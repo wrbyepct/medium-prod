@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import environ
-from split_settings.tools import include
+from split_settings.tools import include, optional
 
 env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,9 +17,17 @@ STATIC_ROOT = str(ROOT_DIR / "staticfiles")
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
-project_settings = "local.py" if DEBUG else "production.py"
+project_settings = "production.py"
+
+if DEBUG:
+    project_settings = "local.py"
+    local_dev_preference = ROOT_DIR / "local/settings.dev.py"
 
 include(
     "base.py",
+    "loggings.py",
     project_settings,
+    optional(local_dev_preference),
 )
+
+print(local_dev_preference)

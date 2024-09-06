@@ -62,13 +62,17 @@ test-d:
 up-dependencies-only:
 	docker-compose -f docker-compose.dev.yml up --force-recreate db
 
-.PHONY:local-db-up
-local-db-up:
-	docker-compose -f docker-compose.dev.yml --env-file .db.env up --build -d
+.PHONY:local-project-up
+local-project-up:
+	docker-compose -f local.yml up --build -d --remove-orphans
 
-.PHONY:local-db-down
-local-db-down:
-	docker-compose -f docker-compose.dev.yml down
+.PHONY:local-project-down
+local-project-down:
+	docker-compose -f local.yml down
+
+.PHONY:docker-logs
+docker-logs:
+	docker-compose -f local.yml logs
 
 .PHONY:prod-db-up
 prod-db-up:

@@ -12,23 +12,23 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "django-filter",
-    "django-countries",
+    "django_filters",
+    "django_countries",
     "phonenumber_field",
     "corsheaders",
 ]
 
 LOCAL_APPS = [
-    # "core.apps.profiles",
-    # "core.apps.common",
-    # "core.apps.users",
+    "core.apps.profiles",
+    "core.apps.general",
+    "core.apps.account",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "corshearders.middleware.CorsMiddleware",  # cors
+    "corsheaders.middleware.CorsMiddleware",  # cors
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -61,14 +61,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("DB_NAME", "ecommerce"),
-        "USER": env("DB_USER", "ecommerce"),
-        "PASSWORD": env("DB_PASS", "ecommerce"),
-        "HOST": env("DB_HOST", "localhost"),
-        "PORT": env("DB_PORT", "5432"),
-    }
+    "default": env.db("DATABASE_URL"),
 }
 
 

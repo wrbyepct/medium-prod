@@ -6,6 +6,7 @@
 *.log
 *.pot
 *.pyc
+.env*
 .vscode
 __pycache__/
 .ruff_cache
@@ -135,12 +136,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.env.dev
-.env.prod
-.db.env
+
+logs
 .venv
-.dev.env
 env/
 venv/
 ENV/
