@@ -80,6 +80,7 @@ omit = [
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "0.1.0"  
+changelog_file = "CHANGELOG.md"
 
 [build-system]
 requires = ["poetry-core"]
