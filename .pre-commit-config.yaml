@@ -14,3 +14,11 @@ repos:
     hooks:
       - id: check-yaml # Validate YAML files
       - id: check-added-large-files # Check for giant files
+
+  - repo: local
+    hooks:
+      - id: commitizen-check
+        name: "Commitizen check"
+        entry: poetry run cz check
+        language: system
+        stages: [commit-msg]
