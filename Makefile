@@ -74,13 +74,13 @@ local-project-down:
 docker-logs:
 	docker-compose -f local.yml logs
 
-.PHONY:prod-db-up
-prod-db-up:
-	docker-compose build --no-cache && docker-compose up -d
+.PHONY:commit
+commit:
+	poetry run cz commit
 
-.PHONY:prod-db-down
-prod-db-down:
-	docker-compose down
+.PHONY:bump
+bump:
+	poetry run cz bump
 
 .PHONY:update
 update: install migrate update-precommit ;
