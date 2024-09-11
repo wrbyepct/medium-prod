@@ -2,4 +2,4 @@
 
 DB_BACKUP_DIR_PATH="/db_backups"
 
-BAKCUP_FILE_PREFIX="backup"
+BACKUP_FILE_PREFIX="backup"

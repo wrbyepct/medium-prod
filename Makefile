@@ -70,6 +70,18 @@ local-project-up:
 local-project-down:
 	docker-compose -f local.yml down
 
+.PHONY:local-db-backup
+local-db-backup:
+	docker-compose -f local.yml exec postgres backup
+
+.PHONY:local-backup-list
+local-backup-list:
+	docker-compose -f local.yml exec postgres backups
+
+.PHONY:local-db-restore
+local-db-restore:
+	docker-compose -f local.yml exec postgres restore $(F)
+
 .PHONY:docker-logs
 docker-logs:
 	docker-compose -f local.yml logs
