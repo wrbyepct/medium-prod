@@ -1,3 +1,9 @@
+## 2.1.0 (2024-09-11)
+
+### Feat
+
+- **postgres**: add backup, restore script for database
+
 ## 2.0.0 (2024-09-08)
 
 ### Feat
