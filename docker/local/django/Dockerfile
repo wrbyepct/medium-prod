@@ -57,5 +57,4 @@ COPY logs logs
 COPY local local
 COPY core core 
 
-
 ENTRYPOINT [ "/entrypoint" ]

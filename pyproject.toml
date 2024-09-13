@@ -61,7 +61,7 @@ django_find_project = false
 pythonpath = "."
 DJANGO_SETTINGS_MODULE = "core.settings"
 python_files = "test_*.py"
-testpaths = ["core"]
+testpaths = ["core/tests"]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::pytest.PytestCacheWarning"]
 markers = [
     "model: tests for model", 

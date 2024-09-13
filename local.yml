@@ -13,6 +13,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/local/postgres/Dockerfile
+
     volumes:
       - local_postgres_db:/var/lib/postgresql/data
       - local_postgres_db_backups:/db_backups

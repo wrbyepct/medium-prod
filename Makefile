@@ -1,26 +1,28 @@
-.PHONY:install
-install:
-	poetry install
+# Django 
 
 .PHONY:django-shell
 django-shell:
-	poetry run python -m core.manage shell
+	docker-compose -f local.yml run --rm api python -m core.manage shell
 
 .PHONY:dbshell
 dbshell:
-	poetry run python -m core.manage dbshell
+	docker-compose -f local.yml exec postgres psql --username=medium --dbname=medium
 
 .PHONY:migrations
 migrations:
-	poetry run python -m core.manage makemigrations
+	docker-compose -f local.yml run --rm api python -m core.manage makemigrations
 
 .PHONY:show-migrations
 show-migrations:
-	poetry run python -m core.manage showmigrations --plan
+	docker-compose -f local.yml run --rm api python -m core.manage showmigrations --plan
 
 .PHONY:migrate
 migrate:
-	poetry run python -m core.manage migrate
+	docker-compose -f local.yml run --rm api python -m core.manage migrate
+
+.PHONY:statics
+statics:
+	docker-compose -f local.yml run --rm api python -m core.manage collectstatics --no-input --clear
 
 .PHONY:sever
 server:
@@ -28,15 +30,10 @@ server:
 
 .PHONY:admin
 admin:
-	poetry run python -m core.manage create_default_admin
+	docker-compose -f local.yml run --rm api python -m core.manage create_default_admin
 
-.PHONY:lint
-lint:
-	git add .; poetry run pre-commit run --all-files
 
-.PHONY:update-precommit
-update-precommit:
-	poetry run pre-commit uninstall; poetry run pre-commit clean; poetry run pre-commit install
+# Test
 
 .PHONY:test
 test:
@@ -58,9 +55,8 @@ test-r:
 test-d:
 	docker-compose exec app make test-r
 
-.PHONY:up-dependencies-only
-up-dependencies-only:
-	docker-compose -f docker-compose.dev.yml up --force-recreate db
+
+# Docker
 
 .PHONY:local-project-up
 local-project-up:
@@ -69,6 +65,10 @@ local-project-up:
 .PHONY:local-project-down
 local-project-down:
 	docker-compose -f local.yml down
+
+.PHONY:down-v
+down-v:
+	docker-compose -f local.yml down -v
 
 .PHONY:local-db-backup
 local-db-backup:
@@ -82,9 +82,26 @@ local-backup-list:
 local-db-restore:
 	docker-compose -f local.yml exec postgres restore $(F)
 
+.PHONY:volume
+volume:
+	docker volume inspect medium_local_postgres_db
+
 .PHONY:docker-logs
 docker-logs:
 	docker-compose -f local.yml logs
+
+
+# Precommit
+.PHONY:lint
+lint:
+	git add .; poetry run pre-commit run --all-files
+
+.PHONY:update-precommit
+update-precommit:
+	poetry run pre-commit uninstall; poetry run pre-commit clean; poetry run pre-commit install
+
+
+# Commit
 
 .PHONY:commit
 commit:
@@ -96,6 +113,10 @@ bump:
 
 .PHONY:update
 update: install migrate update-precommit ;
+
+
+
+# Interact with db
 
 .PHONY:load-fixtures
 load-fixtures:
