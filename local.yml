@@ -29,8 +29,8 @@ services:
     volumes:
       - ./core:/app/core:z
       - ./local:/app/local:z
-      - static_volume:/app/staticfiles
-      - media_volume:/app/mediafiles
+      - static_volume:/vol/api/staticfiles
+      - media_volume:/vol/api/mediafiles
     ports:
       - "8000:8000"
     env_file:

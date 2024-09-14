@@ -1,3 +1,4 @@
+import os  # noqa: F401
 from pathlib import Path
 
 import environ
@@ -9,6 +10,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 APP_DIR = ROOT_DIR / "apps"
 DEBUG = env.bool("DJANGO_DEBUG", False)
+IN_DOCKER = env.bool("IN_DOCKER", False)
 
 
 STATIC_URL = "/staticfiles/"
@@ -22,6 +24,10 @@ project_settings = "production.py"
 if DEBUG:
     project_settings = "local.py"
     local_dev_preference = ROOT_DIR / "local/settings.dev.py"
+
+if IN_DOCKER:
+    STATIC_ROOT = "/vol/api/staticfiles"
+    MEDIA_ROOT = "/vol/api/mediafiles"
 
 include(
     "base.py",

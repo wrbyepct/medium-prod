@@ -129,3 +129,9 @@ extract-db:
 .PHONY:dump-models
 dump-models:
 	poetry run python -m core.manage dump_models
+
+
+# container
+.PHONY:api-shell
+api-shell:
+	docker-compose -f local.yml run --rm api bash

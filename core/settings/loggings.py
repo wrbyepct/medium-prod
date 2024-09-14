@@ -26,7 +26,7 @@ LOGGING = {
         "file": {
             "level": env("DJANGO_LOG_LEVEL", default="INFO"),
             "class": "logging.FileHandler",
-            "filename": env("DJANGO_LOG_FILE_PATH", default="/logs/"),
+            "filename": env("DJANGO_LOG_PATH", default="/logs/debug.log"),
             "filters": [],
         },
     },
