@@ -30,7 +30,7 @@ server:
 
 .PHONY:admin
 admin:
-	docker-compose -f local.yml run --rm api python -m core.manage create_default_admin
+	docker-compose -f local.yml run --rm api python -m core.manage createsuperuser
 
 
 # Test
@@ -51,9 +51,6 @@ test-r:
 	poetry run pytest -v -rs -n auto --show-capture=no --cache-clear \
 	--cov=core --cov-report term-missing --cov-report html --cov-config=pyproject.toml
 
-.PHONY:test-d
-test-d:
-	docker-compose exec app make test-r
 
 
 # Docker
@@ -111,9 +108,6 @@ commit:
 bump:
 	poetry run cz bump
 
-.PHONY:update
-update: install migrate update-precommit ;
-
 
 
 # Interact with db
@@ -131,7 +125,11 @@ dump-models:
 	poetry run python -m core.manage dump_models
 
 
-# container
-.PHONY:api-shell
-api-shell:
-	docker-compose -f local.yml run --rm api bash
+# Container
+.PHONY:log-api
+log-api:
+	docker logs medium-api-1
+
+.PHONY:log-db
+log-db:
+	docker logs medium-postgres-1

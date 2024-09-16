@@ -44,6 +44,7 @@ pygments = "^2.18.0"
 sqlparse = "^0.5.1"
 ruff = "^0.6.3"
 commitizen = "^3.29.0"
+pytest-env = "^1.1.4"
 
 
 [tool.ruff]
@@ -57,6 +58,7 @@ extend-select = ["N", "I", "R"]
 "local/*.py" = ["F821"]
 
 [tool.pytest.ini_options]
+env_files = [".envs/.local/.django", ".envs/.local/.postgres"]
 django_find_project = false
 pythonpath = "."
 DJANGO_SETTINGS_MODULE = "core.settings"

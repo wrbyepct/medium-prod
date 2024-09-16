@@ -21,6 +21,7 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
 project_settings = "production.py"
 
+
 if DEBUG:
     project_settings = "local.py"
     local_dev_preference = ROOT_DIR / "local/settings.dev.py"
@@ -31,9 +32,8 @@ if IN_DOCKER:
 
 include(
     "base.py",
+    "project.py",
     "loggings.py",
     project_settings,
     optional(local_dev_preference),
 )
-
-print(local_dev_preference)

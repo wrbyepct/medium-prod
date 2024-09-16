@@ -29,6 +29,7 @@ services:
     volumes:
       - ./core:/app/core:z
       - ./local:/app/local:z
+      - ./logs:/app/logs:z
       - static_volume:/vol/api/staticfiles
       - media_volume:/vol/api/mediafiles
     ports:

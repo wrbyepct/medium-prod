@@ -16,6 +16,7 @@ THIRD_PARTY_APPS = [
     "django_countries",
     "phonenumber_field",
     "corsheaders",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -25,6 +26,8 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+AUTH_USER_MODEL = "account.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

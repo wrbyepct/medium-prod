@@ -1168,20 +1168,20 @@ tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
 name = "pytest"
-version = "8.2.2"
+version = "8.3.3"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pytest-8.2.2-py3-none-any.whl", hash = "sha256:c434598117762e2bd304e526244f67bf66bbd7b5d6cf22138be51ff661980343"},
-    {file = "pytest-8.2.2.tar.gz", hash = "sha256:de4bb8104e201939ccdc688b27a89a7be2079b22e2bd2b07f806b6ba71117977"},
+    {file = "pytest-8.3.3-py3-none-any.whl", hash = "sha256:a6853c7375b2663155079443d2e45de913a911a11d669df02a50814944db57b2"},
+    {file = "pytest-8.3.3.tar.gz", hash = "sha256:70b98107bd648308a7952b06e6ca9a50bc660be218d53c257cc1fc94fda10181"},
 ]
 
 [package.dependencies]
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
 iniconfig = "*"
 packaging = "*"
-pluggy = ">=1.5,<2.0"
+pluggy = ">=1.5,<2"
 
 [package.extras]
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
@@ -1221,6 +1221,21 @@ pytest = ">=7.0.0"
 [package.extras]
 docs = ["sphinx", "sphinx-rtd-theme"]
 testing = ["Django", "django-configurations (>=2.0)"]
+
+[[package]]
+name = "pytest-dotenv"
+version = "0.5.2"
+description = "A py.test plugin that parses environment files before running tests"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytest-dotenv-0.5.2.tar.gz", hash = "sha256:2dc6c3ac6d8764c71c6d2804e902d0ff810fa19692e95fe138aefc9b1aa73732"},
+    {file = "pytest_dotenv-0.5.2-py3-none-any.whl", hash = "sha256:40a2cece120a213898afaa5407673f6bd924b1fa7eafce6bda0e8abffe2f710f"},
+]
+
+[package.dependencies]
+pytest = ">=5.0.0"
+python-dotenv = ">=0.9.1"
 
 [[package]]
 name = "pytest-factoryboy"
@@ -1329,6 +1344,20 @@ files = [
 
 [package.dependencies]
 six = ">=1.5"
+
+[[package]]
+name = "python-dotenv"
+version = "1.0.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca"},
+    {file = "python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pytz"
@@ -1767,4 +1796,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "99548490f55e0580cd4d2c5945d6a9ade208c1850def7fd34cac3d76e10f95b3"
+content-hash = "ca450d9c65690bbd5f752ce403647232230bf2ec3613955e97c9c8762184ca39"

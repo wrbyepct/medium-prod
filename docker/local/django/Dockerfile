@@ -24,7 +24,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 FROM python as runner
 ARG APP_HOME=/app \
-    LOG_DIR=/logs \
     VOLUME_DIR=/vol
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -46,9 +45,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY logs /logs
-COPY local local 
+
+COPY local logs 
 COPY core core 
+COPY logs logs
 
 COPY ["./docker/local/django/entrypoint", "./docker/local/django/start", "/"]
 RUN sed -i 's/\r$//g' /entrypoint /start \
@@ -59,8 +59,8 @@ RUN adduser \
     --no-create-home \
     medium-api \
     && mkdir -p ${VOLUME_DIR}/api/staticfiles ${VOLUME_DIR}/api/mediafiles \
-    && chown -R medium-api:medium-api $VOLUME_DIR $LOG_DIR $APP_HOME \
-    && chmod -R 755 $VOLUME_DIR $LOG_DIR $APP_HOME
+    && chown -R medium-api:medium-api $VOLUME_DIR $APP_HOME \
+    && chmod -R 755 $VOLUME_DIR $APP_HOME
 
 USER medium-api
 
