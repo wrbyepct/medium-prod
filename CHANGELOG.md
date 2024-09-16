@@ -1,3 +1,9 @@
+## 2.2.0 (2024-09-16)
+
+### Feat
+
+- **user**: Add user model, user model structural test, admin, and api doc
+
 ## 2.1.0 (2024-09-11)
 
 ### Feat
