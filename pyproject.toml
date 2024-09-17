@@ -44,7 +44,7 @@ pygments = "^2.18.0"
 sqlparse = "^0.5.1"
 ruff = "^0.6.3"
 commitizen = "^3.29.0"
-pytest-env = "^1.1.4"
+pytest-dotenv = "^0.5.2"
 
 
 [tool.ruff]

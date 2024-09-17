@@ -2,7 +2,7 @@ FROM postgres:15-bullseye
 
 # copy maintenence files to container 
 
-COPY ./docker/local/postgres/maintenance/ /usr/local/bin/maintenance
+COPY ./maintenance/ /usr/local/bin/maintenance
 
 RUN chmod +x /usr/local/bin/maintenance/*
 

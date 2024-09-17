@@ -6,19 +6,23 @@ services:
     container_name: mailhog
     ports:
       - "8025:8025"
+    restart: always
     networks:
       - medium-api
 
   postgres:
     build:
-      context: .
-      dockerfile: ./docker/local/postgres/Dockerfile
+      context: ./docker/local/postgres
 
     volumes:
       - local_postgres_db:/var/lib/postgresql/data
       - local_postgres_db_backups:/db_backups
+
     env_file:
       - ./.envs/.local/.postgres
+
+    restart: always
+
     networks:
       - medium-api
 
@@ -26,21 +30,49 @@ services:
     build:
       context: .
       dockerfile: ./docker/local/django/Dockerfile
+
     volumes:
       - ./core:/app/core:z
       - ./local:/app/local:z
       - ./logs:/app/logs:z
-      - static_volume:/vol/api/staticfiles
-      - media_volume:/vol/api/mediafiles
-    ports:
-      - "8000:8000"
+      - static_volume:/vol/api
+
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
+
+    expose:
+      - "8000"
+
     depends_on:
       - postgres
       - mailhog
+
     command: /start
+
+    restart: always
+
+    networks:
+      - medium-api
+
+  nginx:
+    build:
+      context: ./docker/local/nginx
+
+    env_file:
+      - ./.envs/.local/.nginx
+
+    volumes:
+      - static_volume:/vol/api
+
+    ports:
+      - "8080:80"
+
+    depends_on:
+      - api
+
+    restart: always
+
     networks:
       - medium-api
 
@@ -50,6 +82,5 @@ networks:
 
 volumes:
   static_volume:
-  media_volume:
   local_postgres_db: {}
   local_postgres_db_backups: {}
