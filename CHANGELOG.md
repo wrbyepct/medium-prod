@@ -1,3 +1,9 @@
+## 2.3.0 (2024-09-17)
+
+### Feat
+
+- **nginx**: setup nginx docker service
+
 ## 2.2.0 (2024-09-16)
 
 ### Feat
