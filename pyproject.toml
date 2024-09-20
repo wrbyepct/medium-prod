@@ -29,6 +29,10 @@ argon2-cffi = "^23.1.0"
 pytz = "^2024.1"
 django-taggit = "^6.0.0"
 django-environ = "^0.11.2"
+celery = "^5.4.0"
+redis = "^5.0.8"
+flower = "^2.0.1"
+django-celery-email = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.1"
@@ -45,6 +49,7 @@ sqlparse = "^0.5.1"
 ruff = "^0.6.3"
 commitizen = "^3.29.0"
 pytest-dotenv = "^0.5.2"
+watchfiles = "^0.24.0"
 
 
 [tool.ruff]

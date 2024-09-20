@@ -1,4 +1,6 @@
 # type: ignore
+AUTH_USER_MODEL = "account.User"
+
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -17,6 +19,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "corsheaders",
     "drf_spectacular",
+    "djcelery_email",
 ]
 
 LOCAL_APPS = [
@@ -27,7 +30,6 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-AUTH_USER_MODEL = "account.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

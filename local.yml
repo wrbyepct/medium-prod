@@ -2,79 +2,118 @@ version: "3.9"
 
 services:
   mailhog:
-    image: mailhog/mailhog:v1.0.0
     container_name: mailhog
+    image: mailhog/mailhog:v1.0.0
     ports:
       - "8025:8025"
     restart: always
     networks:
       - medium-api
 
+
   postgres:
+    container_name: postgres
     build:
       context: ./docker/local/postgres
-
     volumes:
       - local_postgres_db:/var/lib/postgresql/data
       - local_postgres_db_backups:/db_backups
-
     env_file:
       - ./.envs/.local/.postgres
-
     restart: always
-
     networks:
       - medium-api
 
+
+  redis:
+    container_name: redis
+    image: redis:7.4-alpine
+    networks:
+      - medium-api
+
+
   api:
+    container_name: api
     build:
       context: .
       dockerfile: ./docker/local/django/Dockerfile
-
     volumes:
-      - ./core:/app/core:z
-      - ./local:/app/local:z
+      - ./core:/app/core
+      - ./local:/app/local
       - ./logs:/app/logs:z
       - static_volume:/vol/api
-
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
-
     expose:
       - "8000"
-
     depends_on:
       - postgres
       - mailhog
-
+      - redis
     command: /start
-
     restart: always
-
     networks:
       - medium-api
+
 
   nginx:
+    container_name: nginx
     build:
       context: ./docker/local/nginx
-
-    env_file:
-      - ./.envs/.local/.nginx
-
     volumes:
       - static_volume:/vol/api
-
+    env_file:
+      - ./.envs/.local/.nginx
     ports:
       - "8080:80"
-
     depends_on:
       - api
-
     restart: always
-
     networks:
       - medium-api
+  
+
+  celery_worker:
+    container_name: celery
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    volumes:
+      - ./core:/app/core
+      - ./local:/app/local
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    command: /start_celeryworker
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+    networks:
+      - medium-api
+
+
+  flower:
+    container_name: flower
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    volumes:
+      - flower_data:/flower_data
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "5555:5555"
+    command: /start_flower
+    depends_on:
+      - redis
+      - celery_worker
+      - postgres
+    networks:
+      - medium-api
+
 
 networks:
   medium-api:
@@ -84,3 +123,4 @@ volumes:
   static_volume:
   local_postgres_db: {}
   local_postgres_db_backups: {}
+  flower_data: {}
