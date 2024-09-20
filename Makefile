@@ -4,9 +4,7 @@
 django-shell:
 	docker-compose -f local.yml run --rm api python -m core.manage shell
 
-.PHONY:dbshell
-dbshell:
-	docker-compose -f local.yml exec postgres psql --username=medium --dbname=medium
+
 
 .PHONY:migrations
 migrations:
@@ -53,7 +51,7 @@ test-r:
 
 
 
-# Docker
+# Services
 
 .PHONY:local-project-up
 local-project-up:
@@ -67,17 +65,7 @@ local-project-down:
 down-v:
 	docker-compose -f local.yml down -v
 
-.PHONY:local-db-backup
-local-db-backup:
-	docker-compose -f local.yml exec postgres backup
 
-.PHONY:local-backup-list
-local-backup-list:
-	docker-compose -f local.yml exec postgres backups
-
-.PHONY:local-db-restore
-local-db-restore:
-	docker-compose -f local.yml exec postgres restore $(F)
 
 .PHONY:volume
 volume:
@@ -124,8 +112,29 @@ extract-db:
 dump-models:
 	poetry run python -m core.manage dump_models
 
+.PHONY:local-db-backup
+local-db-backup:
+	docker-compose -f local.yml exec postgres backup
+
+.PHONY:local-backup-list
+local-backup-list:
+	docker-compose -f local.yml exec postgres backups
+
+.PHONY:local-db-restore
+local-db-restore:
+	docker-compose -f local.yml exec postgres restore $(F)
+
 
 # Container
+.PHONY:shell-api
+shell-api:
+	docker exec -it api bash
+
+.PHONY:shell-db
+shell-db:
+	docker-compose -f local.yml exec postgres psql --username=medium --dbname=medium
+
+
 .PHONY:log-api
 log-api:
 	docker logs medium-api-1
