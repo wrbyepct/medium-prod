@@ -1,3 +1,9 @@
+## 2.4.0 (2024-09-20)
+
+### Feat
+
+- **celery**: set up celery, redis, flower containers
+
 ## 2.3.0 (2024-09-17)
 
 ### Feat

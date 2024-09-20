@@ -86,7 +86,7 @@ omit = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "2.3.0"  
+version = "2.4.0"  
 update_changelog_on_bump = true
 tag_format = "$version"
 
