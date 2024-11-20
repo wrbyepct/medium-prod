@@ -1,5 +1,7 @@
 # type: ignore
-AUTH_USER_MODEL = "account.User"
+"""Base setting."""
+
+AUTH_USER_MODEL = "user.User"
 
 
 DJANGO_APPS = [
@@ -13,19 +15,26 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    "rest_framework",
+    "corsheaders",
     "django_filters",
     "django_countries",
     "phonenumber_field",
-    "corsheaders",
     "drf_spectacular",
     "djcelery_email",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "rest_framework_simplejwt.token_blacklist",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
 
 LOCAL_APPS = [
     "core.apps.profiles",
     "core.apps.general",
-    "core.apps.account",
+    "core.apps.user",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -40,6 +49,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -109,9 +119,6 @@ USE_I18N = True
 USE_TZ = True
 
 SITE_ID = 1  # new
-
-# TODO make ADMIN_URL more complcated later
-ADMIN_URL = "supersecret/"  # new
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

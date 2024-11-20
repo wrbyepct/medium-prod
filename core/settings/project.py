@@ -1,6 +1,51 @@
+# type: ignore
+"""Settings specific for this project."""
+
+from datetime import timedelta
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # This is for authentication for view access.
+    "DEFAULT_AUTHENTICATION_CLASSES": ["dj_rest_auth.jwt_auth.JWTCookieAuthentication"],
+    # Meaning all views are not 'public' by default.
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
 }
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "SIGNING_KEY": env("JWT_SIGNING_KEY"),
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
+
+# dj-rest-auth
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "medium-access-token",
+    "JWT_AUTH_REFRESH_COOKIE": "medium-refresh-token",
+    "REGISTER_SERIALIZER": "core.apps.user.serializers.CustomRegisterSerializer",
+}
+
+# allauth
+AUTHENTICATION_BACKENDS = {
+    "allauth.account.auth_backends.AuthenticationBackend",
+    "django.contrib.auth.backends.ModelBackend",
+}
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = None
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Medium API",
@@ -19,3 +64,6 @@ SPECTACULAR_SETTINGS = {
         "url": "https://testapi.com/contact",
     },
 }
+
+# TODO make ADMIN_URL more complcated later
+ADMIN_URL = "supersecret/"  # new

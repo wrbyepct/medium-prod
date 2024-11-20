@@ -33,6 +33,10 @@ celery = "^5.4.0"
 redis = "^5.0.8"
 flower = "^2.0.1"
 django-celery-email = "^3.0.0"
+django-stubs = "^5.1.1"
+django-allauth = "^65.2.0"
+dj-rest-auth = "^7.0.0"
+requests = "^2.32.3"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.1"
@@ -56,11 +60,59 @@ watchfiles = "^0.24.0"
 line-length = 88
 
 [tool.ruff.lint]
-extend-select = ["N", "I", "R"]
+select = ["ALL"]
+fixable = ["ALL"]
+ignore = [
+    "ANN201", # Check return type annotation
+    "ANN003", # Missing type annotation for `**extra_fields`
+    "D106", # Missing docstring in public nested class
+    "D203", # 1 blank line required before class docstring
+    "D212", # Multi-line docstring summary should start at the first line
+    "FIX002", # Line contains TODO, consider resolving the issue
+    "E501", # line too long
+    "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
+    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+    "G004", # Logging statement uses f-string
+    "TD", # Missing author in TODO; try: `# TODO(<author_name>): ...` or `# TODO @<author_name>: ...`
+    "PGH003" # Use specified rules
+    
+]
+
+
+[tool.ruff.lint.mccabe]
+# Check mccabe. 
+# Each additional decision point (e.g., if, elif, else, for, while, try, except, etc.) 
+# increases the complexity score by 1.
+max-complexity = 8 
 
 [tool.ruff.lint.per-file-ignores]
-"core/settings/*.py" = ["F821"]
+"core/settings/*.py" = ["F821", "PGH003"]
 "local/*.py" = ["F821"]
+"**/tests/**/*.py" = [
+    "S101", 
+    "INP001", 
+    "ANN201", 
+    "ANN001", 
+    "D",
+    "PT006" #  Wrong type passed to first argument of `@pytest.mark.parametrize`; expected `tuple`
+]
+"**/migrations/**/*.py" = [
+    "INP001", 
+    "D", # Missing docstring in public module
+
+]
+"**/apps.py" = [
+    "INP001", 
+    "D", # Missing docstring in public module
+
+]
+"**/__init__.py" = [
+    "INP001", 
+    "D", # Missing docstring in public module
+
+]
+"local/" = ["INP001"]
+"core/manage.py" = ["ALL"]
 
 [tool.pytest.ini_options]
 env_files = [".envs/.local/.django", ".envs/.local/.postgres"]
@@ -75,6 +127,7 @@ markers = [
     "model_structure: tests for model structure."
 ]
 
+
 [tool.coverage.run]
 omit = [
     "*/migrations/*",
@@ -84,11 +137,13 @@ omit = [
     "core/manage.py"
 ]
 
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "2.4.0"  
 update_changelog_on_bump = true
 tag_format = "$version"
+
 
 [build-system]
 requires = ["poetry-core"]

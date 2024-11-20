@@ -21,6 +21,7 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
 project_settings = "production.py"
 
+local_dev_preference = ""
 
 if DEBUG:
     project_settings = "local.py"
@@ -35,5 +36,5 @@ include(
     "project.py",
     "loggings.py",
     project_settings,
-    optional(local_dev_preference),
+    optional(str(local_dev_preference)),
 )

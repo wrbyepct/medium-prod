@@ -6,3 +6,6 @@ class ProfilesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "core.apps.profiles"
     verbose_name = _("Profiles")
+
+    def ready(self):
+        from core.apps.profiles import signals  # noqa: F401

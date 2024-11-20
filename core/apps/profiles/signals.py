@@ -1,0 +1,26 @@
+"""Profile model instance auto create via singal."""
+
+import logging
+from typing import Literal
+
+from django.contrib.auth.models import AbstractBaseUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from core.apps.profiles.models import Profile
+from core.settings import AUTH_USER_MODEL
+
+logger = logging.getLogger(__name__)
+
+
+@receiver(post_save, sender=AUTH_USER_MODEL)
+def create_user_profile(
+    sender: Literal["account.User"],  # noqa: ARG001
+    instance: AbstractBaseUser,
+    created: bool,  # noqa: FBT001
+    **kwargs: dict,  # noqa: ARG001
+):
+    """Create profile when a user is created."""
+    if created:
+        Profile.objects.create(user=instance)
+        logger.info(f"{instance}'s profile has been created.")

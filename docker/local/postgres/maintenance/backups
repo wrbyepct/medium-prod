@@ -12,4 +12,3 @@ source "$backup_dir/_sourced/messages.sh"
 
 message_welcome "Here are the backups you've got: "
 ls -lht $DB_BACKUP_DIR_PATH
-

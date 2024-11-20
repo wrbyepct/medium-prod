@@ -1,0 +1,15 @@
+#!/bin/bash
+
+prune-all-images() {
+    docker image prune -a
+ 
+}
+
+help() {
+    echo "${1} <task> <arg>s"
+    echo "Tasks:"
+    compgen function -A | cat -n 
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time ${@:-help}

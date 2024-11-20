@@ -1,5 +1,5 @@
 # type: ignore
-
+"""Loggings settings."""
 
 LOGGING = {
     "version": 1,
@@ -35,13 +35,13 @@ LOGGING = {
             "level": "INFO",
             "propagate": True,
         }
-        for logger_name in {
+        for logger_name in (
             "django",
             "django.request",
             "django.template",
             "django.db.backends",
             "core",
-        }
+        )
     },
     "root": {
         "level": "INFO",
