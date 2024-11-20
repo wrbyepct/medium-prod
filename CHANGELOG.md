@@ -1,3 +1,9 @@
+## 3.0.0 (2024-11-20)
+
+### Feat
+
+- **Authentication**: Add simple jwt authentication routes
+
 ## 2.4.0 (2024-09-20)
 
 ### Feat
