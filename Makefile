@@ -5,7 +5,6 @@ django-shell:
 	docker-compose -f local.yml run --rm api python -m core.manage shell
 
 
-
 .PHONY:migrations
 migrations:
 	docker-compose -f local.yml run --rm api python -m core.manage makemigrations
@@ -28,7 +27,16 @@ server:
 
 .PHONY:admin
 admin:
-	docker-compose -f local.yml run --rm api python -m core.manage createsuperuser
+	docker-compose -f local.yml run --rm api python -m core.manage shell \
+	-c "from django.contrib.auth import get_user_model; \
+    User = get_user_model(); \
+	email = 'admin@example.com'; \
+	password = 'admin'; \
+	first_name = 'test'; \
+	last_name = 'test'; \
+    User.objects.create_superuser(email=email, password=password, first_name=first_name, last_name=last_name) \
+    if not User.objects.filter(email='admin@example.com').exists() \
+    else print('Superuser already exists')"
 
 
 # Test
@@ -76,6 +84,11 @@ docker-logs:
 	docker-compose -f local.yml logs
 
 
+# Image
+img-prune:
+	./run prune-all-images -f
+
+
 # Precommit
 .PHONY:lint
 lint:
@@ -87,7 +100,6 @@ update-precommit:
 
 
 # Commit
-
 .PHONY:commit
 commit:
 	poetry run cz commit
