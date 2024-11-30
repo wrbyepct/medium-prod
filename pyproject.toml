@@ -64,10 +64,12 @@ select = ["ALL"]
 fixable = ["ALL"]
 ignore = [
     "ANN201", # Check return type annotation
+    "ANN002", # Missing type annotation for `*args`
     "ANN003", # Missing type annotation for `**extra_fields`
     "D106", # Missing docstring in public nested class
     "D203", # 1 blank line required before class docstring
     "D212", # Multi-line docstring summary should start at the first line
+    "D407", # Missing dashed underline after section ("Args")
     "FIX002", # Line contains TODO, consider resolving the issue
     "E501", # line too long
     "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
