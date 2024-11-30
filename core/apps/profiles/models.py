@@ -1,4 +1,4 @@
-# mypy: disable-error-code="var-annotated"
+# mypy: disable-error-code="var-annotated,attr-defined"
 
 """Profiles models."""
 
@@ -26,7 +26,7 @@ Fields:
     - Folloers
 
 Behaviors:
-    - Followe
+    - Follow
     - Unfollow
     - Check follower exists.
 
@@ -92,12 +92,12 @@ class Profile(TimestampedModel):
 
     def follow(self, profile: Profile):
         """Add other Profile instances as followers."""
-        self.followers.add(profile)
+        self.following.add(profile)
 
     def unfollow(self, profile: Profile):
         """Remove other Profile instances from followers."""
-        self.followers.remove(profile)
+        self.following.remove(profile)
 
-    def check_following(self, profile: Profile):
+    def has_followed(self, profile: Profile):
         """Return True if the follower id in check exists in current followers."""
-        return self.followers.filter(pkid=profile.pkid).exists()
+        return self.following.filter(pkid=profile.pkid).exists()

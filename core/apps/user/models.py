@@ -39,11 +39,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"{self.first_name} | {self.email}"
 
     @property
-    def get_full_name(self):
+    def full_name(self):
         """Return full name."""
         return f"{self.first_name.title()} {self.last_name.title()}"
 
     @property
-    def get_short_name(self):
+    def short_name(self):
         """Return Capitalized first name."""
         return f"{self.first_name.title()}"
