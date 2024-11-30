@@ -1,3 +1,9 @@
+## 4.0.0 (2024-11-30)
+
+### Feat
+
+- **profile**: Add profile view funcitonalities: list profiles, get detailed profile, partial-update profile, follow/unfollow, show my followers and get list of followings
+
 ## 3.0.0 (2024-11-20)
 
 ### Feat
