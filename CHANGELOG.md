@@ -1,3 +1,9 @@
+## 5.0.0 (2024-12-08)
+
+### Feat
+
+- **aritcle-features**: Add article CRUD features
+
 ## 4.0.0 (2024-11-30)
 
 ### Feat
