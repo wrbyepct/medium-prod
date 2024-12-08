@@ -28,7 +28,7 @@ Fields:
 Behaviors:
     - Follow
     - Unfollow
-    - Check follower exists.
+    - Check if the user alread exists in my following.
 
 """
 

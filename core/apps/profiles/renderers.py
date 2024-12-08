@@ -1,6 +1,5 @@
 """Renderer classes."""
 
-# ruff: noqa: ANN001, ARG002
 import json
 
 from rest_framework.renderers import JSONRenderer
