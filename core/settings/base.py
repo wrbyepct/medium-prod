@@ -29,12 +29,15 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "taggit",
 ]
 
 LOCAL_APPS = [
     "core.apps.profiles",
     "core.apps.general",
     "core.apps.user",
+    "core.apps.articles",
+    "core.apps.ratings",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

@@ -10,7 +10,7 @@ from core.utils.email import inform_followed
 
 from .models import Profile
 from .paginations import ProfilePagination
-from .renders import ProfileListRenderer, ProfileRenderer
+from .renderers import ProfileListRenderer, ProfileRenderer
 from .serializers import FollowingSerializer, ProfileSerializer, UpdateProfileSerializer
 
 # ruff: noqa: A002, ANN001, ARG002

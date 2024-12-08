@@ -5,6 +5,10 @@ prune-all-images() {
  
 }
 
+start-app() {
+    poetry run python -m core.manage startapp $1
+}
+
 help() {
     echo "${1} <task> <arg>s"
     echo "Tasks:"

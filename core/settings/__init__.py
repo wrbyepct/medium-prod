@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os  # noqa: F401
 from pathlib import Path
 
@@ -21,7 +23,7 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
 project_settings = "production.py"
 
-local_dev_preference = ""
+local_dev_preference: str | Path = ""
 
 if DEBUG:
     project_settings = "local.py"

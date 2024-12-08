@@ -113,8 +113,11 @@ max-complexity = 8
     "D", # Missing docstring in public module
 
 ]
+"**/renderers.py" = ["ANN001", "ARG002"]
+"**/permissions.py" = ["ANN001", "ARG002"]
 "local/" = ["INP001"]
 "core/manage.py" = ["ALL"]
+
 
 [tool.pytest.ini_options]
 env_files = [".envs/.local/.django", ".envs/.local/.postgres"]

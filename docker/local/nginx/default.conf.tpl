@@ -6,12 +6,12 @@ server {
 
     listen ${LISTEN_PORT};
 
-    location /staticfiles {
-        alias /vol/api/staticfiles;
+    location /staticfiles/ {
+        alias /vol/api/staticfiles/;
     }
 
-    location /mediafiles {
-        alias /vol/api/mediafiles;
+    location /mediafiles/ {
+        alias /vol/api/mediafiles/;
     }
 
     location / {
