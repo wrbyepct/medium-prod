@@ -22,11 +22,11 @@ class ArticleRenderer(JSONRenderer):
         # If article is empty we return 200 ok
         status_code = (
             renderer_context["response"].status_code
-            if renderer_context is None
-            else 201
+            if renderer_context is not None
+            else 200
         )
         # If article is empty we return no error
-        errors = data.get("errors", None) if data is not None else None
+        errors = data.get("errors", None)
 
         if errors is not None:
             return super().render(data)

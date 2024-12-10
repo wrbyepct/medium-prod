@@ -5,9 +5,11 @@ from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.response import Response
 
+from core.apps.general.permissions import IsOwnerOrReadOnly
+
+from .filters import ArticleFilter
 from .models import Article, ArticleView
 from .paginations import ArticlePagination
-from .permissions import IsOwnerOrReadOnly
 from .renderers import ArticleListRenderer, ArticleRenderer
 from .serializers import ArticleSerializer
 
@@ -18,6 +20,7 @@ class ArticleCreateListView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
     renderer_classes = [ArticleListRenderer]
+    filterset_class = ArticleFilter
 
     def get_queryset(self):
         """Return all articles, if user is specified, return all articles belongs to the user."""

@@ -124,6 +124,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "tags",
             "estimated_reading_time",  # property: read-only
             "views",  # property: read-only
+            "average_rating",  # property: read-only
             "banner_image",  # return relative url
             "created_at",  # serializer method: read-only
             "updated_at",  # serializer method: read-only
