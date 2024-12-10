@@ -1,6 +1,6 @@
 """Article app model."""
 
-# mypy: disable-error-code="var-annotated"
+# mypy: disable-error-code="var-annotated,attr-defined"
 # ruff: noqa: D105
 from __future__ import annotations
 
@@ -47,6 +47,11 @@ class Article(TimestampedModel):
         return f"{self.author}'s article | {self.title}"
 
     @property
+    def user(self):
+        """Return also user, for accessing convenience."""
+        return self.author
+
+    @property
     def estimated_reading_time(self):
         """Return estimated article reading time."""
         return ArticleReadTimeEngine.get_reading_time(article=self)
@@ -55,6 +60,21 @@ class Article(TimestampedModel):
     def views(self):
         """Return artice's views count."""
         return self.article_views.count()
+
+    @property
+    def total_ratings_count(self):
+        """Return total ratings count."""
+        return self.ratings.all().count()
+
+    @property
+    def average_rating(self) -> str:
+        """
+        Return string represantation of average rating value, down to 2nd decimal place.
+
+        Return "0.00" if there is no rating yet.
+        """
+        avg_rating = self.ratings.aggregate(models.Avg("rating"))["rating__avg"]
+        return f"{avg_rating:.2f}" if avg_rating else "0.00"
 
 
 class ArticleView(TimestampedModel):

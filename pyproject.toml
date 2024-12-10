@@ -76,7 +76,9 @@ ignore = [
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
     "G004", # Logging statement uses f-string
     "TD", # Missing author in TODO; try: `# TODO(<author_name>): ...` or `# TODO @<author_name>: ...`
-    "PGH003" # Use specified rules
+    "PGH003",  # Use specified rules
+    "COM812", 
+    "ISC001"
     
 ]
 
