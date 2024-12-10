@@ -1,3 +1,9 @@
+## 6.0.0 (2024-12-10)
+
+### Feat
+
+- **rating**: Add rating CRUD features
+
 ## 5.0.0 (2024-12-08)
 
 ### Feat
