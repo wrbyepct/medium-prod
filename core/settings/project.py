@@ -12,11 +12,16 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.BrowsableAPIRenderer",  # This enables the UI
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "EXCEPTION_HANDLER": "rest_framework.views.exception_handler",
 }
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,

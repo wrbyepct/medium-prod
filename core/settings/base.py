@@ -38,15 +38,17 @@ LOCAL_APPS = [
     "core.apps.user",
     "core.apps.articles",
     "core.apps.ratings",
+    "core.apps.bookmarks",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",  # cors
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # debug_toolbar
+    "core.apps.general.middlewares.DatabaseInstrumentationMiddleware",  # SQL query logging middleware
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
+
 
 ROOT_URLCONF = "core.urls"
 

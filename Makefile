@@ -13,6 +13,7 @@ migrations:
 show-migrations:
 	docker-compose -f local.yml run --rm api python -m core.manage showmigrations --plan
 
+
 .PHONY:migrate
 migrate:
 	docker-compose -f local.yml run --rm api python -m core.manage migrate

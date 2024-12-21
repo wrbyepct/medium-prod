@@ -29,6 +29,7 @@ urlpatterns = [
     path("api/v1/profiles/", include("core.apps.profiles.urls")),
     path("api/v1/articles/", include("core.apps.articles.urls")),
     path("api/v1/ratings/", include("core.apps.ratings.urls")),
+    path("api/v1/bookmarks/", include("core.apps.bookmarks.urls")),
 ]
 
 
@@ -46,3 +47,8 @@ urlpatterns += [
         name="redoc",
     ),
 ]
+
+if settings.DEBUG:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
+    urlpatterns = urlpatterns + debug_toolbar_urls()
