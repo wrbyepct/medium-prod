@@ -1,3 +1,9 @@
+## 7.0.0 (2024-12-21)
+
+### Feat
+
+- **bookmark**: Add bookmark features allowing user to add, delete, and see their bookmarks
+
 ## 6.0.0 (2024-12-10)
 
 ### Feat
