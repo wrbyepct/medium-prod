@@ -8,6 +8,7 @@ import logging
 
 from rest_framework import serializers
 
+from core.apps.bookmarks.serializers import BookmarkSerializer
 from core.apps.profiles.serializers import ProfileSerializer
 
 from .models import Article
@@ -45,36 +46,17 @@ class TagListField(serializers.Field):
 class ArticleSerializer(serializers.ModelSerializer):
     """Article Serializer."""
 
+    bookmarks = BookmarkSerializer(many=True)
+    bookmarked_count = serializers.IntegerField(read_only=True)
+    avg_rating = serializers.DecimalField(
+        max_digits=3, decimal_places=2, read_only=True
+    )
+    views = serializers.IntegerField(read_only=True)
     author_info = ProfileSerializer(source="author.profile", read_only=True)
-    created_at = serializers.SerializerMethodField()
-    updated_at = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
+    updated_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
+
     tags = TagListField()
-
-    def get_created_at(self, obj: Article) -> str:
-        """
-        Return formatted time: '%m/%d/%Y, %H:%M:%S'.
-
-        Args:
-            obj (Article): Article instance.
-
-        Returns:
-            str: formatted time: "%m/%d/%Y, %H:%M:%S"
-
-        """
-        return obj.created_at.strftime("%m/%d/%Y, %H:%M:%S")
-
-    def get_updated_at(self, obj: Article) -> str:
-        """
-        Return formatted time: '%m/%d/%Y, %H:%M:%S'.
-
-        Args:
-            obj (Article): Article instance.
-
-        Returns:
-            str: formatted time: "%m/%d/%Y, %H:%M:%S"
-
-        """
-        return obj.updated_at.strftime("%m/%d/%Y, %H:%M:%S")
 
     def to_representation(self, instance: Article):
         """Return article's banner image relative urls instead of absolute one."""
@@ -124,9 +106,12 @@ class ArticleSerializer(serializers.ModelSerializer):
             "tags",
             "estimated_reading_time",  # property: read-only
             "views",  # property: read-only
-            "average_rating",  # property: read-only
+            "avg_rating",  # property: read-only
             "banner_image",  # return relative url
             "created_at",  # serializer method: read-only
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
+            "bookmarked_count",
+            "bookmarks",
         ]
+        read_only_fields = ["bookmarks"]

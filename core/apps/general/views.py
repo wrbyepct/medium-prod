@@ -1,1 +1,1 @@
-"""General views."""
+"""General view."""

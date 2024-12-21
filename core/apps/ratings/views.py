@@ -5,12 +5,11 @@ import logging
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
-from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
-from core.apps.articles.models import Article
 from core.apps.general.permissions import IsOwnerOrReadOnly
+from core.apps.general.utils.article import ArticleUtility
 
 from .exceptions import YouCannotRateArticleAgain
 from .models import Rating
@@ -34,20 +33,6 @@ class RatingCreateListView(generics.ListCreateAPIView):
     ordering_fields = ["created_at"]
     ordering = ["-created_at"]
 
-    def get_article(self):
-        """Try to get the requesting article, return ValidationError if failed."""
-        article_id = self.request.query_params.get("article_id", None)
-
-        if article_id is None:
-            detail = "The article ID must be provided."
-            raise ValidationError(detail=detail)
-
-        try:
-            return Article.objects.get(id=article_id)
-        except Article.DoesNotExist as article_not_found:
-            detail = "Opps, the requesting article does not exist."
-            raise ValidationError(detail=detail) from article_not_found
-
     def get_queryset(self):
         """Get queryset based on article id."""
         article = self.get_article()
@@ -68,7 +53,8 @@ class RatingCreateListView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         """Get article and request user first and then create the rating."""
-        article = self.get_article()
+        article_id = self.request.query_params.get("article_id", None)
+        article = ArticleUtility.get_article(article_id=article_id)
         user = self.request.user
 
         rating = Rating.objects.filter(user=user, article=article).exists()

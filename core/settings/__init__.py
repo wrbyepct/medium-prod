@@ -30,8 +30,9 @@ if DEBUG:
     local_dev_preference = ROOT_DIR / "local/settings.dev.py"
 
 if IN_DOCKER:
-    STATIC_ROOT = "/vol/api/staticfiles"
-    MEDIA_ROOT = "/vol/api/mediafiles"
+    STATIC_ROOT = "/vol/api/staticfiles/"
+    MEDIA_ROOT = "/vol/api/mediafiles/"
+
 
 include(
     "base.py",

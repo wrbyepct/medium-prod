@@ -9,6 +9,14 @@ start-app() {
     poetry run python -m core.manage startapp $1
 }
 
+makemigrations() {
+    docker-compose -f local.yml run --rm api python -m core.manage makemigrations $1
+}
+
+unmigrate() {
+    docker-compose -f local.yml run --rm api python -m core.manage migrate $1 zero $2
+}
+
 help() {
     echo "${1} <task> <arg>s"
     echo "Tasks:"

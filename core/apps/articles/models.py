@@ -22,6 +22,22 @@ if TYPE_CHECKING:
 User = get_user_model()
 
 
+class ArticleManager(models.Manager):
+    """Article manager."""
+
+    def get_queryset(self):
+        """Return article queryset with pre-counted fields."""
+        return (
+            super()
+            .get_queryset()
+            .annotate(
+                avg_rating=models.Avg("ratings"),
+                views=models.Count("article_views", distinct=True),
+                bookmarked_count=models.Count("bookmarks", distinct=True),
+            )
+        )
+
+
 # Create your models here.
 class Article(TimestampedModel):
     """Article mode."""
@@ -43,6 +59,8 @@ class Article(TimestampedModel):
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
 
+    objects = ArticleManager()
+
     def __str__(self) -> str:
         return f"{self.author}'s article | {self.title}"
 
@@ -55,26 +73,6 @@ class Article(TimestampedModel):
     def estimated_reading_time(self):
         """Return estimated article reading time."""
         return ArticleReadTimeEngine.get_reading_time(article=self)
-
-    @property
-    def views(self):
-        """Return artice's views count."""
-        return self.article_views.count()
-
-    @property
-    def total_ratings_count(self):
-        """Return total ratings count."""
-        return self.ratings.all().count()
-
-    @property
-    def average_rating(self) -> str:
-        """
-        Return string represantation of average rating value, down to 2nd decimal place.
-
-        Return "0.00" if there is no rating yet.
-        """
-        avg_rating = self.ratings.aggregate(models.Avg("rating"))["rating__avg"]
-        return f"{avg_rating:.2f}" if avg_rating else "0.00"
 
 
 class ArticleView(TimestampedModel):

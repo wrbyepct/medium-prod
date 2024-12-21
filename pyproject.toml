@@ -54,6 +54,7 @@ ruff = "^0.6.3"
 commitizen = "^3.29.0"
 pytest-dotenv = "^0.5.2"
 watchfiles = "^0.24.0"
+django-debug-toolbar = "^4.4.6"
 
 
 [tool.ruff]
@@ -101,6 +102,12 @@ max-complexity = 8
     "PT006" #  Wrong type passed to first argument of `@pytest.mark.parametrize`; expected `tuple`
 ]
 "**/migrations/**/*.py" = [
+    "INP001", 
+    "D", # Missing docstring in public module
+
+]
+"**/middlewares.py" = [
+    "ANN",
     "INP001", 
     "D", # Missing docstring in public module
 
