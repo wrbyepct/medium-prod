@@ -22,6 +22,27 @@ if TYPE_CHECKING:
 User = get_user_model()
 
 
+class Clap(TimestampedModel):
+    """Artitcle claps model."""
+
+    article = models.ForeignKey(
+        "Article", on_delete=models.CASCADE, related_name="claps"
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["article", "user"], name="unique_article_per_user"
+            )
+        ]
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:
+        """Return "User: {self.user.first_name} clapped the article: {self.article.title}"."""
+        return f"User: {self.user.first_name} clapped the article: {self.article.title}"
+
+
 class ArticleManager(models.Manager):
     """Article manager."""
 
@@ -34,6 +55,7 @@ class ArticleManager(models.Manager):
                 avg_rating=models.Avg("ratings"),
                 views=models.Count("article_views", distinct=True),
                 bookmarked_count=models.Count("bookmarks", distinct=True),
+                claps_count=models.Count("claps", distinct=True),
             )
         )
 

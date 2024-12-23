@@ -2,13 +2,15 @@
 
 # ruff: noqa: ANN001, ARG002
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
-from rest_framework.exceptions import ValidationError
+from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from core.apps.articles.models import Article
 from core.apps.general.permissions import IsOwnerOrReadOnly
-from core.apps.general.utils.article import ArticleUtility
 
 from .filters import BookmarkFilter
 from .models import Bookmark
@@ -16,7 +18,7 @@ from .paginations import BookmarkPagination
 from .serializers import BookmarkSerializer
 
 
-class BookmarkCreateView(generics.ListCreateAPIView):
+class BookmarkListView(generics.ListAPIView):
     """Bookmark list create view."""
 
     serializer_class = BookmarkSerializer
@@ -34,26 +36,43 @@ class BookmarkCreateView(generics.ListCreateAPIView):
             "article", "article__author"
         )
 
-    def perform_create(self, serializer):
-        """Save article by providing article and user in request info."""
-        article_id = self.kwargs.get("article_id")
-        article = ArticleUtility.get_article(article_id=article_id)
 
-        user = self.request.user
+class BookmarkCreateDestoryView(APIView):
+    """Bookmark create & destroy view."""
 
-        try:
-            serializer.save(article=article, user=user)
-        except IntegrityError as already_bookmarked:
-            detail = "You have already bookmarked this article."
-            raise ValidationError(detail=detail) from already_bookmarked
-
-
-class BookmarkDestoryView(generics.DestroyAPIView):
-    """To unbookmarked."""
-
-    queryset = Bookmark.objects.all()
     permission_classes = [IsOwnerOrReadOnly]
-    lookup_field = "id"
 
+    def post(self, request, article_id, format=None):
+        """
+        Create boomark using user and specified article.
 
-# Create your views here.
+        Returns
+            404 - If the specified article cannot be found
+            400 - If the user has already boomarked the article
+            201 - Successfully creatd.
+
+        """
+        # How should i implement post using general api view.
+        article = get_object_or_404(Article, id=article_id)
+        user = request.user
+        try:
+            Bookmark.objects.create(user=user, article=article)
+            detail = f"Successfully bookmarked the article: {article.title}"
+            return Response({"message": detail}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            detail = "You already bookmarked the article"
+            return Response({"message": detail}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, article_id, format=None):
+        """
+        Unbookmark an article.
+
+        Returns
+            404 - If the specified article cannot be found
+            204 - Successfully removed, no content.
+
+        """
+        clap = get_object_or_404(Bookmark, user=request.user, article=article_id)
+        clap.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

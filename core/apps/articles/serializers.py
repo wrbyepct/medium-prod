@@ -11,9 +11,25 @@ from rest_framework import serializers
 from core.apps.bookmarks.serializers import BookmarkSerializer
 from core.apps.profiles.serializers import ProfileSerializer
 
-from .models import Article
+from .models import Article, Clap
 
 logger = logging.getLogger(__name__)
+
+
+class ClapSerializer(serializers.ModelSerializer):
+    """Clap serializer."""
+
+    author_name = serializers.SerializerMethodField()
+    article_title = serializers.CharField(source="article.title", read_only=True)
+    created_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
+
+    def get_author_name(self, obj):
+        """Return user full name."""
+        return obj.user.full_name
+
+    class Meta:
+        model = Clap
+        fields = ["author_name", "article_title", "created_at"]
 
 
 class TagListField(serializers.Field):
@@ -46,8 +62,10 @@ class TagListField(serializers.Field):
 class ArticleSerializer(serializers.ModelSerializer):
     """Article Serializer."""
 
-    bookmarks = BookmarkSerializer(many=True)
-    bookmarked_count = serializers.IntegerField(read_only=True)
+    claps_count = serializers.IntegerField(read_only=True)
+    claps = ClapSerializer(many=True, read_only=True)
+    bookmarks_count = serializers.IntegerField(read_only=True)
+    bookmarks = BookmarkSerializer(many=True, read_only=True)
     avg_rating = serializers.DecimalField(
         max_digits=3, decimal_places=2, read_only=True
     )
@@ -105,13 +123,14 @@ class ArticleSerializer(serializers.ModelSerializer):
             "body",
             "tags",
             "estimated_reading_time",  # property: read-only
-            "views",  # property: read-only
             "avg_rating",  # property: read-only
+            "views",  # property: read-only
             "banner_image",  # return relative url
             "created_at",  # serializer method: read-only
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
-            "bookmarked_count",
+            "bookmarks_count",
             "bookmarks",
+            "claps_count",
+            "claps",
         ]
-        read_only_fields = ["bookmarks"]

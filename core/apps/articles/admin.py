@@ -7,14 +7,6 @@ from core.apps.ratings.models import Rating
 from core.utils.admin import get_model_change_page
 
 from . import models
-from .models import ArticleView
-
-
-class ViewInline(admin.TabularInline):
-    """View inline for article."""
-
-    model = ArticleView
-    extra = 1
 
 
 class RatingsInline(admin.TabularInline):
@@ -40,6 +32,20 @@ class BookmarkInline(admin.TabularInline):
     extra = 1
 
 
+class ViewInline(admin.TabularInline):
+    """View inline for article."""
+
+    model = models.ArticleView
+    extra = 1
+
+
+class ClapInline(admin.TabularInline):
+    """Clap Inline field."""
+
+    model = models.Clap
+    extra = 1
+
+
 @admin.register(models.Article)
 class ArticleAdmin(admin.ModelAdmin):
     """Article admin."""
@@ -49,7 +55,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ["created_at", "updated_at"]
     search_fields = ["body", "title", "tags"]
     ordering = ["-created_at"]
-    inlines = [RatingsInline, BookmarkInline, ViewInline]
+    inlines = [RatingsInline, BookmarkInline, ViewInline, ClapInline]
 
 
 @admin.register(models.ArticleView)
@@ -60,3 +66,17 @@ class ArticleViewAdmin(admin.ModelAdmin):
     list_display_links = ["pkid", "article"]
     list_filter = ["created_at", "updated_at"]
     search_fields = ["article", "user", "viewer_ip"]
+
+
+@admin.register(models.Clap)
+class ClapAdmin(admin.ModelAdmin):
+    """Clap admin."""
+
+    list_display = ["id", "description", "created_at"]
+    list_display_links = ["id", "description"]
+    list_filter = ["created_at"]
+    search_fields = ["article__title", "user__first_name", "user__last_name"]
+
+    def description(self, obj: models.Clap):
+        """Return string method of Clap."""
+        return obj.__str__()

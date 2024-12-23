@@ -26,7 +26,7 @@ INSTALLED_APPS += ["debug_toolbar"]  # += can also be used
 def show_toobar(request):
     client_ip: str = request.META.get("REMOTE_ADDR", "")
     print(f"client's ip is now: {client_ip}")
-    return client_ip.startswith("172.23.") or client_ip == "127.0.0.1"
+    return client_ip.startswith("172.") or client_ip == "127.0.0.1"
 
 
 DEBUG_TOOLBAR_CONFIG = {
