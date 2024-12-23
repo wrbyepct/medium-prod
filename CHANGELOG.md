@@ -1,3 +1,9 @@
+## 8.0.0 (2024-12-23)
+
+### Feat
+
+- **clap**: add clap feature, user can now clap and unclap an article
+
 ## 7.0.0 (2024-12-21)
 
 ### Feat
