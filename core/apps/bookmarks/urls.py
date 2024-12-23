@@ -2,10 +2,13 @@
 
 from django.urls import path
 
-from .views import BookmarkCreateView, BookmarkDestoryView
+from .views import BookmarkCreateDestoryView, BookmarkListView
 
 urlpatterns = [
-    path("", BookmarkCreateView.as_view(), name="bookmark_list"),
-    path("<int:article_id>/", BookmarkCreateView.as_view(), name="bookmark_create"),
-    path("remove/<int:id>/", BookmarkDestoryView.as_view(), name="bookmark_destroy"),
+    path("", BookmarkListView.as_view(), name="bookmark_list"),
+    path(
+        "<int:article_id>/",
+        BookmarkCreateDestoryView.as_view(),
+        name="bookmark_create_destroy",
+    ),
 ]

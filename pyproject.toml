@@ -64,6 +64,7 @@ line-length = 88
 select = ["ALL"]
 fixable = ["ALL"]
 ignore = [
+    "A002", # Argument `format` is shadowing a Python builtin
     "ANN201", # Check return type annotation
     "ANN002", # Missing type annotation for `*args`
     "ANN003", # Missing type annotation for `**extra_fields`

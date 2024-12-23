@@ -1,14 +1,17 @@
 """Article views."""
 
 # ruff: noqa: ANN001, ARG002
+from django.db import IntegrityError
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.apps.general.permissions import IsOwnerOrReadOnly
 
 from .filters import ArticleFilter
-from .models import Article, ArticleView
+from .models import Article, ArticleView, Clap
 from .paginations import ArticlePagination
 from .serializers import ArticleSerializer
 
@@ -26,7 +29,7 @@ class ArticleCreateListView(generics.ListCreateAPIView):
     def get_queryset(self):
         """Return all articles, if user is specified, return all articles belongs to the user."""
         return Article.objects.select_related("author__profile").prefetch_related(
-            "tags", "bookmarks"
+            "tags", "bookmarks", "claps__user"
         )
 
     def perform_create(self, serializer: ArticleSerializer):
@@ -45,8 +48,6 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieve article instance and catch Http404 error.
-
-        Record everything in
 
         Returns
             Response: Return Http404 if article not found, else return article data.
@@ -70,3 +71,44 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
         serializer = self.get_serializer(article)
         return Response(serializer.data)
+
+
+class ClapCreateDestroyView(APIView):
+    """Clap create or destroy view."""
+
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def post(self, request, article_id, format=None):
+        """
+        Create clap using user and specified article.
+
+        Returns
+            404 - If the specified article cannot be found
+            400 - If the user has already clapped the article
+            201 - Successfully creatd.
+
+        """
+        # How should i implement post using general api view.
+        article = get_object_or_404(Article, id=article_id)
+        user = request.user
+        try:
+            Clap.objects.create(user=user, article=article)
+            detail = f"Successfully clapped the article: {article.title}"
+            return Response({"message": detail}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            detail = "You already clapped the article"
+            return Response({"message": detail}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, article_id, format=None):
+        """
+        Unclapped an article.
+
+        Returns
+            404 - If the specified article cannot be found
+            204 - Successfully removed, no content.
+
+        """
+        clap = get_object_or_404(Clap, user=request.user, article=article_id)
+        clap.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
