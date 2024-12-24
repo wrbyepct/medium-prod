@@ -9,7 +9,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from core.apps.general.permissions import IsOwnerOrReadOnly
-from core.apps.general.utils.article import ArticleUtility
+from core.utils.article import ArticleUtility
 
 from .exceptions import YouCannotRateArticleAgain
 from .models import Rating

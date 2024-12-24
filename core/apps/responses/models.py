@@ -44,9 +44,11 @@ class Response(TimestampedModel, MPTTModel):
     parent = TreeForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
+    replies_count = models.PositiveSmallIntegerField(default=0)
+    claps_count = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
-        ordering = ["created_at"]
+        ordering = ["-claps_count"]
 
     def __str__(self) -> str:
         """User: {self.user.full_name}'s response to article: {self.article.title}."""
