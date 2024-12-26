@@ -4,7 +4,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from mptt.models import MPTTModel, TreeForeignKey
 
 from core.apps.articles.models import Article
 from core.apps.general.models import TimestampedModel
@@ -33,7 +32,7 @@ class ResponseClap(TimestampedModel):
         return f"User: {self.user.full_name} clapped the response by {self.response.user.full_name}."
 
 
-class Response(TimestampedModel, MPTTModel):
+class Response(TimestampedModel):
     """Response model."""
 
     content = models.TextField(blank=True, verbose_name=_("response content"))
@@ -41,7 +40,7 @@ class Response(TimestampedModel, MPTTModel):
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE, related_name="responses"
     )
-    parent = TreeForeignKey(
+    parent = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
     replies_count = models.PositiveSmallIntegerField(default=0)
@@ -49,6 +48,11 @@ class Response(TimestampedModel, MPTTModel):
 
     class Meta:
         ordering = ["-claps_count"]
+        indexes = [
+            models.Index(fields=["claps_count", "created_at", "updated_at"]),
+            models.Index(fields=["article_id", "parent_id"]),
+            models.Index(fields=["parent_id"]),
+        ]
 
     def __str__(self) -> str:
         """User: {self.user.full_name}'s response to article: {self.article.title}."""

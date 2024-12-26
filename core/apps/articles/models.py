@@ -80,7 +80,7 @@ class Article(TimestampedModel):
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
-
+    responses_count = models.PositiveSmallIntegerField(default=0)
     objects = ArticleManager()
 
     def __str__(self) -> str:
