@@ -5,6 +5,7 @@ from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 
 from core.apps.articles.models import Article
+from core.apps.general.permissions import IsOwnerOrReadOnly
 from core.utils.article import ResponseUtility
 
 from .models import Response
@@ -68,3 +69,12 @@ class ReplyListCreateView(generics.ListCreateAPIView):
         article = parent_response.article
         user = self.request.user
         serializer.save(article=article, user=user, parent=parent_response)
+
+
+class ResponseUpdateDestroyView(generics.UpdateAPIView, generics.DestroyAPIView):
+    """Response Update Destroy View."""
+
+    queryset = Response.objects.all()
+    serializer_class = ResponseSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+    lookup_field = "id"

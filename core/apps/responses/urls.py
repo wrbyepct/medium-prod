@@ -2,7 +2,11 @@
 
 from django.urls import path
 
-from .views import ReplyListCreateView, ResponseListCreateView
+from .views import (
+    ReplyListCreateView,
+    ResponseListCreateView,
+    ResponseUpdateDestroyView,
+)
 
 urlpatterns = [
     path(
@@ -14,5 +18,8 @@ urlpatterns = [
         "next-child-replies/<int:reply_to_id>/",
         ReplyListCreateView.as_view(),
         name="next_child_replies_list_create",
+    ),
+    path(
+        "<int:id>/", ResponseUpdateDestroyView.as_view(), name="response_update_destroy"
     ),
 ]
