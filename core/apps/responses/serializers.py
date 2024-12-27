@@ -24,5 +24,12 @@ class ResponseSerializer(serializers.ModelSerializer):
             "parent",
             "claps_count",
             "replies_count",
+            "created_at",
         ]
-        read_only_fields = ["replies_count", "claps_count", "article", "parent"]
+        read_only_fields = [
+            "replies_count",
+            "claps_count",
+            "article",
+            "parent",
+            "created_at",
+        ]

@@ -43,6 +43,7 @@ class Clap(TimestampedModel):
         return f"User: {self.user.first_name} clapped the article: {self.article.title}"
 
 
+# TODO: consider create a statistics model for counting fields
 class ArticleManager(models.Manager):
     """Article manager."""
 

@@ -4,6 +4,7 @@ from django.urls import path
 
 from .views import (
     ReplyListCreateView,
+    ResponseClapCreateDestroyView,
     ResponseListCreateView,
     ResponseUpdateDestroyView,
 )
@@ -21,5 +22,10 @@ urlpatterns = [
     ),
     path(
         "<int:id>/", ResponseUpdateDestroyView.as_view(), name="response_update_destroy"
+    ),
+    path(
+        "clap/<int:response_id>/",
+        ResponseClapCreateDestroyView.as_view(),
+        name="response_clap_create_destroy",
     ),
 ]

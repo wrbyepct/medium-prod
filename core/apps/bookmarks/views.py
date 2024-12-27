@@ -74,5 +74,5 @@ class BookmarkCreateDestoryView(APIView):
         """
         clap = get_object_or_404(Bookmark, user=request.user, article=article_id)
         clap.delete()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        # TODO: Figure out why it still shows 200 instead of 204
+        return Response(data=None, status=status.HTTP_204_NO_CONTENT)

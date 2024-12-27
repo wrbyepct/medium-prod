@@ -11,6 +11,41 @@ from core.apps.general.models import TimestampedModel
 User = get_user_model()
 
 
+class ResponseManager(models.Manager):
+    """Response Manager."""
+
+    def get_queryset(self):
+        """
+        Return optimized queryset.
+
+        Select on FK: article, user, parent.
+        Only with Columns:
+           - id, content,
+           - claps_count,
+           - replies_count,
+           - created_at,
+           - user_name,
+           - article_id,
+           - parent_id
+        """
+        return (
+            super()
+            .get_queryset()
+            .select_related("article", "user", "parent")
+            .only(
+                "id",
+                "content",
+                "claps_count",
+                "replies_count",
+                "created_at",
+                "user__first_name",
+                "user__last_name",
+                "article__id",
+                "parent__id",
+            )
+        )
+
+
 class ResponseClap(TimestampedModel):
     """Respone clap model."""
 
@@ -45,6 +80,8 @@ class Response(TimestampedModel):
     )
     replies_count = models.PositiveSmallIntegerField(default=0)
     claps_count = models.PositiveSmallIntegerField(default=0)
+
+    objects = ResponseManager()
 
     class Meta:
         ordering = ["-claps_count"]

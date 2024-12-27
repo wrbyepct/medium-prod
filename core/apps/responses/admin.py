@@ -1,5 +1,6 @@
 """Response Adim."""
 
+# ruff: noqa: ANN001, ARG002
 from django.contrib import admin
 
 from . import models
@@ -17,3 +18,8 @@ class ResponseAdmin(admin.ModelAdmin):
     def description(self, obj: models.Response):
         """Return instance string name."""
         return obj.__str__()
+
+    def delete_queryset(self, request, queryset):
+        """Trigger .delete() of every instance for the signal to update count."""
+        for obj in queryset:
+            obj.delete()  # This triggers `post_delete` signals
