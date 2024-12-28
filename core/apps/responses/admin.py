@@ -23,3 +23,15 @@ class ResponseAdmin(admin.ModelAdmin):
         """Trigger .delete() of every instance for the signal to update count."""
         for obj in queryset:
             obj.delete()  # This triggers `post_delete` signals
+
+
+@admin.register(models.ResponseClap)
+class ResponseClapAdmin(admin.ModelAdmin):
+    """ResponseClap admin."""
+
+    list_display = ["id", "description", "created_at"]
+    list_display_links = ["id", "description"]
+
+    def description(self, obj: models.ResponseClap):
+        """Show instance string name."""
+        return obj.__str__()

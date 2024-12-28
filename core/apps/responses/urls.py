@@ -16,7 +16,7 @@ urlpatterns = [
         name="top_level_response_list_create",
     ),
     path(
-        "next-child-replies/<int:reply_to_id>/",
+        "child-replies/<int:reply_to_id>/",
         ReplyListCreateView.as_view(),
         name="next_child_replies_list_create",
     ),
