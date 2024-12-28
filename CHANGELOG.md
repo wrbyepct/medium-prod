@@ -1,3 +1,9 @@
+## 8.1.1 (2024-12-28)
+
+### Refactor
+
+- **response-signal**: Optimize response count, response clap count update signal
+
 ## 8.1.0 (2024-12-28)
 
 ### Feat
