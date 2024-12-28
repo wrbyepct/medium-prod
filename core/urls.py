@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/v1/articles/", include("core.apps.articles.urls")),
     path("api/v1/ratings/", include("core.apps.ratings.urls")),
     path("api/v1/bookmarks/", include("core.apps.bookmarks.urls")),
+    path("api/v1/responses/", include("core.apps.responses.urls")),
 ]
 
 

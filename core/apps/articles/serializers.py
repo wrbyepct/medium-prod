@@ -129,6 +129,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "created_at",  # serializer method: read-only
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
+            "responses_count",
             "bookmarks_count",
             "bookmarks",
             "claps_count",

@@ -47,7 +47,9 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         """
-        Retrieve article instance and catch Http404 error.
+        Retrieve article instance, catch Http404 error if article does not exist.
+
+        Record Article view.
 
         Returns
             Response: Return Http404 if article not found, else return article data.
