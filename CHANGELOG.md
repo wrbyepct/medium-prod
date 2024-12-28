@@ -1,3 +1,14 @@
+## 8.1.0 (2024-12-28)
+
+### Feat
+
+- **response**: Fix error in response count update through signal. Add ResponseManager to extract long optimized query. Remove redudant instance check in view
+- Implement Response update destory feature.
+- **response-view**: Implement Response List & Create view, use index to optimize list query
+- add Response serializer, signals.
+- add Response admin
+- **response-model**: Add a article response model using mptt and TimestampModel as the base model
+
 ## 8.0.0 (2024-12-23)
 
 ### Feat
