@@ -8,7 +8,6 @@ import logging
 
 from rest_framework import serializers
 
-from core.apps.bookmarks.serializers import BookmarkSerializer
 from core.apps.profiles.serializers import ProfileSerializer
 
 from .models import Article, Clap
@@ -64,8 +63,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     claps_count = serializers.IntegerField(read_only=True)
     claps = ClapSerializer(many=True, read_only=True)
-    bookmarks_count = serializers.IntegerField(read_only=True)
-    bookmarks = BookmarkSerializer(many=True, read_only=True)
+
     avg_rating = serializers.DecimalField(
         max_digits=3, decimal_places=2, read_only=True
     )
@@ -130,8 +128,6 @@ class ArticleSerializer(serializers.ModelSerializer):
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
             "responses_count",
-            "bookmarks_count",
-            "bookmarks",
             "claps_count",
             "claps",
         ]

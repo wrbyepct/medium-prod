@@ -2,7 +2,6 @@
 
 from django.contrib import admin
 
-from core.apps.bookmarks.models import Bookmark
 from core.apps.ratings.models import Rating
 from core.utils.admin import get_model_change_page
 
@@ -23,13 +22,6 @@ class RatingsInline(admin.TabularInline):
             model_name="rating",
             obj_id=obj.id,
         )
-
-
-class BookmarkInline(admin.TabularInline):
-    """Bookmark Inline article."""
-
-    model = Bookmark
-    extra = 1
 
 
 class ViewInline(admin.TabularInline):
@@ -55,7 +47,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ["created_at", "updated_at"]
     search_fields = ["body", "title", "tags"]
     ordering = ["-created_at"]
-    inlines = [RatingsInline, BookmarkInline, ViewInline, ClapInline]
+    inlines = [RatingsInline, ViewInline, ClapInline]
 
 
 @admin.register(models.ArticleView)

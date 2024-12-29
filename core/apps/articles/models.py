@@ -55,7 +55,6 @@ class ArticleManager(models.Manager):
             .annotate(
                 avg_rating=models.Avg("ratings"),
                 views=models.Count("article_views", distinct=True),
-                bookmarked_count=models.Count("bookmarks", distinct=True),
                 claps_count=models.Count("claps", distinct=True),
             )
         )

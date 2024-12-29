@@ -18,6 +18,7 @@ from .paginations import BookmarkPagination
 from .serializers import BookmarkSerializer
 
 
+# TODO: Think about how to Re-implement Bookmark view
 class BookmarkListView(generics.ListAPIView):
     """Bookmark list create view."""
 

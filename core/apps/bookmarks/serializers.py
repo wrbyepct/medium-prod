@@ -5,6 +5,8 @@ from rest_framework import serializers
 
 from .models import Bookmark
 
+# TODO: Think about how to Re-implement Bookmark serialzier
+
 
 class BookmarkSerializer(serializers.ModelSerializer):
     """Bookmark serializer."""

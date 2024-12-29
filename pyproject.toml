@@ -103,6 +103,8 @@ max-complexity = 8
     "PT006" #  Wrong type passed to first argument of `@pytest.mark.parametrize`; expected `tuple`
 ]
 "**/migrations/**/*.py" = [
+    "ANN001", 
+    "ARG001",
     "INP001", 
     "D", # Missing docstring in public module
 
