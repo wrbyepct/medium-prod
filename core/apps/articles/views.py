@@ -29,7 +29,7 @@ class ArticleCreateListView(generics.ListCreateAPIView):
     def get_queryset(self):
         """Return all articles, if user is specified, return all articles belongs to the user."""
         return Article.objects.select_related("author__profile").prefetch_related(
-            "tags", "bookmarks", "claps__user"
+            "tags", "claps__user"
         )
 
     def perform_create(self, serializer: ArticleSerializer):
