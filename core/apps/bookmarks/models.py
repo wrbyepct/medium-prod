@@ -19,6 +19,7 @@ class ReadingCategory(TimestampedModel):
     description = models.TextField(blank=True)
     is_private = models.BooleanField(default=False)
     is_reading_list = models.BooleanField(default=False)
+    bookmarks_count = models.PositiveSmallIntegerField(default=0)
     bookmarks = models.ManyToManyField(Article, through="BookmarksInCategories")
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="bookmark_categories"

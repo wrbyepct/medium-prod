@@ -12,14 +12,44 @@ from .models import ReadingCategory
 # # TODO: Think about how to Re-implement Bookmark serialzier
 
 
+class BookmarkSerializer(serializers.ModelSerializer):
+    """Bookmark Serializer."""
+
+    created_at = serializers.DateTimeField(format="%m, %d, %Y")
+    partial_body = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Article
+        fields = [
+            "id",
+            "title",
+            "partial_body",
+            "created_at",
+            "claps_count",
+            "responses_count",
+        ]
+        read_only_fields = ["title", "created_at", "claps_count", "responses_count"]
+
+    def get_partial_body(self, obj):
+        """Return certain length of article's body."""
+        text = obj.description + obj.body
+        display_length = 133
+        return text[:134] if len(text) > display_length else text
+
+
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
     title = serializers.CharField(required=False)
+    bookmarks_count = serializers.SerializerMethodField()
 
     class Meta:
         model = ReadingCategory
-        fields = ["id", "title", "description", "is_private"]
+        fields = ["id", "title", "description", "bookmarks_count", "is_private"]
+
+    def get_bookmarks_count(self, obj):
+        """Return boomarked articles count."""
+        return obj.bookmarks.all().count()
 
     def create(self, validated_data):
         """Get or create a bookmark categoyr and associate it with an article."""

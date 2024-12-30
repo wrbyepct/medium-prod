@@ -3,11 +3,26 @@
 # ruff: noqa: ANN001, ARG002
 # mypy: disable-error-code="annotation-unchecked"
 
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
+from .models import ReadingCategory
 from .serializers import ReadingCategorySerializer
 
-# # TODO: Think about how to Re-implement Bookmark view
+# # TODO: Implement sorted by bookmark count on non-readingl-list categoreis
+
+
+class BookmarkCategoryListView(generics.ListAPIView):
+    """Show user's bookmark category."""
+
+    serializer_class = ReadingCategorySerializer
+    filter_backends = [DjangoFilterBackend]
+    ordering = ["-is_reading_list", "-bookmarks"]
+
+    def get_queryset(self):
+        """Return only the user's bookmark category."""
+        user = self.request.user
+        return ReadingCategory.objects.filter(user=user)
 
 
 class BookmarkCreateView(generics.CreateAPIView):
