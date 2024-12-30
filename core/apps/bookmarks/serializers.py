@@ -41,15 +41,11 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
     title = serializers.CharField(required=False)
-    bookmarks_count = serializers.SerializerMethodField()
 
     class Meta:
         model = ReadingCategory
         fields = ["id", "title", "description", "bookmarks_count", "is_private"]
-
-    def get_bookmarks_count(self, obj):
-        """Return boomarked articles count."""
-        return obj.bookmarks.all().count()
+        read_only_fields = ["id", "bookmarks_count"]
 
     def create(self, validated_data):
         """Get or create a bookmark categoyr and associate it with an article."""

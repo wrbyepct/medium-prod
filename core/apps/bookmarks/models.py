@@ -31,6 +31,7 @@ class ReadingCategory(TimestampedModel):
                 fields=["title", "user"], name="unique_title_per_user"
             )
         ]
+        ordering = ["-is_reading_list", "-bookmarks_count"]
         verbose_name_plural = "ReadingCategories"
 
     def __str__(self):
@@ -52,6 +53,7 @@ class BookmarksInCategories(models.Model):
                 fields=["category", "bookmark"], name="unique_boomark_per_category"
             )
         ]
+
         verbose_name_plural = "BookmarksInCategories"
 
     def __str__(self):
