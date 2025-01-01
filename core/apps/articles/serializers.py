@@ -61,13 +61,14 @@ class TagListField(serializers.Field):
 class ArticleSerializer(serializers.ModelSerializer):
     """Article Serializer."""
 
-    claps_count = serializers.IntegerField(read_only=True)
+    responses_count = serializers.IntegerField(read_only=True)
     claps = ClapSerializer(many=True, read_only=True)
+    claps_count = serializers.IntegerField(read_only=True)
 
+    views = serializers.IntegerField(read_only=True)
     avg_rating = serializers.DecimalField(
         max_digits=3, decimal_places=2, read_only=True
     )
-    views = serializers.IntegerField(read_only=True)
     author_info = ProfileSerializer(source="author.profile", read_only=True)
     created_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
     updated_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
@@ -118,16 +119,16 @@ class ArticleSerializer(serializers.ModelSerializer):
             "slug",
             "title",
             "description",
+            "banner_image",  # return relative url
             "body",
             "tags",
             "estimated_reading_time",  # property: read-only
             "avg_rating",  # property: read-only
             "views",  # property: read-only
-            "banner_image",  # return relative url
-            "created_at",  # serializer method: read-only
-            "updated_at",  # serializer method: read-only
-            "author_info",  # nested info: read-only
             "responses_count",
             "claps_count",
             "claps",
+            "created_at",  # serializer method: read-only
+            "updated_at",  # serializer method: read-only
+            "author_info",  # nested info: read-only
         ]

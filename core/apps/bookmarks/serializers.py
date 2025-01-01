@@ -15,10 +15,10 @@ PARTIAL_ARITCLE_BODY_LENGTH = 134
 class BookmarkSerializer(serializers.ModelSerializer):
     """Bookmark Serializer."""
 
+    claps_count = serializers.IntegerField(read_only=True)
+    responses_count = serializers.IntegerField(read_only=True)
     partial_body = serializers.SerializerMethodField()
-    created_at = serializers.DateTimeField(format="%b %d, %Y")
-    claps_count = serializers.SerializerMethodField()
-    responses_count = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(format="%b %d, %Y", read_only=True)
 
     class Meta:
         model = Article
@@ -31,15 +31,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
             "claps_count",
             "responses_count",
         ]
-        read_only_fields = ["title", "created_at"]
-
-    def get_claps_count(self, obj):
-        """Return all claps count."""
-        return obj.claps.all().count()
-
-    def get_responses_count(self, obj):
-        """Return all responsess count."""
-        return obj.responses.all().count()
+        read_only_fields = ["title"]
 
     def get_partial_body(self, obj):
         """Return certain length of article's body."""
@@ -55,7 +47,8 @@ class BookmarkSerializer(serializers.ModelSerializer):
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
-    bookmarks_count = serializers.SerializerMethodField()
+    bookmarks = BookmarkSerializer(many=True, read_only=True)
+    bookmarks_count = serializers.IntegerField(read_only=True)
     title = serializers.CharField(required=False)
 
     class Meta:
@@ -67,12 +60,9 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             "description",
             "is_private",
             "bookmarks_count",
+            "bookmarks",
         ]
         read_only_fields = ["id", "slug"]
-
-    def get_bookmarks_count(self, obj):
-        """Return boomarks count."""
-        return obj.bookmarks.all().count()
 
     def update(self, instance, validated_data):
         """Allow only updating is_private and description for 'Reading list' category."""

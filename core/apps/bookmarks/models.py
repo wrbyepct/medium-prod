@@ -15,6 +15,20 @@ from core.utils.hash import generate_hashed_slug
 User = get_user_model()
 
 
+class ReadingCategoryManager(models.Manager):
+    """ReadingCategory manager."""
+
+    def get_queryset(self):
+        """Return queryset with annotated field: boomarks_count."""
+        return (
+            super()
+            .get_queryset()
+            .defer("created_at", "updated_at")
+            .annotate(bookmarks_count=models.Count("bookmarks", distinct=True))
+            .prefetch_related("bookmarks")
+        )
+
+
 class ReadingCategory(TimestampedModel):
     """BookmarCategory."""
 
@@ -29,6 +43,8 @@ class ReadingCategory(TimestampedModel):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="bookmark_categories"
     )
+
+    objects = ReadingCategoryManager()
 
     class Meta:
         ordering = ["-is_reading_list"]

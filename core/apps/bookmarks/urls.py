@@ -19,7 +19,7 @@ urlpatterns = [
         name="bookmark_create",
     ),
     path(
-        "<slug:slug>/<int:article_id>/",
+        "category/<slug:slug>/<int:article_id>/",
         BookmarkDestoryView.as_view(),
         name="bookmark_destory",
     ),
