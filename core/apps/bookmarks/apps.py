@@ -6,3 +6,6 @@ class BookmarksConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "core.apps.bookmarks"
     verbose_name = _("Bookmarks")
+
+    def ready(self):
+        import core.apps.bookmarks.signals  # noqa: F401

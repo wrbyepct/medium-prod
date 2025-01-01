@@ -9,14 +9,16 @@ from core.apps.articles.models import Article
 
 from .models import ReadingCategory
 
-# # TODO: Think about how to Re-implement Bookmark serialzier
+PARTIAL_ARITCLE_BODY_LENGTH = 134
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
     """Bookmark Serializer."""
 
-    created_at = serializers.DateTimeField(format="%m, %d, %Y")
+    created_at = serializers.DateTimeField(format="%b %d, %Y")
     partial_body = serializers.SerializerMethodField()
+    claps_count = serializers.SerializerMethodField()
+    responses_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Article
@@ -28,24 +30,56 @@ class BookmarkSerializer(serializers.ModelSerializer):
             "claps_count",
             "responses_count",
         ]
-        read_only_fields = ["title", "created_at", "claps_count", "responses_count"]
+        read_only_fields = ["title", "created_at"]
+
+    def get_claps_count(self, obj):
+        """Return all claps count."""
+        return obj.claps.all().count()
+
+    def get_responses_count(self, obj):
+        """Return all responsess count."""
+        return obj.responses.all().count()
 
     def get_partial_body(self, obj):
         """Return certain length of article's body."""
         text = obj.description + obj.body
-        display_length = 133
-        return text[:134] if len(text) > display_length else text
+
+        return (
+            text[:PARTIAL_ARITCLE_BODY_LENGTH]
+            if len(text) >= PARTIAL_ARITCLE_BODY_LENGTH
+            else text
+        )
 
 
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
+    bookmarks = BookmarkSerializer(many=True, read_only=True)
     title = serializers.CharField(required=False)
 
     class Meta:
         model = ReadingCategory
-        fields = ["id", "title", "description", "bookmarks_count", "is_private"]
-        read_only_fields = ["id", "bookmarks_count"]
+        fields = [
+            "id",
+            "slug",
+            "title",
+            "description",
+            "is_private",
+            "bookmarks_count",
+            "bookmarks",
+        ]
+        read_only_fields = ["id", "slug", "bookmarks_count"]
+
+    def update(self, instance, validated_data):
+        """Allow only updating is_private and description for 'Reading list' category."""
+        if instance.is_reading_list:
+            validated_data.pop("title", None)
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+                instance.save()
+            return instance
+
+        return super().update(instance, validated_data)
 
     def create(self, validated_data):
         """Get or create a bookmark categoyr and associate it with an article."""

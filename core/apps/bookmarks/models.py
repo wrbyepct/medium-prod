@@ -2,12 +2,15 @@
 
 # mypy: disable-error-code="var-annotated,attr-defined"
 # ruff: noqa: ANN204
+
+from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
 
 from core.apps.articles.models import Article
 from core.apps.general.models import TimestampedModel
+from core.utils.hash import generate_hashed_slug
 
 User = get_user_model()
 
@@ -16,6 +19,9 @@ class ReadingCategory(TimestampedModel):
     """BookmarCategory."""
 
     title = models.CharField(validators=[MinLengthValidator(1)], max_length=60)
+    slug = AutoSlugField(
+        populate_from=generate_hashed_slug, always_update=True, unique=True
+    )
     description = models.TextField(blank=True)
     is_private = models.BooleanField(default=False)
     is_reading_list = models.BooleanField(default=False)
@@ -26,11 +32,6 @@ class ReadingCategory(TimestampedModel):
     )
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["title", "user"], name="unique_title_per_user"
-            )
-        ]
         ordering = ["-is_reading_list", "-bookmarks_count"]
         verbose_name_plural = "ReadingCategories"
 

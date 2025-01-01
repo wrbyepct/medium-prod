@@ -9,3 +9,7 @@ class YouCannotBookmarkAgain(APIException):
     status_code = 400
     default_code = "bad_request"
     default_detail = "You already bookmarked the same article."
+
+
+class SignalProcessingError(Exception):
+    """Handle error happening in signal."""

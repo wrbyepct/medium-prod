@@ -16,7 +16,7 @@ class BookmarkInline(admin.TabularInline):
 class ReadingCategoryAdmin(admin.ModelAdmin):
     """Reading Category admin."""
 
-    list_display = ["id", "title", "user_full_name"]
+    list_display = ["id", "title", "slug", "user_full_name", "is_private"]
     list_display_links = ["id", "title"]
     inlines = [BookmarkInline]
 
