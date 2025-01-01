@@ -19,7 +19,7 @@ class ReadingCategoryManager(models.Manager):
     """ReadingCategory manager."""
 
     def get_queryset(self):
-        """Return queryset with annotated field: boomarks_count."""
+        """Return queryset with annotated field: boomarks_count. Prefetch bookmarks."""
         return (
             super()
             .get_queryset()

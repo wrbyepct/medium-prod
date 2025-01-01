@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 
 from core.apps.articles.models import Article
 
-from .exceptions import SignalProcessingError
 from .models import ReadingCategory
 from .permissions import IsOwnerOrPublicOnly
 from .serializers import ReadingCategorySerializer
@@ -23,6 +22,7 @@ class BookmarkCategoryListView(generics.ListAPIView):
 
     serializer_class = ReadingCategorySerializer
 
+    # TODO: consider using Materilaized view on this query.
     def get_queryset(self):
         """Return only the user's bookmark category."""
         return self.queryset.filter(user=self.request.user).order_by(
@@ -62,11 +62,7 @@ class BookmarkDestoryView(APIView):
         """Try to delete a bookmark from a bookmark category."""
         article = get_object_or_404(Article, id=article_id)
         category = get_object_or_404(ReadingCategory, user=request.user, slug=slug)
-        try:
-            category.bookmarks.remove(article)
-        except SignalProcessingError:
-            return Response(
-                {"message": "Oops, something went wrong."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+
+        category.bookmarks.remove(article)
+
         return Response(data=None, status=status.HTTP_204_NO_CONTENT)
