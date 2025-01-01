@@ -9,6 +9,8 @@ class ResponseSerializer(serializers.ModelSerializer):
     """Response serializer."""
 
     user_name = serializers.SerializerMethodField()
+    claps_count = serializers.IntegerField(read_only=True)
+    replies_count = serializers.IntegerField(read_only=True)
 
     def get_user_name(self, obj: Response):
         """Return user full name."""
@@ -27,8 +29,6 @@ class ResponseSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = [
-            "replies_count",
-            "claps_count",
             "article",
             "parent",
             "created_at",

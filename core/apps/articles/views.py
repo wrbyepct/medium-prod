@@ -40,6 +40,7 @@ class ArticleCreateListView(generics.ListCreateAPIView):
 class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     """Article Retrieve, Update Destroy view."""
 
+    # TODO: optimize the query
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [IsOwnerOrReadOnly]

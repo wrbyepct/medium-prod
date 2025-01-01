@@ -22,7 +22,7 @@ class ResponseListCreateView(generics.ListCreateAPIView):
     serializer_class = ResponseSerializer
     pagination_class = ResponsePagination
     filter_backends = [OrderingFilter]
-    ordering = ["-claps_count", "-created_at", "-updated_at"]
+    ordering = ["-claps_count", "-replies_count", "-created_at", "-updated_at"]
 
     def get_queryset(self):
         """Get top-level responses of an article."""
@@ -33,7 +33,7 @@ class ResponseListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer: ResponseSerializer):
         """Create top-level response with article and user instance."""
         article_id = self.kwargs.get("article_id")
-        article = get_object_or_404(Article, id=article_id)
+        article = get_object_or_404(Article.objects.only("id"), id=article_id)
         user = self.request.user
         serializer.save(article=article, user=user)
 

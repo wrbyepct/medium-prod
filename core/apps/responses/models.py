@@ -31,18 +31,20 @@ class ResponseManager(models.Manager):
         return (
             super()
             .get_queryset()
-            .select_related("article", "user", "parent")
+            .annotate(
+                claps_count=models.Count("claps", distinct=True),
+                replies_count=models.Count("children", distinct=True),
+            )
             .only(
                 "id",
                 "content",
-                "claps_count",
-                "replies_count",
                 "created_at",
                 "user__first_name",
                 "user__last_name",
-                "article__id",
-                "parent__id",
+                "article_id",
+                "parent_id",
             )
+            .select_related("user")
         )
 
 
@@ -78,18 +80,8 @@ class Response(TimestampedModel):
     parent = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
-    replies_count = models.PositiveSmallIntegerField(default=0)
-    claps_count = models.PositiveSmallIntegerField(default=0)
 
     objects = ResponseManager()
-
-    class Meta:
-        ordering = ["-claps_count"]
-        indexes = [
-            models.Index(fields=["claps_count", "created_at", "updated_at"]),
-            models.Index(fields=["article_id", "parent_id"]),
-            models.Index(fields=["parent_id"]),
-        ]
 
     def __str__(self) -> str:
         """User: {self.user.full_name}'s response to article: {self.article.title}."""
