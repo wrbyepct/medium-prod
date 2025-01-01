@@ -43,7 +43,6 @@ class Clap(TimestampedModel):
         return f"User: {self.user.first_name} clapped the article: {self.article.title}"
 
 
-# TODO: consider create a statistics model for counting fields
 class ArticleManager(models.Manager):
     """Article manager."""
 
@@ -81,7 +80,8 @@ class Article(TimestampedModel):
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
-    objects = ArticleManager()
+    statistic_objects = ArticleManager()
+    objects = models.Manager()
 
     def __str__(self) -> str:
         return f"{self.author}'s article | {self.title}"

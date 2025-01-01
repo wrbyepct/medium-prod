@@ -62,7 +62,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     """Article Serializer."""
 
     responses_count = serializers.IntegerField(read_only=True)
-    claps = ClapSerializer(many=True, read_only=True)
+    clapped_by = ClapSerializer(source="claps", many=True, read_only=True)
     claps_count = serializers.IntegerField(read_only=True)
 
     views = serializers.IntegerField(read_only=True)
@@ -127,7 +127,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "views",  # property: read-only
             "responses_count",
             "claps_count",
-            "claps",
+            "clapped_by",
             "created_at",  # serializer method: read-only
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
