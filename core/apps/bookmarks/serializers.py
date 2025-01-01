@@ -15,8 +15,8 @@ PARTIAL_ARITCLE_BODY_LENGTH = 134
 class BookmarkSerializer(serializers.ModelSerializer):
     """Bookmark Serializer."""
 
-    created_at = serializers.DateTimeField(format="%b %d, %Y")
     partial_body = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(format="%b %d, %Y")
     claps_count = serializers.SerializerMethodField()
     responses_count = serializers.SerializerMethodField()
 
@@ -26,6 +26,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "partial_body",
+            "banner_image",
             "created_at",
             "claps_count",
             "responses_count",
@@ -55,6 +56,7 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
     bookmarks = BookmarkSerializer(many=True, read_only=True)
+    bookmarks_count = serializers.SerializerMethodField()
     title = serializers.CharField(required=False)
 
     class Meta:
@@ -68,7 +70,11 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             "bookmarks_count",
             "bookmarks",
         ]
-        read_only_fields = ["id", "slug", "bookmarks_count"]
+        read_only_fields = ["id", "slug"]
+
+    def get_bookmarks_count(self, obj):
+        """Return boomarks count."""
+        return obj.bookmarks.all().count()
 
     def update(self, instance, validated_data):
         """Allow only updating is_private and description for 'Reading list' category."""
