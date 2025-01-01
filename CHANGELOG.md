@@ -1,3 +1,22 @@
+## 9.0.0 (2025-01-01)
+
+### Feat
+
+- **Bookmark-category**: Refine Bookmark features
+- Add bookmarks_count field in ReadingCategory
+- Implement ReadingCategory model and its through table with bookmark.
+
+### Fix
+
+- Remove replies_count from Response model
+- Remove redundant code in BookmarkDestroyView
+- Optimize Bookmark all operations query
+- Remove 'responses_count' from Article model
+- ReadingCategory's boomkmark count is normalized, removed from model fields.
+- ReadingCategory's boomkmark count is now updated through signals. Bookmarkcategory Update & Destory view finished.
+- ReadingCategory is now sorted by -is_reading_list, -bookmark_count in db
+- Re-implement bookmark create: user can now create bookmark with specified category
+
 ## 8.1.1 (2024-12-28)
 
 ### Refactor
