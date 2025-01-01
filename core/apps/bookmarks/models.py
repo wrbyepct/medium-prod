@@ -2,32 +2,78 @@
 
 # mypy: disable-error-code="var-annotated,attr-defined"
 # ruff: noqa: ANN204
+
+from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 from core.apps.articles.models import Article
 from core.apps.general.models import TimestampedModel
+from core.utils.hash import generate_hashed_slug
 
 User = get_user_model()
 
 
-class Bookmark(TimestampedModel):
-    """Bookmark model."""
+class ReadingCategoryManager(models.Manager):
+    """ReadingCategory manager."""
 
-    article = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name="bookmarks"
+    def get_queryset(self):
+        """Return queryset with annotated field: boomarks_count. Prefetch bookmarks."""
+        return (
+            super()
+            .get_queryset()
+            .defer("created_at", "updated_at")
+            .annotate(bookmarks_count=models.Count("bookmarks", distinct=True))
+            .prefetch_related("bookmarks")
+        )
+
+
+class ReadingCategory(TimestampedModel):
+    """BookmarCategory."""
+
+    title = models.CharField(validators=[MinLengthValidator(1)], max_length=60)
+    slug = AutoSlugField(
+        populate_from=generate_hashed_slug, always_update=True, unique=True
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookmarks")
+    description = models.TextField(blank=True)
+    is_private = models.BooleanField(default=False)
+    is_reading_list = models.BooleanField(default=False)
+    bookmarks = models.ManyToManyField(Article, through="BookmarksInCategories")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="bookmark_categories"
+    )
+
+    objects = ReadingCategoryManager()
+
+    class Meta:
+        ordering = ["-is_reading_list"]
+        verbose_name_plural = "ReadingCategories"
+
+    def __str__(self):
+        """Return User: {self.user.first_name} {self.user.last_name} user.Bookmark category{self.title}."""
+        return f"User: {self.user.first_name} {self.user.last_name}'s Bookmark category: {self.title}."
+
+
+class BookmarksInCategories(models.Model):
+    """Bookmark & Reading Category through table."""
+
+    category = models.ForeignKey(ReadingCategory, on_delete=models.CASCADE)
+    bookmark = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name="reading_categories"
+    )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["article", "user"],
-                name="unique_user_bookmark_per_article",
+                fields=["category", "bookmark"], name="unique_boomark_per_category"
             )
         ]
-        ordering = ["-created_at"]
+
+        verbose_name_plural = "BookmarksInCategories"
 
     def __str__(self):
-        """Return string name Article: '{self.article.title}' bookmarked by user '{self.user.first_name}'."""
-        return f"Article: '{self.article.title}' bookmarked by user '{self.user.first_name}'"
+        """Return Article: {self.bookmark.title} in user: {self.category.user.full_name}'s list: {self.category.title}."""
+        return f"Article: {self.bookmark.title} in user: \
+            {self.category.user.full_name}'s \
+                list: {self.category.title}."

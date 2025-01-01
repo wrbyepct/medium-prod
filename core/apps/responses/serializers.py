@@ -8,9 +8,11 @@ from .models import Response
 class ResponseSerializer(serializers.ModelSerializer):
     """Response serializer."""
 
-    user_name = serializers.SerializerMethodField()
+    user_full_name = serializers.SerializerMethodField()
+    claps_count = serializers.IntegerField(read_only=True)
+    replies_count = serializers.IntegerField(read_only=True)
 
-    def get_user_name(self, obj: Response):
+    def get_user_full_name(self, obj: Response):
         """Return user full name."""
         return obj.user.full_name
 
@@ -18,7 +20,7 @@ class ResponseSerializer(serializers.ModelSerializer):
         model = Response
         fields = [
             "id",
-            "user_name",
+            "user_full_name",
             "content",
             "article",
             "parent",
@@ -27,8 +29,6 @@ class ResponseSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = [
-            "replies_count",
-            "claps_count",
             "article",
             "parent",
             "created_at",

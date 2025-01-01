@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class RatingCreateListView(generics.ListCreateAPIView):
-    """Rating Create & List view."""
+    """Create rating on an aritcle & show all ratings of an article."""
 
     serializer_class = RatingSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]

@@ -5,13 +5,23 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
+from core.apps.bookmarks.models import ReadingCategory
+
 User = get_user_model()
+
+
+class ReadingCategoryInline(admin.TabularInline):
+    """Bookmark Category Inline."""
+
+    model = ReadingCategory
+    extra = 1
 
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     """User admin BaseUserAdmin class."""
 
+    inlines = [ReadingCategoryInline]
     ordering = ["email"]
     list_display = [
         "pkid",

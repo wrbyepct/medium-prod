@@ -24,13 +24,14 @@ class ArticleCreateListView(generics.ListCreateAPIView):
 
     filterset_class = ArticleFilter
 
-    # TODO: opitimize for rating average query and views count
+    # TODO: Try to optimize for TaggableManager's tag insertion
+
     # DONE: Using annotate on manager query
     def get_queryset(self):
         """Return all articles, if user is specified, return all articles belongs to the user."""
-        return Article.objects.select_related("author__profile").prefetch_related(
-            "tags", "bookmarks", "claps__user"
-        )
+        return Article.statistic_objects.select_related(
+            "author__profile"
+        ).prefetch_related("tags", "claps__user")
 
     def perform_create(self, serializer: ArticleSerializer):
         """Create article with author user info."""
@@ -40,7 +41,8 @@ class ArticleCreateListView(generics.ListCreateAPIView):
 class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     """Article Retrieve, Update Destroy view."""
 
-    queryset = Article.objects.all()
+    # TODO: optimize the query
+    queryset = Article.statistic_objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [IsOwnerOrReadOnly]
     lookup_field = "id"
@@ -91,7 +93,7 @@ class ClapCreateDestroyView(APIView):
 
         """
         # How should i implement post using general api view.
-        article = get_object_or_404(Article, id=article_id)
+        article = get_object_or_404(Article.objects.only("id"), id=article_id)
         user = request.user
         try:
             Clap.objects.create(user=user, article=article)

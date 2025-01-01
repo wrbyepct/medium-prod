@@ -10,7 +10,7 @@ start-app() {
 }
 
 makemigrations() {
-    docker-compose -f local.yml run --rm api python -m core.manage makemigrations $1
+    docker-compose -f local.yml run --rm api python -m core.manage makemigrations "$1"
 }
 
 unmigrate() {

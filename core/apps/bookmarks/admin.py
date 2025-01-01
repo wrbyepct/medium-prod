@@ -2,17 +2,24 @@
 
 from django.contrib import admin
 
-from .models import Bookmark
+from .models import BookmarksInCategories, ReadingCategory
 
 
-@admin.register(Bookmark)
-class BookmarkAdmin(admin.ModelAdmin):
-    """Bookmark admin."""
+class BookmarkInline(admin.TabularInline):
+    """Bookmark inline."""
 
-    list_display = ["id", "description", "created_at"]
-    list_display_links = ["id", "description"]
-    search_fields = ["user__first_name", "user__last_name"]
+    model = BookmarksInCategories
+    extra = 1
 
-    def description(self, obj: Bookmark):
-        """Show bookmark model's __str__ name."""
-        return obj.__str__()
+
+@admin.register(ReadingCategory)
+class ReadingCategoryAdmin(admin.ModelAdmin):
+    """Reading Category admin."""
+
+    list_display = ["id", "title", "slug", "user_full_name", "is_private"]
+    list_display_links = ["id", "title"]
+    inlines = [BookmarkInline]
+
+    def user_full_name(self, obj: ReadingCategory):
+        """Return user full name."""
+        return obj.user.full_name
