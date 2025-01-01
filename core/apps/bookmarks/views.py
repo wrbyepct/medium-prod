@@ -19,12 +19,12 @@ from .serializers import ReadingCategorySerializer
 class BookmarkCategoryListView(generics.ListAPIView):
     """Show user's bookmark category."""
 
+    queryset = ReadingCategory.objects.prefetch_related("bookmarks")
     serializer_class = ReadingCategorySerializer
 
     def get_queryset(self):
         """Return only the user's bookmark category."""
-        user = self.request.user
-        return ReadingCategory.objects.filter(user=user)
+        return self.queryset.filter(user=self.request.user)
 
 
 class BookmarkCreateView(generics.CreateAPIView):

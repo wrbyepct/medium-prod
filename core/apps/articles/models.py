@@ -56,6 +56,7 @@ class ArticleManager(models.Manager):
                 avg_rating=models.Avg("ratings"),
                 views=models.Count("article_views", distinct=True),
                 claps_count=models.Count("claps", distinct=True),
+                responses_count=models.Count("responses", distinct=True),
             )
         )
 
@@ -80,7 +81,6 @@ class Article(TimestampedModel):
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
-    responses_count = models.PositiveSmallIntegerField(default=0)
     objects = ArticleManager()
 
     def __str__(self) -> str:

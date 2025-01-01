@@ -55,7 +55,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
-    bookmarks = BookmarkSerializer(many=True, read_only=True)
     bookmarks_count = serializers.SerializerMethodField()
     title = serializers.CharField(required=False)
 
@@ -68,7 +67,6 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             "description",
             "is_private",
             "bookmarks_count",
-            "bookmarks",
         ]
         read_only_fields = ["id", "slug"]
 
