@@ -62,51 +62,65 @@ class ProfileUpdateAPIView(generics.UpdateAPIView):
         return self.request.user.profile
 
 
-class FollowersListAPIView(APIView):
-    """
-    Follower API view.
+class BaseFollowListView(generics.ListAPIView):
+    """Template view for Following/Followers list view."""
 
-    Rewrite '.get()':
-        return followers_count and followers data.
-    """
+    serializer_class = FollowingSerializer
 
-    def get(self, request, format=None):
-        """Return Response containing followers_count and followers data."""
-        try:
-            profile = Profile.objects.get(user=request.user)
+    def get_queryset(self):
+        """
+        Return instances with necessary columns.
 
-        except Profile.DoesNotExist:
-            return Response(status=404)
+        Columns:
+           - "profile_photo"
+           - "about_me"
+           - "twitter_handle"
+           - "user__first_name"
+           - "user__last_name"
 
-        followers = profile.followers.all()
-        serializer = FollowingSerializer(followers, many=True)
 
+        By selecting joined table from user.
+        """
+        return Profile.objects.only(
+            "profile_photo",
+            "about_me",
+            "twitter_handle",
+            "user__first_name",
+            "user__last_name",
+        ).select_related("user")
+
+    def get(self, request, *args, **kwargs):
+        """Return formatted response: follow_type_count, follow_type data."""
+        response = super().get(request, *args, **kwargs)
+        data = response.data
+        follow_type = self.follow_type
         formatted_response = {
-            "followers_count": followers.count(),
-            "followers": serializer.data,
+            f"{follow_type}_count": len(data),
+            follow_type: response.data,
         }
         return Response(formatted_response)
 
 
-class FollowingAPIView(APIView):
-    """Get following user view."""
+class FollowersListAPIView(BaseFollowListView):
+    """Get user's followers by specifying user uuid."""
 
-    def get(self, request, user_id, format=None, *args, **kwargs):
-        """Get a list of follwing users."""
-        try:
-            profile = Profile.objects.get(user__id=user_id)
+    follow_type = "followers"
 
-        except Profile.DoesNotExist:
-            return Response(status=404)
+    def get_queryset(self):
+        """Filter results by selecting those who follow the user."""
+        user_id = self.kwargs.get("user_id")
+        return super().get_queryset().filter(following__user__id=user_id)
 
-        following_profiles = profile.following.all()
 
-        serializer = FollowingSerializer(following_profiles, many=True)
-        formatted_response = {
-            "following_count": following_profiles.count(),
-            "followings": serializer.data,
-        }
-        return Response(formatted_response)
+class FollowingListAPIView(BaseFollowListView):
+    """Get user's following by specifying user uuid."""
+
+    follow_type = "following"
+
+    def get_queryset(self):
+        """Filter results by selecting those whose followers contain the user."""
+        user_id = self.kwargs.get("user_id")
+        return super().get_queryset().filter(followers__user__id=user_id)
 
 
 class FollowAPIView(APIView):

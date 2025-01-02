@@ -52,15 +52,17 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
 class FollowingSerializer(serializers.ModelSerializer):
     """Show following user's serializer."""
 
-    first_name = serializers.CharField(source="user.first_name")
-    last_name = serializers.CharField(source="user.last_name")
+    user_full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = [
-            "first_name",
-            "last_name",
+            "user_full_name",
             "profile_photo",
             "about_me",
             "twitter_handle",
         ]
+
+    def get_user_full_name(self, obj):  # noqa: ANN001
+        """Return user full name."""
+        return obj.user.full_name
