@@ -26,12 +26,17 @@ class BookmarkCategoryListView(generics.ListAPIView):
     def get_queryset(self):
         """Return only the user's bookmark category."""
         return self.queryset.filter(user=self.request.user).order_by(
-            "-is_reading_list", "-bookmarks_count"
+            "-is_reading_list", "-updated_at"
         )
 
 
 class BookmarkCreateView(generics.CreateAPIView):
-    """View to create a bookmark by adding an article to an existing category."""
+    """
+
+    Create a bookmark by adding an article to an existing category, by providing "title" in the JSON body.
+
+    Or create a category on the fly, by providing "title", "description"(optional), "is_private"(optional).
+    """
 
     serializer_class = ReadingCategorySerializer
 

@@ -59,6 +59,7 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             "title",
             "description",
             "is_private",
+            "updated_at",
             "bookmarks_count",
             "bookmarks",
         ]

@@ -1,6 +1,6 @@
 """Article views."""
 
-# ruff: noqa: ANN001, ARG002
+# ruff: noqa: ANN001, ARG002, D301
 from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -17,7 +17,7 @@ from .serializers import ArticleSerializer
 
 
 class ArticleCreateListView(generics.ListCreateAPIView):
-    """Article view for list and create actions."""
+    """Show all articles, 10 results per page(You can request 20 results at maximum)."""
 
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
@@ -26,7 +26,7 @@ class ArticleCreateListView(generics.ListCreateAPIView):
 
     # TODO: Try to optimize for TaggableManager's tag insertion
 
-    # DONE: Using annotate on manager query
+    # TODO: Think how to persoalize article feed.
     def get_queryset(self):
         """Return all articles, if user is specified, return all articles belongs to the user."""
         return Article.statistic_objects.select_related(
@@ -39,9 +39,8 @@ class ArticleCreateListView(generics.ListCreateAPIView):
 
 
 class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """Article Retrieve, Update Destroy view."""
+    """Retrieve, update, or destory an artice."""
 
-    # TODO: optimize the query
     queryset = Article.statistic_objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [IsOwnerOrReadOnly]
@@ -78,7 +77,7 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ClapCreateDestroyView(APIView):
-    """Clap create or destroy view."""
+    """Clap / Unclap an article."""
 
     permission_classes = [IsOwnerOrReadOnly]
 
@@ -86,14 +85,13 @@ class ClapCreateDestroyView(APIView):
         """
         Create clap using user and specified article.
 
-        Returns
-            404 - If the specified article cannot be found
-            400 - If the user has already clapped the article
+        Return: \n
+            404 - If the specified article cannot be found. \n
+            400 - If the user has already clapped the article. \n
             201 - Successfully creatd.
 
         """
-        # How should i implement post using general api view.
-        article = get_object_or_404(Article.objects.only("id"), id=article_id)
+        article = get_object_or_404(Article.objects.only("id", "title"), id=article_id)
         user = request.user
         try:
             Clap.objects.create(user=user, article=article)
@@ -107,9 +105,9 @@ class ClapCreateDestroyView(APIView):
         """
         Unclapped an article.
 
-        Returns
-            404 - If the specified article cannot be found
-            204 - Successfully removed, no content.
+        Return: \n
+            404 - If the specified article cannot be found. \n
+            204 - Successfully removed, no content. \n
 
         """
         clap = get_object_or_404(Clap, user=request.user, article=article_id)

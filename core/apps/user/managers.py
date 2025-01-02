@@ -8,6 +8,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import AbstractBaseUser
@@ -24,17 +25,17 @@ class CustomUserManager(BaseUserManager):
 
     """
 
-    def email_validate(self, email: str):
+    @staticmethod
+    def email_validate(email: str) -> None:
         """Validate emial."""
         try:
             validate_email(email)
 
         except ValidationError as account_managers_CustomUserManager_error:
-            raise ValueError(
+            raise serializers.ValidationError(
                 _("Email provied: %s is invalid. Please provide a valid email.")
                 % email,
             ) from account_managers_CustomUserManager_error
-        return True
 
     def create_user(
         self,
@@ -81,7 +82,7 @@ class CustomUserManager(BaseUserManager):
 
         if email:
             email = self.normalize_email(email)
-            self.email_validate(email)
+            CustomUserManager.email_validate(email)
         else:
             raise ValueError(
                 _("User email is not provided. Please provide an valid email.."),

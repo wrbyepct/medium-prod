@@ -18,17 +18,17 @@ logger = logging.getLogger(__name__)
 class ClapSerializer(serializers.ModelSerializer):
     """Clap serializer."""
 
-    author_name = serializers.SerializerMethodField()
-    article_title = serializers.CharField(source="article.title", read_only=True)
+    user_name = serializers.SerializerMethodField()
+
     created_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
 
-    def get_author_name(self, obj):
+    def get_user_name(self, obj):
         """Return user full name."""
         return obj.user.full_name
 
     class Meta:
         model = Clap
-        fields = ["author_name", "article_title", "created_at"]
+        fields = ["user_name", "created_at"]
 
 
 class TagListField(serializers.Field):

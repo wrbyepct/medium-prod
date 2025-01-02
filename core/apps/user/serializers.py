@@ -8,6 +8,8 @@ from django_countries.serializer_fields import CountryField
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
+from core.apps.user.managers import CustomUserManager
+
 User = get_user_model()
 
 
@@ -56,6 +58,11 @@ class CustomRegisterSerializer(RegisterSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
+    def validate_email(self, value: str):
+        """Validate email."""
+        CustomUserManager.email_validate(value)
+        return value
+
     def get_cleaned_data(self):
         """
         Return the necessary user fields: 'email', 'fist_name', 'last_name', 'password1'.
@@ -78,13 +85,14 @@ class CustomRegisterSerializer(RegisterSerializer):
         adapter = get_adapter()
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
+
+        # This code handle saving user into db
+        # it access cleaned_data through self.
         user = adapter.save_user(request, user, self)
         user.save()
 
+        # This saves user' email to EmailAddress from allauth
+        # to track if the email is verified or not.
         setup_user_email(request, user, [])
-        user.email = self.cleaned_data.get("email")
-        user.password = self.cleaned_data.get("password1")
-        user.first_name = self.cleaned_data.get("first_name")
-        user.last_name = self.cleaned_data.get("last_name")
 
         return user

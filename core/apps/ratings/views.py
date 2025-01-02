@@ -3,13 +3,14 @@
 # ruff: noqa: ANN001, ARG002
 import logging
 
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
+from core.apps.articles.models import Article
 from core.apps.general.permissions import IsOwnerOrReadOnly
-from core.utils.article import ArticleUtility
 
 from .exceptions import YouCannotRateArticleAgain
 from .models import Rating
@@ -35,8 +36,12 @@ class RatingCreateListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Get queryset based on article id."""
-        article = self.get_article()
-        return article.ratings.select_related("user", "article")
+        article_id = self.kwargs.get("article_id")
+
+        get_object_or_404(Article.objects.only("id"), id=article_id)
+        return Rating.objects.filter(article=article_id).select_related(
+            "user", "article"
+        )
 
     def list(self, request, *args, **kwargs):
         """Get all ratings of the given article."""
@@ -53,8 +58,8 @@ class RatingCreateListView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         """Get article and request user first and then create the rating."""
-        article_id = self.request.query_params.get("article_id", None)
-        article = ArticleUtility.get_article(article_id=article_id)
+        article_id = self.kwargs.get("article_id")
+        article = get_object_or_404(Article.objects.only("id"), id=article_id)
         user = self.request.user
 
         rating = Rating.objects.filter(user=user, article=article).exists()
@@ -64,8 +69,8 @@ class RatingCreateListView(generics.ListCreateAPIView):
         serializer.save(user=user, article=article)
 
 
-class RatingUpdateDestory(generics.RetrieveUpdateDestroyAPIView):
-    """Rating Update and Destory view."""
+class RatingUpdateDestoryView(generics.UpdateAPIView, generics.DestroyAPIView):
+    """Edit or delete a rating."""
 
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
