@@ -8,7 +8,7 @@ from .serializers import UserSeralizer
 
 
 class CustomUserDetailsView(RetrieveUpdateAPIView):
-    """Retrieve or update detailed user information."""
+    """Retrieve or update your user information."""
 
     serializer_class = UserSeralizer
     permission_classes = [IsAuthenticated]

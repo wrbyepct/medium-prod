@@ -17,7 +17,16 @@ from .serializers import ArticleSerializer
 
 
 class ArticleCreateListView(generics.ListCreateAPIView):
-    """Show all articles, 10 results per page(You can request 20 results at maximum)."""
+    """
+    Show all articles, 10 results per page(You can request 20 results at maximum).
+
+    You can filter results by:
+        - athor name
+        - article tags
+        - article title
+        - article created time / updated time
+
+    """
 
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
@@ -39,7 +48,7 @@ class ArticleCreateListView(generics.ListCreateAPIView):
 
 
 class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """Retrieve, update, or destory an artice."""
+    """Retrieve, update, or destory an artice by providing article id."""
 
     queryset = Article.statistic_objects.all()
     serializer_class = ArticleSerializer

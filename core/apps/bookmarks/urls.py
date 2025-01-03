@@ -3,7 +3,7 @@
 from django.urls import path
 
 from .views import (
-    BookmarkCategoryListView,
+    BookmarkCategoryListCreateView,
     BookmarkCategoryRetrieveUpdateDestroyView,
     BookmarkCreateView,
     BookmarkDestoryView,
@@ -11,7 +11,9 @@ from .views import (
 
 urlpatterns = [
     path(
-        "categories/", BookmarkCategoryListView.as_view(), name="bookmark_category_list"
+        "categories/",
+        BookmarkCategoryListCreateView.as_view(),
+        name="bookmark_category_list",
     ),
     path(
         "<uuid:article_id>/",

@@ -78,10 +78,6 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Get or create a bookmark categoyr and associate it with an article."""
-        # Check to-boomark article existence
-        article_id = self.context.get("article_id", None)
-        article = get_object_or_404(Article, id=article_id)
-
         # Try to get exisitng category or create a new category
         title = validated_data.get("title", "Reading list")  # Default to "Reading list"
         user = validated_data.get("user")
@@ -94,6 +90,9 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             },
         )
 
-        bookmark_category.bookmarks.add(article)
+        article_id = self.context.get("article_id", None)
+        if article_id:
+            article = get_object_or_404(Article, id=article_id)
+            bookmark_category.bookmarks.add(article)
 
         return bookmark_category

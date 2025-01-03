@@ -15,8 +15,13 @@ from .permissions import IsOwnerOrPublicOnly
 from .serializers import ReadingCategorySerializer
 
 
-class BookmarkCategoryListView(generics.ListAPIView):
-    """Show user's bookmark category."""
+# TODO: Consider refactor thie view class.
+class BookmarkCategoryListCreateView(generics.ListCreateAPIView):
+    """
+    GET: Show user's bookmark categories.
+
+    POST: Create a bookmark category
+    """
 
     queryset = ReadingCategory.objects.all()
 
@@ -28,6 +33,10 @@ class BookmarkCategoryListView(generics.ListAPIView):
         return self.queryset.filter(user=self.request.user).order_by(
             "-is_reading_list", "-updated_at"
         )
+
+    def perform_create(self, serializer):
+        """Provide user instance in serializer's validated data."""
+        serializer.save(user=self.request.user)
 
 
 class BookmarkCreateView(generics.CreateAPIView):
@@ -52,7 +61,7 @@ class BookmarkCreateView(generics.CreateAPIView):
 
 
 class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """View to retrieve, update and destroy a bookmark category."""
+    """View to retrieve, update and destroy a bookmark category by providing bookmark category slug."""
 
     queryset = ReadingCategory.objects.all()
     serializer_class = ReadingCategorySerializer
@@ -64,7 +73,7 @@ class BookmarkDestoryView(APIView):
     """View to remove a bookmark from a category."""
 
     def delete(self, request, slug, article_id, format=None):
-        """Try to delete a bookmark from a bookmark category."""
+        """Try to delete a bookmark from a bookmark category by providng bookmark category slug and article id."""
         article = get_object_or_404(Article, id=article_id)
         category = get_object_or_404(ReadingCategory, user=request.user, slug=slug)
 
