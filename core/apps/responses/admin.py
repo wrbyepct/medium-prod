@@ -10,8 +10,8 @@ from . import models
 class ResponseAdmin(admin.ModelAdmin):
     """Response admin."""
 
-    list_display = ["id", "description", "created_at", "updated_at"]
-    list_display_links = ["id", "description"]
+    list_display = ["description", "created_at", "updated_at"]
+    list_display_links = ["description"]
     list_filter = ["user__first_name", "user__last_name", "created_at", "updated_at"]
     search_fields = ["article__title"]
 
@@ -29,8 +29,8 @@ class ResponseAdmin(admin.ModelAdmin):
 class ResponseClapAdmin(admin.ModelAdmin):
     """ResponseClap admin."""
 
-    list_display = ["id", "description", "created_at"]
-    list_display_links = ["id", "description"]
+    list_display = ["description", "created_at"]
+    list_display_links = ["description"]
 
     def description(self, obj: models.ResponseClap):
         """Show instance string name."""

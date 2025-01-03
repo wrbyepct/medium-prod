@@ -13,8 +13,8 @@ from .models import Rating
 class RatingAdmin(admin.ModelAdmin):
     """Rating admin."""
 
-    list_display = ["id", "rating", "custom_display", "user_full_name"]
-    list_display_links = ["id", "custom_display"]
+    list_display = ["rating", "custom_display", "user_full_name"]
+    list_display_links = ["custom_display"]
     readonly_fields = ["article_link", "user_profile", "created_at", "updated_at"]
     search_fields = ["article__title", "user__first_name", "user__last_name"]
     list_filter = ["rating", "created_at", "updated_at"]

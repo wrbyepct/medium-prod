@@ -27,9 +27,9 @@ class FollowersInline(admin.TabularInline):
 class ProfileAdmin(admin.ModelAdmin):
     """Profile Admin Page config."""
 
-    list_display = ["id", "pkid", "user", "country", "city", "phone_number"]
+    list_display = ["user", "country", "city", "phone_number"]
 
-    list_display_links = ["id", "pkid", "user"]
-    list_filter = ["id", "pkid"]
+    list_display_links = ["user"]
+    list_filter = []
 
     inlines = [FollowingInline, FollowersInline]

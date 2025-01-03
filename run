@@ -9,8 +9,18 @@ start-app() {
     poetry run python -m core.manage startapp $1
 }
 
+manage() {
+    docker-compose -f local.yml run --rm api python -m core.manage "$1"
+}
+
+
+
 makemigrations() {
     docker-compose -f local.yml run --rm api python -m core.manage makemigrations "$1"
+}
+
+migrate-to() {
+    docker-compose -f local.yml run --rm api python -m core.manage migrate "$1"
 }
 
 unmigrate() {

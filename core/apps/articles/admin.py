@@ -42,8 +42,8 @@ class ClapInline(admin.TabularInline):
 class ArticleAdmin(admin.ModelAdmin):
     """Article admin."""
 
-    list_display = ["pkid", "author", "title", "slug"]
-    list_display_links = ["pkid", "title"]
+    list_display = ["pkid", "id", "author", "title", "slug"]
+    list_display_links = ["pkid", "id", "title"]
     list_filter = ["created_at", "updated_at"]
     search_fields = ["body", "title", "tags"]
     ordering = ["-created_at"]
@@ -54,8 +54,8 @@ class ArticleAdmin(admin.ModelAdmin):
 class ArticleViewAdmin(admin.ModelAdmin):
     """Custom ArticeView admin."""
 
-    list_display = ["pkid", "article", "user", "viewer_ip"]
-    list_display_links = ["pkid", "article"]
+    list_display = ["pkid", "id", "article", "user", "viewer_ip"]
+    list_display_links = ["pkid", "id", "article"]
     list_filter = ["created_at", "updated_at"]
     search_fields = ["article", "user", "viewer_ip"]
 
@@ -64,8 +64,8 @@ class ArticleViewAdmin(admin.ModelAdmin):
 class ClapAdmin(admin.ModelAdmin):
     """Clap admin."""
 
-    list_display = ["id", "description", "created_at"]
-    list_display_links = ["id", "description"]
+    list_display = ["description", "created_at"]
+    list_display_links = ["description"]
     list_filter = ["created_at"]
     search_fields = ["article__title", "user__first_name", "user__last_name"]
 

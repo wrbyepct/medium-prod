@@ -14,12 +14,12 @@ urlpatterns = [
         "categories/", BookmarkCategoryListView.as_view(), name="bookmark_category_list"
     ),
     path(
-        "<int:article_id>/",
+        "<uuid:article_id>/",
         BookmarkCreateView.as_view(),
         name="bookmark_create",
     ),
     path(
-        "category/<slug:slug>/<int:article_id>/",
+        "category/<slug:slug>/<uuid:article_id>/",
         BookmarkDestoryView.as_view(),
         name="bookmark_delete",
     ),

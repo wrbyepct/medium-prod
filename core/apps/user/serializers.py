@@ -88,6 +88,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         # This code handle saving user into db
         # it access cleaned_data through self.
+        # Email normalize happens here
         user = adapter.save_user(request, user, self)
         user.save()
 
