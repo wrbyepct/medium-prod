@@ -6,12 +6,12 @@ from .views import RatingCreateListView, RatingUpdateDestoryView
 
 urlpatterns = [
     path(
-        "<int:article_id>/",
+        "<uuid:article_id>/",
         RatingCreateListView.as_view(),
         name="article_ratings_list_create",
     ),
     path(
-        "edit/<int:id>/",
+        "edit/<uuid:id>/",
         RatingUpdateDestoryView.as_view(),
         name="rating_update_destory",
     ),
