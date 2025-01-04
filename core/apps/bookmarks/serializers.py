@@ -4,6 +4,7 @@
 
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from core.apps.articles.models import Article
 
@@ -44,12 +45,26 @@ class BookmarkSerializer(serializers.ModelSerializer):
         )
 
 
+class DynamicPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
+    """Cusom Primary key related field."""
+
+    def get_queryset(self):
+        """Filter results by requesting user."""
+        return super().get_queryset().filter(user=self.context["request"].user)
+
+
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
+    title = serializers.CharField(required=False)
+    category = DynamicPrimaryKeyRelatedField(
+        queryset=ReadingCategory.objects.all(),
+        allow_null=True,
+        required=False,
+    )
+
     bookmarks = BookmarkSerializer(many=True, read_only=True)
     bookmarks_count = serializers.IntegerField(read_only=True)
-    title = serializers.CharField(required=False)
 
     class Meta:
         model = ReadingCategory
@@ -59,6 +74,7 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             "title",
             "description",
             "is_private",
+            "category",
             "updated_at",
             "bookmarks_count",
             "bookmarks",
@@ -77,18 +93,29 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def create(self, validated_data):
-        """Get or create a bookmark categoyr and associate it with an article."""
-        # Try to get exisitng category or create a new category
-        title = validated_data.get("title", "Reading list")  # Default to "Reading list"
-        user = validated_data.get("user")
-        bookmark_category, _ = ReadingCategory.objects.get_or_create(
-            user=user,
-            title=title,
-            defaults={
-                "description": validated_data.get("description", ""),
-                "is_private": validated_data.get("is_private", False),
-            },
-        )
+        """
+        Create a bookmark category or use an existing one.
+
+        Add a bookmark if specified.
+
+        """
+        selected_category = validated_data.pop("category", None)
+
+        if selected_category is None:
+            title = validated_data.get("title", None)
+            if title is None:
+                detail = "Creating new category 'title' cannot be empty."
+                raise ValidationError(detail=detail)
+
+            validated_data["description"] = validated_data.get("description", "")
+            validated_data["is_private"] = validated_data.get("is_private", False)
+
+            bookmark_category = ReadingCategory.objects.create(**validated_data)
+
+        else:
+            bookmark_category = get_object_or_404(
+                ReadingCategory, id=selected_category.id
+            )
 
         article_id = self.context.get("article_id", None)
         if article_id:
@@ -96,3 +123,9 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             bookmark_category.bookmarks.add(article)
 
         return bookmark_category
+
+    def to_representation(self, instance):
+        """Remove category from representation."""
+        data = super().to_representation(instance)
+        data.pop("category")
+        return data

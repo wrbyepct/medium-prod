@@ -14,6 +14,8 @@ from .models import ReadingCategory
 from .permissions import IsOwnerOrPublicOnly
 from .serializers import ReadingCategorySerializer
 
+# TODO: Implement feature that user can see if the article is bookmarked in what categories.
+
 
 # TODO: Consider refactor thie view class.
 class BookmarkCategoryListCreateView(generics.ListCreateAPIView):
@@ -39,6 +41,15 @@ class BookmarkCategoryListCreateView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
+class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and destroy a bookmark category by providing bookmark category slug."""
+
+    queryset = ReadingCategory.objects.all()
+    serializer_class = ReadingCategorySerializer
+    permission_classes = [IsOwnerOrPublicOnly]
+    lookup_field = "slug"
+
+
 class BookmarkCreateView(generics.CreateAPIView):
     """
 
@@ -58,15 +69,6 @@ class BookmarkCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         """Provide user instance in serializer's validated data."""
         serializer.save(user=self.request.user)
-
-
-class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """View to retrieve, update and destroy a bookmark category by providing bookmark category slug."""
-
-    queryset = ReadingCategory.objects.all()
-    serializer_class = ReadingCategorySerializer
-    permission_classes = [IsOwnerOrPublicOnly]
-    lookup_field = "slug"
 
 
 class BookmarkDestoryView(APIView):
