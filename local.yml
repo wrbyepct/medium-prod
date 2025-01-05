@@ -32,6 +32,15 @@ services:
       - medium-api
 
 
+  es: 
+    image: elasticsearch:8.17.0
+    environment:
+     - discovery.type=single-node
+    ports: 
+     - "9200:9200"
+    networks:
+     - medium-api
+
   api:
     container_name: api
     build:
