@@ -1,3 +1,14 @@
+## 9.0.1 (2025-01-05)
+
+### Fix
+
+- All urls that take id as part of url now take uuid
+- Allow user select existing category while adding a bookmark
+- Allow directly create Bookmark category without adding bookmark. Fix bookmark slug auto generate missing hash part.
+- Swap pkid and id on TimstampModel. Fix user doesn't have default 'Reading list' on create
+- Refactor Follower/Following list view and optimize the list query..
+- Fix fail to validate user email and remove redundant instance saving code.
+
 ## 9.0.0 (2025-01-01)
 
 ### Feat

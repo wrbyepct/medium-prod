@@ -158,7 +158,7 @@ omit = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "9.0.0"  
+version = "9.0.1"  
 update_changelog_on_bump = true
 tag_format = "$version"
 
