@@ -11,12 +11,12 @@ from .views import (
 urlpatterns = [
     path("", ArticleCreateListView.as_view(), name="article_list_create"),
     path(
-        "<int:id>/",
+        "<uuid:id>/",
         ArticleRetrieveUpdateDestroyView.as_view(),
         name="article_retrieve_update_destroy",
     ),
     path(
-        "clap/<int:article_id>/",
+        "clap/<uuid:article_id>/",
         ClapCreateDestroyView.as_view(),
         name="clap_create",
     ),

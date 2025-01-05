@@ -52,6 +52,7 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = None
 
+# Doc
 SPECTACULAR_SETTINGS = {
     "SCHEMA_PATH_PREFIX": r"/api/v[0-9]",
     "TITLE": "Medium API",
@@ -70,6 +71,8 @@ SPECTACULAR_SETTINGS = {
         "url": "https://testapi.com/contact",
     },
 }
+
+ELASTICSEARCH_DSL = {"default": {"host": "es:9200"}}
 
 # TODO make ADMIN_URL more complcated later
 ADMIN_URL = "supersecret/"  # new

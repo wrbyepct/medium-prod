@@ -18,7 +18,7 @@ admin.site.index_title = "Welcome to Medium API Admin"
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("api/v1/auth/user/", CustomUserDetailsView.as_view(), name="user_details"),
+    path("api/v1/auth/user/me/", CustomUserDetailsView.as_view(), name="user_details"),
     path("api/v1/auth/", include("dj_rest_auth.urls")),
     path("api/v1/auth/registration/", include("dj_rest_auth.registration.urls")),
     path(

@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from core.apps.bookmarks.models import ReadingCategory
 from core.apps.profiles.models import Profile
 from core.settings import AUTH_USER_MODEL
 
@@ -24,3 +25,9 @@ def create_user_profile(
     if created:
         Profile.objects.create(user=instance)
         logger.info(f"{instance}'s profile has been created.")
+        ReadingCategory.objects.create(
+            title="Reading list", is_reading_list=True, is_private=True, user=instance
+        )
+        logger.info(
+            f"{instance}'s default 'Reading list' bookmark category has been created."
+        )

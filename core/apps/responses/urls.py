@@ -11,20 +11,22 @@ from .views import (
 
 urlpatterns = [
     path(
-        "top-level-responses/<int:article_id>/",
+        "top-level-responses/<uuid:article_id>/",
         ResponseListCreateView.as_view(),
         name="top_level_response_list_create",
     ),
     path(
-        "child-replies/<int:reply_to_id>/",
+        "child-replies/<uuid:reply_to_id>/",
         ReplyListCreateView.as_view(),
         name="next_child_replies_list_create",
     ),
     path(
-        "<int:id>/", ResponseUpdateDestroyView.as_view(), name="response_update_destroy"
+        "<uuid:id>/",
+        ResponseUpdateDestroyView.as_view(),
+        name="response_update_destroy",
     ),
     path(
-        "clap/<int:response_id>/",
+        "clap/<uuid:response_id>/",
         ResponseClapCreateDestroyView.as_view(),
         name="response_clap_create_destroy",
     ),

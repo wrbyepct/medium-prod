@@ -17,7 +17,7 @@ from .serializers import ResponseSerializer
 
 
 class ResponseListCreateView(generics.ListCreateAPIView):
-    """Response View."""
+    """Get top-level responses of an article."""
 
     serializer_class = ResponseSerializer
     pagination_class = ResponsePagination
@@ -39,7 +39,7 @@ class ResponseListCreateView(generics.ListCreateAPIView):
 
 
 class ReplyListCreateView(generics.ListCreateAPIView):
-    """Response Create view."""
+    """Get immediate child replies of a specified response."""
 
     serializer_class = ResponseSerializer
     pagination_class = ResponsePagination
@@ -62,7 +62,7 @@ class ReplyListCreateView(generics.ListCreateAPIView):
 
 
 class ResponseUpdateDestroyView(generics.UpdateAPIView, generics.DestroyAPIView):
-    """Response Update Destroy View."""
+    """Update or delete a reponse by provding id."""
 
     queryset = Response.objects.all()
     serializer_class = ResponseSerializer
@@ -71,12 +71,12 @@ class ResponseUpdateDestroyView(generics.UpdateAPIView, generics.DestroyAPIView)
 
 
 class ResponseClapCreateDestroyView(APIView):
-    """ResponseClap create & destroy view."""
+    """Clap or un clap a response by providing response id."""
 
     permission_classes = [IsOwnerOrReadOnly]
 
     def post(self, request, response_id, format=None):
-        """Create response clap using user and to-clap-response id."""
+        """Clap a response."""
         response = get_object_or_404(Response, id=response_id)
 
         try:
@@ -95,7 +95,7 @@ class ResponseClapCreateDestroyView(APIView):
         return Res(**res)
 
     def delete(self, request, response_id, format=None):
-        """Delete response clap using user and to-clap-response id."""
+        """Unclap a response."""
         res_clap = get_object_or_404(
             ResponseClap, response=response_id, user=request.user
         )

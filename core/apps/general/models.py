@@ -9,8 +9,8 @@ from django.db import models
 class TimestampedModel(models.Model):
     """Abstract base Timstamped base class that uses uuid."""
 
-    id = models.BigAutoField(primary_key=True)
-    pkid = models.UUIDField(default=uuid4, editable=False, unique=True)
+    pkid = models.BigAutoField(primary_key=True)
+    id = models.UUIDField(default=uuid4, editable=False, unique=True)
 
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)

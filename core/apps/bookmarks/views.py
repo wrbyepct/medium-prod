@@ -14,9 +14,16 @@ from .models import ReadingCategory
 from .permissions import IsOwnerOrPublicOnly
 from .serializers import ReadingCategorySerializer
 
+# TODO: Implement feature that user can see if the article is bookmarked in what categories.
 
-class BookmarkCategoryListView(generics.ListAPIView):
-    """Show user's bookmark category."""
+
+# TODO: Consider refactor thie view class.
+class BookmarkCategoryListCreateView(generics.ListCreateAPIView):
+    """
+    GET: Show user's bookmark categories.
+
+    POST: Create a bookmark category
+    """
 
     queryset = ReadingCategory.objects.all()
 
@@ -26,12 +33,30 @@ class BookmarkCategoryListView(generics.ListAPIView):
     def get_queryset(self):
         """Return only the user's bookmark category."""
         return self.queryset.filter(user=self.request.user).order_by(
-            "-is_reading_list", "-bookmarks_count"
+            "-is_reading_list", "-updated_at"
         )
+
+    def perform_create(self, serializer):
+        """Provide user instance in serializer's validated data."""
+        serializer.save(user=self.request.user)
+
+
+class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and destroy a bookmark category by providing bookmark category slug."""
+
+    queryset = ReadingCategory.objects.all()
+    serializer_class = ReadingCategorySerializer
+    permission_classes = [IsOwnerOrPublicOnly]
+    lookup_field = "slug"
 
 
 class BookmarkCreateView(generics.CreateAPIView):
-    """View to create a bookmark by adding an article to an existing category."""
+    """
+
+    Create a bookmark by adding an article to an existing category, by providing "title" in the JSON body.
+
+    Or create a category on the fly, by providing "title", "description"(optional), "is_private"(optional).
+    """
 
     serializer_class = ReadingCategorySerializer
 
@@ -46,20 +71,11 @@ class BookmarkCreateView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """View to retrieve, update and destroy a bookmark category."""
-
-    queryset = ReadingCategory.objects.all()
-    serializer_class = ReadingCategorySerializer
-    permission_classes = [IsOwnerOrPublicOnly]
-    lookup_field = "slug"
-
-
 class BookmarkDestoryView(APIView):
     """View to remove a bookmark from a category."""
 
     def delete(self, request, slug, article_id, format=None):
-        """Try to delete a bookmark from a bookmark category."""
+        """Try to delete a bookmark from a bookmark category by providng bookmark category slug and article id."""
         article = get_object_or_404(Article, id=article_id)
         category = get_object_or_404(ReadingCategory, user=request.user, slug=slug)
 
