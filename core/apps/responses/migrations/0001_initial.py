@@ -3,7 +3,6 @@
 import uuid
 
 import django.db.models.deletion
-import mptt.fields
 from django.conf import settings
 from django.db import migrations, models
 
@@ -45,7 +44,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "parent",
-                    mptt.fields.TreeForeignKey(
+                    models.ForeignKey(
                         blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,

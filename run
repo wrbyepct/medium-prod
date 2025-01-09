@@ -5,14 +5,15 @@ prune-all-images() {
  
 }
 
+manage() {
+ 
+    docker-compose -f local.yml run --rm api python -m core.manage $@
+}
+
+
 start-app() {
     poetry run python -m core.manage startapp $1
 }
-
-manage() {
-    docker-compose -f local.yml run --rm api python -m core.manage "$1"
-}
-
 
 
 makemigrations() {
@@ -30,7 +31,7 @@ unmigrate() {
 help() {
     echo "${1} <task> <arg>s"
     echo "Tasks:"
-    compgen function -A | cat -n 
+    compgen -A function | cat -n 
 }
 
 TIMEFORMAT="Task completed in %3lR"
