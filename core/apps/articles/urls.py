@@ -3,13 +3,13 @@
 from django.urls import path
 
 from .views import (
-    ArticleCreateListView,
+    ArticleListCreateView,
     ArticleRetrieveUpdateDestroyView,
     ClapCreateDestroyView,
 )
 
 urlpatterns = [
-    path("", ArticleCreateListView.as_view(), name="article_list_create"),
+    path("", ArticleListCreateView.as_view(), name="article_list_create"),
     path(
         "<uuid:id>/",
         ArticleRetrieveUpdateDestroyView.as_view(),

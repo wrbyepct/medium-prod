@@ -2,45 +2,94 @@
 
 # ruff: noqa: ANN001, ARG002, D301
 from django.db import IntegrityError
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
+from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.apps.general.permissions import IsOwnerOrReadOnly
 
+from .documents import ArticleDocument
 from .filters import ArticleFilter
 from .models import Article, ArticleView, Clap
 from .paginations import ArticlePagination
 from .serializers import ArticleSerializer
 
 
-class ArticleCreateListView(generics.ListCreateAPIView):
+class ArticleListCreateView(generics.ListCreateAPIView):
     """
     Show all articles, 10 results per page(You can request 20 results at maximum).
 
     You can filter results by:
-        - athor name
-        - article tags
-        - article title
-        - article created time / updated time
+
+        1. Full-text search fields(Elasticsarch):
+            - title
+            - description
+            - body
+            - slug
+            - author.first_name
+            - author.last_name
+            - tags
+
+        2. Exact match:
+            - tags
+
+        3. Time range:
+            - created_at_after (e.g.: 2025-01-01)
+            - created_at_before (e.g.: 2024-12-31)
+
+        4. Ordering:
+            - ordering: (specify "created_at" or "-created_at")
 
     """
 
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
-
     filterset_class = ArticleFilter
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["created_at", "title"]
+    # We already set the default to DjangoFilterBackend at the settings.py
 
     # TODO: Try to optimize for TaggableManager's tag insertion
 
     # TODO: Think how to persoalize article feed.
+
+    def handle_fulltext_search(self):
+        """Use Elasticsearch to return filtered article ids if search term is provided, else return None."""
+        search_term = self.request.query_params.get("search", None)
+        if search_term:
+            search = ArticleDocument.search().query(
+                "multi_match",
+                query=search_term,
+                fields=[
+                    "title",
+                    "body",
+                    "slug",
+                    "description",
+                    "author.first_name",
+                    "author.last_name",
+                    "tags",
+                ],
+                fuzziness="auto",
+            )
+            response = search.execute()
+
+            return [hit.id for hit in response]
+        return None
+
     def get_queryset(self):
-        """Return all articles, if user is specified, return all articles belongs to the user."""
-        return Article.statistic_objects.select_related(
+        """Return all articles, if search term is provided, return all articles based on the search terms."""
+        qs = Article.statistic_objects.select_related(
             "author__profile"
         ).prefetch_related("tags", "claps__user")
+
+        article_ids = self.handle_fulltext_search()
+
+        if article_ids:
+            return qs.filter(id__in=article_ids)
+
+        return qs
 
     def perform_create(self, serializer: ArticleSerializer):
         """Create article with author user info."""
@@ -65,12 +114,7 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             Response: Return Http404 if article not found, else return article data.
 
         """
-        try:
-            article = self.get_object()
-
-        except Http404:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
+        article = self.get_object()
         # record view count
         viewer_ip = request.META.get("REMOTE_ADDR", "")
         user = (

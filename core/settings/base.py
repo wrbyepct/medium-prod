@@ -30,7 +30,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "taggit",
-    "mptt",
+    "django_elasticsearch_dsl",
 ]
 
 LOCAL_APPS = [

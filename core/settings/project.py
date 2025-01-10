@@ -72,7 +72,7 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
-ELASTICSEARCH_DSL = {"default": {"host": "es:9200"}}
+ELASTICSEARCH_DSL = {"default": {"hosts": "http://es:9200"}}
 
 # TODO make ADMIN_URL more complcated later
 ADMIN_URL = "supersecret/"  # new

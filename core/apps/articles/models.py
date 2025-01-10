@@ -86,6 +86,9 @@ class Article(TimestampedModel):
     def __str__(self) -> str:
         return f"{self.author}'s article | {self.title}"
 
+    class Meta:
+        ordering = ["-created_at"]
+
     @property
     def user(self):
         """Return also user, for accessing convenience."""
