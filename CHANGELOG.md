@@ -1,3 +1,13 @@
+## 9.1.0 (2025-01-10)
+
+### Feat
+
+- add Elasticsearch full-text search on Article List view.
+
+### Fix
+
+- set Article db-level '-created_at' ordering by default; allow ArticleListView sorting on 'created_at' and 'title'
+
 ## 9.0.1 (2025-01-05)
 
 ### Fix
