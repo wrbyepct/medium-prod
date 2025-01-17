@@ -49,8 +49,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 COPY local logs 
 COPY core core 
 COPY logs logs
+COPY pyproject.toml pyproject.toml
 
-COPY ["./docker/local/django/entrypoint", "./docker/local/django/start", "./docker/local/django/celery/worker/start_celeryworker", "./docker/local/django/celery/flower/start_flower",  "/"]
+COPY ["./docker/local/django/entrypoint", "./docker/local/django/start", "./docker/local/django/celery/worker/start_celeryworker", "./docker/local/django/celery/flower/start_flower", "/"]
 
 RUN sed -i 's/\r$//g' /entrypoint /start /start_flower /start_celeryworker \
     && chmod +x /entrypoint /start /start_flower /start_celeryworker

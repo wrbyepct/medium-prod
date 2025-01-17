@@ -14,20 +14,28 @@ from core.settings import AUTH_USER_MODEL
 logger = logging.getLogger(__name__)
 
 
+def create_profile(instance):
+    Profile.objects.create(user=instance)
+    logger.info(f"{instance}'s profile has been created.")
+
+
+def create_reading_category(instance):
+    ReadingCategory.objects.create(
+        title="Reading list", is_reading_list=True, is_private=True, user=instance
+    )
+    logger.info(
+        f"{instance}'s default 'Reading list' bookmark category has been created."
+    )
+
+
 @receiver(post_save, sender=AUTH_USER_MODEL)
 def create_user_profile(
-    sender: Literal["account.User"],  # noqa: ARG001
+    sender: Literal["account.User"],
     instance: AbstractBaseUser,
     created: bool,  # noqa: FBT001
-    **kwargs: dict,  # noqa: ARG001
+    **kwargs: dict,
 ):
     """Create profile when a user is created."""
     if created:
-        Profile.objects.create(user=instance)
-        logger.info(f"{instance}'s profile has been created.")
-        ReadingCategory.objects.create(
-            title="Reading list", is_reading_list=True, is_private=True, user=instance
-        )
-        logger.info(
-            f"{instance}'s default 'Reading list' bookmark category has been created."
-        )
+        create_profile(instance)
+        create_reading_category(instance)

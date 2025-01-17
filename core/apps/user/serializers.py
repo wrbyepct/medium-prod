@@ -13,7 +13,7 @@ from core.apps.user.managers import CustomUserManager
 User = get_user_model()
 
 
-class UserSeralizer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     """Custom User serializer for retrieval."""
 
     gender = serializers.CharField(source="profile.gender")

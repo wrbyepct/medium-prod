@@ -22,7 +22,7 @@ class TestUserModelStructure:
             ("is_staff", models.BooleanField),
         ],
     )
-    def test_model_fields_type(self, field_name, field_type):
+    def test_user_model_structure_field_type_correct(self, field_name, field_type):
         """Test model field types."""
         assert hasattr(self.model, field_name)
 
@@ -36,11 +36,13 @@ class TestUserModelStructure:
             ("id", [("unique", True)]),
             ("first_name", [("max_length", 50)]),
             ("last_name", [("max_length", 50)]),
-            ("email", [("unique", True)]),
+            ("email", [("unique", True), ("max_length", 255)]),
             ("date_joined", [("editable", False)]),
+            ("is_staff", [("default", False)]),
+            ("is_active", [("default", True)]),
         ],
     )
-    def test_model_constraints(self, field, constraints):
+    def test_user_model_structure_constraints_correct(self, field, constraints):
         """Test model field constraints."""
         field = self.model._meta.get_field(field)  # noqa: SLF001
 

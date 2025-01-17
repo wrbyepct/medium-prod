@@ -14,6 +14,7 @@ APP_DIR = ROOT_DIR / "apps"
 DEBUG = env.bool("DJANGO_DEBUG", False)
 IN_DOCKER = env.bool("IN_DOCKER", False)
 
+IN_TEST = env.bool("IN_TEST", False)
 
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = str(ROOT_DIR / "staticfiles")

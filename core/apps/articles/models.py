@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 
 from core.apps.general.models import TimestampedModel
+from core.utils.hash import generate_hashed_slug
 
 from .read_time_engine import ArticleReadTimeEngine
 
@@ -76,10 +77,15 @@ class Article(TimestampedModel):
         null=True,
         blank=True,
     )
-    tags = TaggableManager()
-    slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
+    slug = AutoSlugField(
+        populate_from=generate_hashed_slug,
+        always_update=True,
+        unique=True,
+        max_length=300,  # default is 50
+    )
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
+    tags = TaggableManager()
     statistic_objects = ArticleManager()
     objects = models.Manager()
 

@@ -94,15 +94,25 @@ max-complexity = 8
 [tool.ruff.lint.per-file-ignores]
 "core/settings/*.py" = ["F821", "PGH003"]
 "local/*.py" = ["F821"]
-"**/tests/**/*.py" = [
+"core/tests/*.py" = [
     "S101", 
     "INP001", 
     "ANN201", 
     "ANN001", 
+    "ARG",
     "D",
-    "PT006" #  Wrong type passed to first argument of `@pytest.mark.parametrize`; expected `tuple`
+    "PT006", #  Wrong type passed to first argument of `@pytest.mark.parametrize`; expected `tuple`
+    "ERA001",
+    "W291",
 ]
 "**/migrations/**/*.py" = [
+    "ANN001", 
+    "ARG001",
+    "INP001", 
+    "D", # Missing docstring in public module
+
+]
+"**/signals.py" = [
     "ANN001", 
     "ARG001",
     "INP001", 
@@ -139,9 +149,18 @@ DJANGO_SETTINGS_MODULE = "core.settings"
 python_files = "test_*.py"
 testpaths = ["core/tests"]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::pytest.PytestCacheWarning"]
+addopts = """
+    --reuse-db
+    -n auto
+    --dist loadfile
+    --durations=10
+
+"""
 markers = [
-    "model: tests for model", 
-    "model_structure: tests for model structure."
+    "view: tests for model views",
+    "behavior: tests for model behavior", 
+    "structure: tests for model structure.",
+    "flow: tests for api flow."
 ]
 
 
@@ -151,8 +170,17 @@ omit = [
     "*/tests/*",
     "core/settings/*",
     "*/conftest.py",
-    "core/manage.py"
+    "core/manage.py",
+    "*apps.py",
+    "*urls.py",
+    "*wsgi.py",
+    "*asgi.py",
+    "*__init__.py",
+    "*/env/*",
+    "*/venv/*",
+
 ]
+
 
 
 [tool.commitizen]

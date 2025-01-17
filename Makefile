@@ -22,7 +22,7 @@ migrate:
 statics:
 	docker-compose -f local.yml run --rm api python -m core.manage collectstatics --no-input --clear
 
-.PHONY:sever
+.PHONY:server
 server:
 	poetry run python -m core.manage runserver
 
@@ -38,25 +38,6 @@ admin:
     User.objects.create_superuser(email=email, password=password, first_name=first_name, last_name=last_name) \
     if not User.objects.filter(email='admin@example.com').exists() \
     else print('Superuser already exists')"
-
-
-# Test
-
-.PHONY:test
-test:
-	@RUNNING_MODE=test \
-	poetry run pytest $(ARGS)
-
-.PHONY:test-lf
-test-lf:
-	@RUNNING_MODE=test \
-	poetry run pytest -v -rs --lf
-
-.PHONY:test-r
-test-r:
-	@RUNNING_MODE=test \
-	poetry run pytest -v -rs -n auto --show-capture=no --cache-clear \
-	--cov=core --cov-report term-missing --cov-report html --cov-config=pyproject.toml
 
 
 

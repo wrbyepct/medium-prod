@@ -22,7 +22,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid4, unique=True, editable=False)
     first_name = models.CharField(max_length=50, verbose_name=_("first name"))
     last_name = models.CharField(max_length=50, verbose_name=_("last name"))
-    email = models.EmailField(unique=True, verbose_name=_("email address"))
+    email = models.EmailField(
+        unique=True, verbose_name=_("email address"), max_length=255
+    )
     date_joined = models.DateTimeField(auto_now_add=True, editable=False)
 
     # By default 'is_superuser' is set to 'False' because of PermissionMixin
@@ -35,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self) -> str:
-        """Return '<user.first_nae> | <user.email>'."""
+        """Return '<user.first_name> | <user.email>'."""
         return f"{self.first_name} | {self.email}"
 
     @property

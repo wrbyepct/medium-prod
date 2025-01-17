@@ -10,14 +10,13 @@ manage() {
     docker-compose -f local.yml run --rm api python -m core.manage $@
 }
 
-
 start-app() {
     poetry run python -m core.manage startapp $1
 }
 
-
+# Migrations
 makemigrations() {
-    docker-compose -f local.yml run --rm api python -m core.manage makemigrations "$1"
+    docker-compose -f local.yml run --rm api python -m core.manage makemigrations $@
 }
 
 migrate-to() {
@@ -26,6 +25,20 @@ migrate-to() {
 
 unmigrate() {
     docker-compose -f local.yml run --rm api python -m core.manage migrate $1 zero $2
+}
+
+
+# Tests
+test() {
+    IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@ 
+}
+
+test-report() {
+    IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@  \
+    --cov=. \
+    --cov-report=term-missing \
+    --cov-report=html \
+    --cov-config=pyproject.toml
 }
 
 help() {

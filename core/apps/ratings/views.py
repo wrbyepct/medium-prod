@@ -61,7 +61,6 @@ class RatingCreateListView(generics.ListCreateAPIView):
         article_id = self.kwargs.get("article_id")
         article = get_object_or_404(Article.objects.only("id"), id=article_id)
         user = self.request.user
-
         rating = Rating.objects.filter(user=user, article=article).exists()
         if rating:
             raise YouCannotRateArticleAgain

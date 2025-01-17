@@ -23,13 +23,13 @@ class ArticleReadTimeEngine:
             int: Number of words count.
 
         """
-        words = re.findall(r"\w+", text)
+        words = re.findall(r"[^\W\d_]+", text, flags=re.UNICODE)
         return len(words)
 
     @staticmethod
     def get_reading_time(
         article: "Article",
-        words_per_min: int = 250,
+        words_per_min: int = 250,  # Average adult read time
         secs_per_image: int = 10,
         secs_per_tag: int = 2,
     ) -> int:
@@ -47,11 +47,11 @@ class ArticleReadTimeEngine:
 
         """
         article_word_count = (
-            ArticleReadTimeEngine.get_reading_time(
+            ArticleReadTimeEngine.word_count(
                 article.body,
             )
-            + ArticleReadTimeEngine.get_reading_time(article.title)
-            + ArticleReadTimeEngine.get_reading_time(article.description)
+            + ArticleReadTimeEngine.word_count(article.title)
+            + ArticleReadTimeEngine.word_count(article.description)
         )
 
         read_time = article_word_count / words_per_min
