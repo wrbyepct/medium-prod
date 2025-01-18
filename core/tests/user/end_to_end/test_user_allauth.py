@@ -14,9 +14,7 @@ pytestmark = pytest.mark.django_db
 User = get_user_model()
 
 
-def test_user_register_flow(
-    mock_create_user_profile, mock_create_user_reading_category, user_data
-):
+def test_user_register_flow(mock_create_user_side_effect, user_data):
     client = APIClient()  # only it can store crendietial token
 
     # Register user

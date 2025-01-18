@@ -4,11 +4,7 @@ import pytest
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory
 
-from .constants import (
-    ARTICLE_DOCUMENT_UPDATE,
-    CREATE_USER_PROFILE_SIDE_EFFECT,
-    CREATE_USER_READINGCATEGORY_SIDE_EFFECT,
-)
+from .constants import ARTICLE_DOCUMENT_UPDATE, CREATE_USER_SIDE_EFFECT
 
 """
 Q: Why Mock Request with SessionMiddleWare is Needed?
@@ -43,12 +39,6 @@ def mock_article_index_update():
 
 
 @pytest.fixture
-def mock_create_user_profile():
-    with patch(CREATE_USER_PROFILE_SIDE_EFFECT):
-        yield
-
-
-@pytest.fixture
-def mock_create_user_reading_category():
-    with patch(CREATE_USER_READINGCATEGORY_SIDE_EFFECT):
+def mock_create_user_side_effect():
+    with patch(CREATE_USER_SIDE_EFFECT):
         yield

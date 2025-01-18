@@ -35,9 +35,9 @@ test() {
 
 test-report() {
     IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@  \
-    --cov=. \
-    --cov-report=term-missing \
-    --cov-report=html \
+    --cov-report term-missing \
+    --cov-report html \
+    --cov=core \
     --cov-config=pyproject.toml
 }
 

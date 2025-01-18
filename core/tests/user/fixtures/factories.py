@@ -1,7 +1,6 @@
 import factory
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
-from pytest_factoryboy import register
 
 User = get_user_model()
 
@@ -23,6 +22,3 @@ class UserFactory(factory.django.DjangoModelFactory):
         if "is_superuser" in kwargs:
             return manager.create_superuser(*args, **kwargs)
         return manager.create_user(*args, **kwargs)
-
-
-register(UserFactory)

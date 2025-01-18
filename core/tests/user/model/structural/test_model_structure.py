@@ -26,7 +26,7 @@ class TestUserModelStructure:
         """Test model field types."""
         assert hasattr(self.model, field_name)
 
-        field = self.model._meta.get_field(field_name)  # noqa:  SLF001
+        field = self.model._meta.get_field(field_name)
         assert isinstance(field, field_type)
 
     @pytest.mark.parametrize(
@@ -44,7 +44,7 @@ class TestUserModelStructure:
     )
     def test_user_model_structure_constraints_correct(self, field, constraints):
         """Test model field constraints."""
-        field = self.model._meta.get_field(field)  # noqa: SLF001
+        field = self.model._meta.get_field(field)
 
         for constraint, expect_value in constraints:
             assert getattr(field, constraint) == expect_value

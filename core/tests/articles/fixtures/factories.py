@@ -2,7 +2,7 @@ import factory
 from django.db.models.signals import post_delete, post_save
 from faker import Faker
 
-from core.apps.articles.models import Article
+from core.apps.articles.models import Article, ArticleView, Clap
 from core.tests.user.fixtures.factories import UserFactory
 
 faker = Faker()
@@ -26,3 +26,24 @@ class ArticleFactory(factory.django.DjangoModelFactory):
 
         if extracted:
             self.tags.set(extracted)
+
+
+@factory.django.mute_signals(post_save, post_delete)
+class ArticleViewFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ArticleView
+
+    article = factory.SubFactory(ArticleFactory)
+
+    class Params:
+        has_user = factory.Trait(user=factory.SubFactory(UserFactory))
+        has_viewer_ip = factory.Trait(viewer_ip=factory.Faker("ipv4"))
+
+
+@factory.django.mute_signals(post_save, post_delete)
+class ArticleClapFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Clap
+
+    article = factory.SubFactory(ArticleFactory)
+    user = factory.SubFactory(UserFactory)

@@ -101,9 +101,13 @@ max-complexity = 8
     "ANN001", 
     "ARG",
     "D",
+    "DTZ005", # atetime.datetime.now()` called without a `tz` argumen
     "PT006", #  Wrong type passed to first argument of `@pytest.mark.parametrize`; expected `tuple`
     "ERA001",
     "W291",
+    "PT011",
+    "SLF001",
+    "PLR0913"
 ]
 "**/migrations/**/*.py" = [
     "ANN001", 

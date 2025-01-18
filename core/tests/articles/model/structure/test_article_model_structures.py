@@ -28,7 +28,7 @@ from core.utils.hash import generate_hashed_slug
 )
 def test_article_model_structure__field_type_correct(field_name, field_type):
     assert hasattr(Article, field_name)
-    field = Article._meta.get_field(field_name)  # noqa: SLF001
+    field = Article._meta.get_field(field_name)
     assert isinstance(field, field_type)
 
 
@@ -61,7 +61,7 @@ def test_article_model_structure__field_type_correct(field_name, field_type):
     ],
 )
 def test_article_model_structure__field_contraints_correct(field_name, constraints):
-    field = Article._meta.get_field(field_name)  # noqa:SLF001
+    field = Article._meta.get_field(field_name)
 
     for attr, val in constraints:
         assert getattr(field, attr) == val

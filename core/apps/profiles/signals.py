@@ -14,12 +14,10 @@ from core.settings import AUTH_USER_MODEL
 logger = logging.getLogger(__name__)
 
 
-def create_profile(instance):
+def side_effect(instance):
+    """Create user Profile and default ReadingCategory"""
     Profile.objects.create(user=instance)
     logger.info(f"{instance}'s profile has been created.")
-
-
-def create_reading_category(instance):
     ReadingCategory.objects.create(
         title="Reading list", is_reading_list=True, is_private=True, user=instance
     )
@@ -37,5 +35,4 @@ def create_user_profile(
 ):
     """Create profile when a user is created."""
     if created:
-        create_profile(instance)
-        create_reading_category(instance)
+        side_effect(instance)
