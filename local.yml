@@ -57,6 +57,7 @@ services:
       - ./local:/app/local
       - ./logs:/app/logs:z
       - static_volume:/vol/api
+      - ./htmlcov:/app/htmlcov
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres

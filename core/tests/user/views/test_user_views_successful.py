@@ -1,7 +1,10 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory
 from django.urls import reverse
 from rest_framework import status
+
+from core.apps.user.views import CustomUserDetailsView
 
 pytestmark = pytest.mark.django_db
 User = get_user_model()
@@ -46,3 +49,13 @@ def test_user_view__change_password_successful(
 
     user = User.objects.get(pk=normal_user.pk)
     assert user.check_password(password_info["new_password1"])
+
+
+def test_user_retrieve_view__get_queryset_empty():
+    factory = RequestFactory()
+    request = factory.get("/")
+
+    view = CustomUserDetailsView()
+    view.request = request
+
+    assert view.get_queryset().count() == 0

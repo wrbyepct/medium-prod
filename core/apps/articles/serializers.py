@@ -73,7 +73,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
     updated_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)
 
-    tags = TagListField()
+    tags = TagListField(required=False)
 
     def to_representation(self, instance: Article):
         """Return article's banner image relative urls instead of absolute one."""
@@ -125,9 +125,9 @@ class ArticleSerializer(serializers.ModelSerializer):
             "estimated_reading_time",  # property: read-only
             "avg_rating",  # property: read-only
             "views",  # property: read-only
-            "responses_count",
-            "claps_count",
-            "clapped_by",
+            "responses_count",  # read-only
+            "claps_count",  #  read-only
+            "clapped_by",  # read-only
             "created_at",  # serializer method: read-only
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only

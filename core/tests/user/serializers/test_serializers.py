@@ -38,7 +38,7 @@ def test_user_serializer__convert_super_user_instance_correctly(super_user):
 
 
 def test_user_register_serializer__save_method_return_user_instance(
-    mock_create_user_profile, mock_create_user_reading_category, user_data, mock_request
+    mock_create_user_side_effect, user_data, mock_request
 ):
     serializer = CustomRegisterSerializer(data=user_data)
 

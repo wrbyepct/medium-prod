@@ -1,16 +1,9 @@
 import pytest
-from pytest_factoryboy import register
-
-from core.tests.articles.fixtures.factories import ArticleFactory
-from core.tests.user.fixtures.factories import UserFactory
-
-register(UserFactory)
-register(ArticleFactory)
 
 pytest_plugins = [
     "core.tests.user.fixtures",
-    "core.tests.fixtures",
     "core.tests.articles.fixtures",
+    "core.tests.fixtures",
 ]
 
 
