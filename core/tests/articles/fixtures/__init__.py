@@ -6,6 +6,7 @@ from pytest_factoryboy import register
 
 from core.tests.utils.misc import create_upload_image_file
 
+
 from .factories import ArticleClapFactory, ArticleFactory, ArticleViewFactory
 
 register(ArticleFactory)
