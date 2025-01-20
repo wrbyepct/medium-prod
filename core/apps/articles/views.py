@@ -85,7 +85,6 @@ class ArticleListCreateView(generics.ListCreateAPIView):
         ).prefetch_related("tags", "claps__user")
 
         article_ids = self.handle_fulltext_search()
-
         if article_ids:
             return qs.filter(id__in=article_ids)
 
