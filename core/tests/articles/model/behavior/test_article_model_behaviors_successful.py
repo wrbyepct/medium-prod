@@ -7,15 +7,18 @@ pytestmark = pytest.mark.django_db
 def test_article_model_behavior__create_article_successful(
     mock_create_user_side_effect,
     mock_article_index_update,
+    mock_media_dir,
     normal_user,
     article_factory,
 ):
-    article = article_factory.create(author=normal_user, tags=["a", "b"])
+    article = article_factory.create(
+        author=normal_user, tags=["a", "b"], with_image=True
+    )
 
     assert article.title is not None
     assert article.description is not None
     assert article.body is not None
-    assert not article.banner_image
+    assert article.banner_image.name == "default.jpg"
     assert article.author == normal_user
     assert list(article.tags.names()) == ["a", "b"]
 

@@ -19,6 +19,11 @@ class ArticleFactory(factory.django.DjangoModelFactory):
 
     author = factory.SubFactory(UserFactory)
 
+    class Params:
+        with_image = factory.Trait(
+            banner_image=factory.django.ImageField(filename="default.jpg")
+        )
+
     @factory.post_generation
     def tags(self, create, extracted, **kwargs):
         if not create:
