@@ -30,11 +30,11 @@ unmigrate() {
 
 # Tests
 test() {
-    IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@ 
+    docker-compose -f local.yml run --rm -e IN_TEST=1 api pytest $@ 
 }
 
 test-report() {
-    IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@  \
+    docker-compose -f local.yml run --rm -e IN_TEST=1 api pytest $@  \
     --cov-report term-missing \
     --cov-report html \
     --cov=core \

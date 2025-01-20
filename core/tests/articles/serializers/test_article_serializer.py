@@ -1,4 +1,5 @@
 import json
+
 import pytest
 
 from core.apps.articles.models import Article

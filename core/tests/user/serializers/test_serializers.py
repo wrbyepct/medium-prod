@@ -61,7 +61,7 @@ def test_user_register_serializer__password_not_match_raise_validation_error():
         "password2": "password12345_wrong",
     }
 
-    with pytest.raises(ValidationError):  # noqa: PT012
+    with pytest.raises(ValidationError):
         serializer = CustomRegisterSerializer(data=invlaid_data)
         serializer.is_valid(raise_exception=True)
 
@@ -88,6 +88,6 @@ def test_user_register_serializer__password_not_match_raise_validation_error():
 def test_user_register_serializer__name_exceeding_len50_raise_validation_error(
     invalid_data,
 ):
-    with pytest.raises(ValidationError):  # noqa: PT012
+    with pytest.raises(ValidationError):
         serializer = CustomRegisterSerializer(data=invalid_data)
         serializer.is_valid(raise_exception=True)

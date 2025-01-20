@@ -38,24 +38,40 @@ class TagListField(serializers.Field):
         """Represent the data as the list of string tag name."""
         return [tag.name for tag in value.all()]
 
-    def to_internal_value(self, data: str):
-        """Filter out empty string and return a list of string."""
+    def check_data_type(self, data):
+        """
+        Raise TypeError if input data cannot be converted to list of string elements.
+
+        Otherwise it returns the converted value.
+        """
+        data_list = json.loads(data)
+        if not isinstance(data_list, list) or not all(
+            isinstance(item, str) for item in data_list
+        ):
+            raise ValueError
+        return data_list
+
+    def to_internal_value(self, data: str) -> list[str]:
+        """
+        Filter out empty string and return a list of string.
+
+        Raises
+          - serializer.ValidationError: If input data cannot be converted to list object of string elements.
+
+        """
+        error_detail = (
+            """Expected a string of list of tags.\n E.g., '["tag1", "tag2"]'"""
+        )
+
         try:
-            data_list = json.loads(data)
+            data_list = self.check_data_type(data)
 
-        except ValueError as invalid_tags_format:
-            detail = """Expected a string of list of tags.\n E.g., '["tag1", "tag2"]'"""
-            raise serializers.ValidationError(detail=detail) from invalid_tags_format
+        except (ValueError, TypeError) as invalid_tags_format:
+            raise serializers.ValidationError(
+                detail=error_detail
+            ) from invalid_tags_format
 
-        tags = []
-
-        for tag in data_list:
-            tag_name = tag.strip()
-            if not tag_name:  # This allows user to accidentally add empty tag name. we just need to ignore it.
-                continue
-
-            tags.append(tag_name)
-        return tags
+        return [tag.strip() for tag in data_list if tag.strip()]
 
 
 class ArticleSerializer(serializers.ModelSerializer):

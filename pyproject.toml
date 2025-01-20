@@ -109,7 +109,8 @@ max-complexity = 8
     "W291",
     "PT011",
     "SLF001",
-    "PLR0913"
+    "PLR0913",
+    "PT012",  # `pytest.raises()` block should contain a single simple statement
 ]
 "**/migrations/**/*.py" = [
     "ANN001", 
@@ -148,7 +149,6 @@ max-complexity = 8
 
 
 [tool.pytest.ini_options]
-env_files = [".envs/.local/.django", ".envs/.local/.postgres"]
 django_find_project = false
 pythonpath = "."
 DJANGO_SETTINGS_MODULE = "core.settings"

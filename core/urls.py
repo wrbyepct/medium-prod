@@ -49,6 +49,7 @@ urlpatterns += [
     ),
 ]
 
+
 if settings.DEBUG and not settings.IN_TEST:
     from debug_toolbar.toolbar import debug_toolbar_urls
 
