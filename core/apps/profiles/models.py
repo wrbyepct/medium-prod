@@ -33,7 +33,23 @@ Behaviors:
 """
 
 
-class Profile(TimestampedModel):
+class ProfileFollowMixins:
+    """Add follow service to Profile Model."""
+
+    def follow(self, profile: Profile):
+        """Add other Profile instances as followers."""
+        self.following.add(profile)
+
+    def unfollow(self, profile: Profile):
+        """Remove other Profile instances from followers."""
+        self.following.remove(profile)
+
+    def has_followed(self, profile: Profile):
+        """Return True if the to-follow-profile has been followed."""
+        return self.following.filter(pkid=profile.pkid).exists()
+
+
+class Profile(TimestampedModel, ProfileFollowMixins):
     """Medium user profile."""
 
     class Gender(models.TextChoices):
@@ -77,7 +93,7 @@ class Profile(TimestampedModel):
     city = models.CharField(
         verbose_name=_("city"),
         blank=False,
-        default="Lundon",
+        default="London",
     )
     followers = models.ManyToManyField(
         "self",
@@ -89,15 +105,3 @@ class Profile(TimestampedModel):
     def __str__(self) -> str:
         """Return string: {self.user.first_name}'s Profile."""
         return f"{self.user.first_name}'s Profile"
-
-    def follow(self, profile: Profile):
-        """Add other Profile instances as followers."""
-        self.following.add(profile)
-
-    def unfollow(self, profile: Profile):
-        """Remove other Profile instances from followers."""
-        self.following.remove(profile)
-
-    def has_followed(self, profile: Profile):
-        """Return True if the follower id in check exists in current followers."""
-        return self.following.filter(pkid=profile.pkid).exists()
