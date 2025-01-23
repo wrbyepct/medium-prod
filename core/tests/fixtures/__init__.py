@@ -3,6 +3,9 @@ from unittest.mock import patch
 import pytest
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory
+from faker import Faker
+
+from core.tests.utils.misc import create_upload_image_file
 
 from .constants import ARTICLE_DOCUMENT_UPDATE, CREATE_USER_SIDE_EFFECT
 
@@ -21,6 +24,7 @@ A: The functions from 'allauth' need it:
 Q: Then How do We mock it?
 A: Mock it with django.test.RequestFactory
 """
+fake = Faker()
 
 
 @pytest.fixture
@@ -42,3 +46,19 @@ def mock_article_index_update():
 def mock_create_user_side_effect():
     with patch(CREATE_USER_SIDE_EFFECT):
         yield
+
+
+@pytest.fixture
+def ipv4():
+    return fake.ipv4()
+
+
+@pytest.fixture
+def mock_media_dir(tmpdir):
+    with patch("django.conf.settings.MEDIA_ROOT", new=str(tmpdir)):
+        yield
+
+
+@pytest.fixture
+def mock_image_upload():
+    return create_upload_image_file()

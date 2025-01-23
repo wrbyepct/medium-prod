@@ -7,3 +7,4 @@ def test_envs():
 
     is_debug = settings.DEBUG
     assert not is_debug
+    assert settings.IN_TEST

@@ -12,15 +12,15 @@ def test_article_view_model__violate_unique_constraints(
 ):
     article_view_factory.create(article=article, user=normal_user, viewer_ip=ipv4)
 
-    # Different article passes
+    # Different article case passes
     article_view_factory.create(
         article=article_factory(), user=normal_user, viewer_ip=ipv4
     )
 
-    # Different user passes
+    # Different user  case passes
     article_view_factory.create(article=article, user=user_factory(), viewer_ip=ipv4)
 
-    # Different ip passes
+    # Different ip  case passes
     article_view_factory.create(
         article=article, user=normal_user, viewer_ip=fake.ipv4()
     )

@@ -34,29 +34,29 @@ def test_profile_model_behavior__str_method_correct(profile):
 
 # Test follow method
 def test_profile_model_behavior__follow_method_correct(two_profiles):
-    profile_1, profile_2 = two_profiles
-    assert profile_1.following.all().count() == 0
-    assert profile_2.followers.all().count() == 0
+    fan, idol = two_profiles
+    assert fan.following.all().count() == 0
+    assert idol.followers.all().count() == 0
 
     # Act
-    profile_1.follow(profile_2)
-    profile_2.refresh_from_db()
+    fan.follow(idol)
+    idol.refresh_from_db()
 
-    assert profile_1.following.all().count() == 1
-    assert profile_1.has_followed(profile_2)
+    assert fan.following.all().count() == 1
+    assert fan.has_followed(idol)
 
-    assert profile_2.followers.all().count() == 1
-    assert profile_2.followers.filter(pkid=profile_1.pkid).exists()
+    assert idol.followers.all().count() == 1
+    assert idol.followers.filter(pkid=fan.pkid).exists()
 
 
 # Test unfollow method
 def test_profile_model_behavior__unfollow_method_correct(two_profiles):
     # Arrange
-    profile_1, profile_2 = two_profiles
+    fan, idol = two_profiles
 
-    profile_1.follow(profile_2)
-    assert profile_1.has_followed(profile_2)
+    fan.follow(idol)
+    assert fan.has_followed(idol)
     # Act
-    profile_1.unfollow(profile_2)
-    assert not profile_1.has_followed(profile_2)
-    assert profile_1.following.all().count() == 0
+    fan.unfollow(idol)
+    assert not fan.has_followed(idol)
+    assert fan.following.all().count() == 0

@@ -21,9 +21,14 @@ def test_profile_model_behavior__phonenumber_invalid_create_fail(
 
 
 # Test gender choice not correct, exceeds max_length
+def test_profile_model_behavior__geneder_exceeds_length(profile_factory):
+    gender = "O" * 21
+    with pytest.raises(DataError):
+        profile_factory.create(gender=gender)
+
 
 # Test twittwer handle exceeds max_length
-
-# Test country name blank string
-
-# city name blank string
+def test_profile_model_behavior__twitter_handle_exceeds_length(profile_factory):
+    twitter_handle = "O" * 21
+    with pytest.raises(DataError):
+        profile_factory.create(twitter_handle=twitter_handle)
