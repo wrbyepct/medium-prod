@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 
 from core.apps.general.models import TimestampedModel
-from core.utils.hash import generate_hashed_slug
+from core.tools.hash import generate_hashed_slug
 
 from .read_time_engine import ArticleReadTimeEngine
 

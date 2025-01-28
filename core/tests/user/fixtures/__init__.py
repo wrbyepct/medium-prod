@@ -35,18 +35,12 @@ def normal_user(user_factory):
 
 
 @pytest.fixture
-def create_profile_for_normal_user(normal_user, profile_factory):
-    profile_factory.create(user=normal_user)
-    normal_user.refresh_from_db()
-
-
-@pytest.fixture
 def super_user(user_factory):
     return user_factory.create(is_superuser=True, is_staff=True)
 
 
 @pytest.fixture
-def unauth_client():
+def client():
     return APIClient()
 
 

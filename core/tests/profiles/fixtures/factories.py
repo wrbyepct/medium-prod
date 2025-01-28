@@ -10,14 +10,20 @@ class ProfileFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
 
-    class Params:
-        has_followers = factory.Trait(
-            followers=factory.RelatedFactoryList(
-                "core.tests.profiles.fixtures.factories.ProfileFactory", size=3
-            )
-        )
-        has_following = factory.Trait(
-            following=factory.RelatedFactoryList(
-                "core.tests.profiles.fixtures.factories.ProfileFactory", size=3
-            )
-        )
+    @factory.post_generation
+    def with_followers(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            profiles = ProfileFactory.create_batch(size=extracted)
+            for p in profiles:
+                self.followers.add(p)
+
+    @factory.post_generation
+    def with_following(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            profiles = ProfileFactory.create_batch(size=extracted)
+            for p in profiles:
+                self.following.add(p)

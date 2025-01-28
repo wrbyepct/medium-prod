@@ -3,7 +3,7 @@
 import autoslug.fields
 from django.db import migrations
 
-import core.utils.hash
+import core.tools.hash
 
 
 class Migration(migrations.Migration):
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             field=autoslug.fields.AutoSlugField(
                 always_update=True,
                 editable=False,
-                populate_from=core.utils.hash.generate_hashed_slug,
+                populate_from=core.tools.hash.generate_hashed_slug,
                 unique=True,
             ),
         ),

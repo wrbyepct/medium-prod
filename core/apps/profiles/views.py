@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.utils.email import inform_followed
+from core.tools.email import inform_followed
 
 from .models import Profile
 from .paginations import ProfilePagination
@@ -37,7 +37,7 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
         """
         Optimize query by joining the user table.
 
-        So you don't query every through profile for user.
+        So you don't have to query through profile for user.
         """
         return Profile.objects.select_related("user")
 
@@ -151,9 +151,9 @@ class FollowAPIView(APIView):
         requesting_profile.follow(to_follow_profile)
 
         email_data = {
-            "follow_user_fullname": requesting_profile.user.full_name,
             "being_followed_user_first_name": to_follow_profile.user.first_name,
-            "being_followed_email_address": to_follow_profile.user.email,
+            "to_email": to_follow_profile.user.email,
+            "user_fullname": requesting_profile.user.full_name,
         }
 
         inform_followed(**email_data)  # TODO: Will send email fail?
@@ -189,7 +189,6 @@ class UnfollowAPIView(APIView):
         requesting_profile.unfollow(to_unfollow_profile)
         return Response(
             {
-                "statud_code": 200,
                 "message": f"You have unfollowed {to_unfollow_profile.user.full_name}.",
             },
             status=status.HTTP_200_OK,

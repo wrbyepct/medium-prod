@@ -4,7 +4,7 @@ from autoslug import AutoSlugField
 from django.db import migrations
 from django.utils.text import slugify
 
-from core.utils.hash import generate_hashed_slug as _
+from core.tools.hash import generate_hashed_slug as _
 
 
 def generate_hashed_slug(apps, schema_editor):

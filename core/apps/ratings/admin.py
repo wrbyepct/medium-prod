@@ -4,7 +4,7 @@
 # ruff: noqa: ANN001
 from django.contrib import admin
 
-from core.utils.admin import get_model_change_page
+from core.tools.admin import get_model_change_page
 
 from .models import Rating
 
