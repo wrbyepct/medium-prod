@@ -5,7 +5,7 @@ from math import ceil
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .models import Article  # Import only for type checking
+    from core.apps.articles.models import Article  # Import only for type checking
 
 
 class ArticleReadTimeEngine:

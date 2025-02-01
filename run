@@ -28,6 +28,10 @@ unmigrate() {
 }
 
 
+api() {
+    docker-compose -f local.yml exec api $@
+}
+
 # Tests
 test() {
     docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ 

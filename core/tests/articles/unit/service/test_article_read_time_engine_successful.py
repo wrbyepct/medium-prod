@@ -2,7 +2,7 @@
 
 import pytest
 
-from core.apps.articles.read_time_engine import ArticleReadTimeEngine
+from core.apps.articles.services.read_time_engine import ArticleReadTimeEngine
 
 pytestmark = pytest.mark.django_db
 

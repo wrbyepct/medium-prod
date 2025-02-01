@@ -15,7 +15,7 @@ from taggit.managers import TaggableManager
 from core.apps.general.models import TimestampedModel
 from core.tools.hash import generate_hashed_slug
 
-from .read_time_engine import ArticleReadTimeEngine
+from .services.read_time_engine import ArticleReadTimeEngine
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import AbstractBaseUser
