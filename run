@@ -28,13 +28,25 @@ unmigrate() {
 }
 
 
+api() {
+    docker-compose -f local.yml exec api $@
+}
+
 # Tests
 test() {
-    IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@ 
+    docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ 
+}
+
+test-dist() {
+    docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ \
+    -n auto \
+    --dist loadfile
 }
 
 test-report() {
-    IN_TEST=1 docker-compose -f local.yml run --rm api pytest $@  \
+    docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@  \
+    -n auto \
+    --dist loadfile \
     --cov-report term-missing \
     --cov-report html \
     --cov=core \

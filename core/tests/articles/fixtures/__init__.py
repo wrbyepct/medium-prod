@@ -1,19 +1,12 @@
-from unittest.mock import patch
-
 import pytest
-from faker import Faker
 from pytest_factoryboy import register
 
-from core.tests.utils.misc import create_upload_image_file
-
-
+from .documents import TestArticleDocument
 from .factories import ArticleClapFactory, ArticleFactory, ArticleViewFactory
 
 register(ArticleFactory)
 register(ArticleViewFactory)
 register(ArticleClapFactory)
-
-fake = Faker()
 
 
 @pytest.fixture
@@ -22,16 +15,21 @@ def article(article_factory):
 
 
 @pytest.fixture
-def ipv4():
-    return fake.ipv4()
+def setup_article_doc_index():
+    TestArticleDocument._get_connection()
+    TestArticleDocument._index.delete(ignore=[404])
+    TestArticleDocument._index.create()
+
+    yield
+
+    TestArticleDocument._index.delete(ignore=[404])
 
 
 @pytest.fixture
-def mock_media_dir(tmpdir):
-    with patch("django.conf.settings.MEDIA_ROOT", new=str(tmpdir)):
-        yield
+def api_request_with_user(mocker):
+    def _make_request(user="fake_user"):
+        request = mocker.Mock()
+        request.user = user
+        return request
 
-
-@pytest.fixture
-def mock_image_upload():
-    return create_upload_image_file()
+    return _make_request

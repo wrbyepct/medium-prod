@@ -18,9 +18,11 @@ DEFAULT_FROM_EMAIL = "test@test.api.com"
 DOMAIN = env("DOMAIN")
 SITE_NAME = "Medium Clone"
 
-MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+
 # Django debug toolbar
-INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # += can also be used
+if DEBUG and not IN_TEST:
+    INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # += can also be used
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 
 def show_toolbar(request):

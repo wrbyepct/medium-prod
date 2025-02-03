@@ -3,7 +3,7 @@
 from django.contrib import admin
 
 from core.apps.ratings.models import Rating
-from core.utils.admin import get_model_change_page
+from core.tools.admin import get_model_change_page
 
 from . import models
 

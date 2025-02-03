@@ -10,11 +10,11 @@ from rest_framework.views import APIView
 
 from core.apps.general.permissions import IsOwnerOrReadOnly
 
-from .documents import ArticleDocument
 from .filters import ArticleFilter
 from .models import Article, ArticleView, Clap
 from .paginations import ArticlePagination
 from .serializers import ArticleSerializer
+from .services.es import full_text_search
 
 
 class ArticleListCreateView(generics.ListCreateAPIView):
@@ -59,31 +59,12 @@ class ArticleListCreateView(generics.ListCreateAPIView):
         """Use Elasticsearch to return filtered article ids if search term is provided, else return None."""
         search_term = self.request.query_params.get("search", None)
         if search_term:
-            search = ArticleDocument.search().query(
-                "multi_match",
-                query=search_term,
-                fields=[
-                    "title",
-                    "body",
-                    "slug",
-                    "description",
-                    "author.first_name",
-                    "author.last_name",
-                    "tags",
-                ],
-                fuzziness="auto",
-            )
-            response = search.execute()
-
-            return [hit.id for hit in response]
+            return full_text_search(search_term)
         return None
 
     def get_queryset(self):
         """Return all articles, if search term is provided, return all articles based on the search terms."""
-        qs = Article.statistic_objects.select_related(
-            "author__profile"
-        ).prefetch_related("tags", "claps__user")
-
+        qs = Article.statistic_objects.all()
         article_ids = self.handle_fulltext_search()
         if article_ids:
             return qs.filter(id__in=article_ids)

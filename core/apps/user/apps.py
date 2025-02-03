@@ -10,3 +10,6 @@ class AccountConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "core.apps.user"
     verbose_name = _("user")
+
+    def ready(self):
+        from core.apps.user import signals  # noqa: F401

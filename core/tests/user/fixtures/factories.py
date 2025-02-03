@@ -1,3 +1,5 @@
+import uuid
+
 import factory
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
@@ -12,7 +14,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    email = factory.Faker("email")
+    email = factory.Sequence(lambda n: f"user{str(uuid.uuid4())[:8]}@example.com")
     password = factory.Faker("password")
 
     @classmethod

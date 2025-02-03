@@ -18,6 +18,6 @@ urlpatterns = [
     path(
         "clap/<uuid:article_id>/",
         ClapCreateDestroyView.as_view(),
-        name="clap_create",
+        name="clap_create_destroy",
     ),
 ]

@@ -40,6 +40,11 @@ def super_user(user_factory):
 
 
 @pytest.fixture
+def client():
+    return APIClient()
+
+
+@pytest.fixture
 def authenticated_client(normal_user):
     client = APIClient()
     client.force_authenticate(user=normal_user)

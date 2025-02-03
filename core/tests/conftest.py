@@ -1,9 +1,10 @@
 import pytest
 
 pytest_plugins = [
+    "core.tests.fixtures",
     "core.tests.user.fixtures",
     "core.tests.articles.fixtures",
-    "core.tests.fixtures",
+    "core.tests.profiles.fixtures",
 ]
 
 
