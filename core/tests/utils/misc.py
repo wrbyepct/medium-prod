@@ -23,3 +23,13 @@ def full_url(
     domain=DOMAIN,
 ):
     return f"{protocol}://{domain}{url}{query_term if query_term else ''}"
+
+
+def get_remaining_pages(query_pages, paginator, total_count):
+    from math import floor
+
+    max_pages = paginator.max_page_size
+    default_pages = paginator.page_size
+
+    per_page_count = min(query_pages, max_pages) if query_pages else default_pages
+    return floor(total_count / per_page_count)

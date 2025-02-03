@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 
@@ -58,6 +59,8 @@ class ArticleManager(models.Manager):
                 claps_count=models.Count("claps", distinct=True),
                 responses_count=models.Count("responses", distinct=True),
             )
+            .select_related("author__profile")
+            .prefetch_related("tags", "claps__user")
         )
 
 
@@ -89,21 +92,40 @@ class Article(TimestampedModel):
     statistic_objects = ArticleManager()
     objects = models.Manager()
 
-    def __str__(self) -> str:
-        return f"{self.author}'s article | {self.title}"
-
-    class Meta:
-        ordering = ["-created_at"]
-
     @property
     def user(self):
         """Return also user, for accessing convenience."""
         return self.author
 
-    @property
+    @cached_property
     def estimated_reading_time(self):
         """Return estimated article reading time."""
         return ArticleReadTimeEngine.get_reading_time(article=self)
+
+    def __str__(self) -> str:
+        return f"{self.author}'s article | {self.title}"
+
+    def check_invalidate_cached_read_time(self):
+        """Invalidated cached read time when updating and columns involving word count changed."""
+        if self.pk:
+            old_instance = (
+                Article.objects.filter(pk=self.pk)
+                .only("title", "description", "body", "banner_image")
+                .first()
+            )
+
+            if not all(
+                old_instance.title == self.title
+                and old_instance.description == self.description
+                and old_instance.body == self.body
+                and old_instance.banner_image == self.banner_image
+            ) and hasattr(self, "estimated_reading_time"):
+                del self.__dict__["estimated_reading_time"]
+
+    def save(self, *args, **kwargs):
+        """Check if need to calculate read time before calling default save."""
+        self.check_invalidate_cached_read_time()
+        super().save(*args, **kwargs)
 
 
 class ArticleView(TimestampedModel):

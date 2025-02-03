@@ -6,6 +6,7 @@ from rest_framework import status
 
 from core.apps.profiles.paginations import ProfilePagination
 from core.tests.profiles.fixtures.factories import ProfileFactory
+from core.tests.utils.misc import get_remaining_pages
 
 User = get_user_model()
 
@@ -104,18 +105,11 @@ def test_hit_all_profiles_endpoint_page_links_work_correctly(profiles):
     target_fixture="num_of_pages",
 )
 def _(page_size_num, paginator):
-    from math import floor
-
-    default_page_size = paginator.page_size
-    max_page_size = paginator.max_page_size
-
-    page_size = (
-        min(int(max_page_size), int(page_size_num))
-        if page_size_num
-        else default_page_size
+    return get_remaining_pages(
+        query_pages=page_size_num,
+        paginator=paginator,
+        total_count=NUM_OF_PROFILES,
     )
-
-    return floor(NUM_OF_PROFILES / page_size)
 
 
 def zero_2_empty(value):

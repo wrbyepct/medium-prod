@@ -843,6 +843,22 @@ files = [
 Django = ">=4.2"
 
 [[package]]
+name = "django-mock-queries"
+version = "2.3.0"
+description = "A django library for mocking queryset functions in memory for testing"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django_mock_queries-2.3.0-py2.py3-none-any.whl", hash = "sha256:71c538e0f41d10942ccdcabc450a25234875086ff91134b6bad62e08e1d21db1"},
+    {file = "django_mock_queries-2.3.0.tar.gz", hash = "sha256:3cc9c3922a1438ea7c318d61269ff9239b696d1d7c2ce4ebfa8cec3d1cf9b970"},
+]
+
+[package.dependencies]
+Django = "*"
+djangorestframework = "*"
+model-bakery = ">=1.0.0"
+
+[[package]]
 name = "django-phonenumber-field"
 version = "8.0.0"
 description = "An international phone number field for django models."
@@ -1393,6 +1409,24 @@ files = [
     {file = "MarkupSafe-2.1.5-cp39-cp39-win_amd64.whl", hash = "sha256:fa173ec60341d6bb97a89f5ea19c85c5643c1e7dedebc22f5181eb73573142c5"},
     {file = "MarkupSafe-2.1.5.tar.gz", hash = "sha256:d283d37a890ba4c1ae73ffadf8046435c76e7bc2247bbb63c00bd1a709c6544b"},
 ]
+
+[[package]]
+name = "model-bakery"
+version = "1.20.1"
+description = "Smart object creation facility for Django."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "model_bakery-1.20.1-py3-none-any.whl", hash = "sha256:eb3b4301e6a5620dac9a16d5d586796869bda05b958a95239fbccf69e79c3831"},
+    {file = "model_bakery-1.20.1.tar.gz", hash = "sha256:6b9dcdcdbbc65f6c1e0c61ebea173777020ddcdce52f3e21362ba7f6000f90fe"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[package.extras]
+docs = ["myst-parser", "sphinx", "sphinx-rtd-theme"]
+test = ["black", "coverage", "mypy", "pillow", "pytest", "pytest-django", "ruff"]
 
 [[package]]
 name = "nodeenv"
@@ -2584,4 +2618,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b3a4dacaf527f136e6612456a1817d0001cb5398469f67288ac8a69b8b323a1c"
+content-hash = "3f35715004a459ad4f8250fe61514c248923b62c05f5e17b670a14842a124402"

@@ -59,14 +59,12 @@ class ArticleListCreateView(generics.ListCreateAPIView):
         """Use Elasticsearch to return filtered article ids if search term is provided, else return None."""
         search_term = self.request.query_params.get("search", None)
         if search_term:
-            full_text_search(search_term)
+            return full_text_search(search_term)
+        return None
 
     def get_queryset(self):
         """Return all articles, if search term is provided, return all articles based on the search terms."""
-        qs = Article.statistic_objects.select_related(
-            "author__profile"
-        ).prefetch_related("tags", "claps__user")
-
+        qs = Article.statistic_objects.all()
         article_ids = self.handle_fulltext_search()
         if article_ids:
             return qs.filter(id__in=article_ids)
