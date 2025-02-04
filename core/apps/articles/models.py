@@ -49,7 +49,7 @@ class ArticleManager(models.Manager):
     """Article manager."""
 
     def get_queryset(self):
-        """Return article queryset with pre-counted fields."""
+        """Return optimized article queryset with pre-calculated fields."""
         return (
             super()
             .get_queryset()
@@ -114,7 +114,7 @@ class Article(TimestampedModel):
                 .first()
             )
 
-            if not all(
+            if not (
                 old_instance.title == self.title
                 and old_instance.description == self.description
                 and old_instance.body == self.body
