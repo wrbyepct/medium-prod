@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -81,7 +82,7 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Article.statistic_objects.all()
     serializer_class = ArticleSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     lookup_field = "id"
 
     def retrieve(self, request, *args, **kwargs):
@@ -104,6 +105,7 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         )
 
         ArticleView.record_view(article=article, viewer_ip=viewer_ip, user=user)
+        article = self.get_object()  # get newest view counts
 
         serializer = self.get_serializer(article)
         return Response(serializer.data)
@@ -112,7 +114,7 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 class ClapCreateDestroyView(APIView):
     """Clap / Unclap an article."""
 
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def post(self, request, article_id, format=None):
         """
@@ -143,7 +145,10 @@ class ClapCreateDestroyView(APIView):
             204 - Successfully removed, no content. \n
 
         """
-        clap = get_object_or_404(Clap, user=request.user, article=article_id)
+        article = get_object_or_404(Article, id=article_id)
+        clap = get_object_or_404(Clap, user=request.user, article=article)
+
         clap.delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        message = "Successfully unclap the article."
+        return Response({"message": message})

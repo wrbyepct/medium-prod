@@ -45,6 +45,7 @@ class TagListField(serializers.Field):
         Otherwise it returns the converted value.
         """
         data_list = json.loads(data)
+
         if not isinstance(data_list, list) or not all(
             isinstance(item, str) for item in data_list
         ):
