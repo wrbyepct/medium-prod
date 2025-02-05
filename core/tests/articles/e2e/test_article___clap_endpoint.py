@@ -13,7 +13,6 @@ def get_endpoint(article_id):
     return reverse("clap_create_destroy", args=[article_id])
 
 
-@pytest.mark.abc
 class TestArticleClapEndpoint:
     def test_article_clap__unathed_get_401(self, client, article):
         endpoint = get_endpoint(article.id)
