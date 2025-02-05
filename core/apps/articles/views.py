@@ -114,7 +114,7 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 class ClapCreateDestroyView(APIView):
     """Clap / Unclap an article."""
 
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def post(self, request, article_id, format=None):
         """
@@ -145,7 +145,10 @@ class ClapCreateDestroyView(APIView):
             204 - Successfully removed, no content. \n
 
         """
-        clap = get_object_or_404(Clap, user=request.user, article=article_id)
+        article = get_object_or_404(Article, id=article_id)
+        clap = get_object_or_404(Clap, user=request.user, article=article)
+
         clap.delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        message = "Successfully unclap the article."
+        return Response({"message": message})

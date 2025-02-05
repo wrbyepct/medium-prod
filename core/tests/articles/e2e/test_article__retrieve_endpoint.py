@@ -76,7 +76,6 @@ class TestTestArticleDesctroyEndpoint:
         assert Article.objects.filter(id=article.id).exists()
 
 
-@pytest.mark.abc
 class TestArticleUpdateEndpoint:
     def test_article_update_view__udpate_own_article_success(
         self,
@@ -85,7 +84,7 @@ class TestArticleUpdateEndpoint:
         article_factory,
         mock_image_upload,
         mock_media_dir,
-        mock_article_es_save,
+        mock_article_es_update,
     ):
         article = article_factory.create(author=normal_user)
 
@@ -166,3 +165,31 @@ class TestArticleUpdateEndpoint:
         old_data.pop("updated_at")
         new_data.pop("updated_at")
         assert new_data == old_data
+
+    @pytest.mark.parametrize(
+        "invalid_data",
+        [
+            {"title": "1" * 256},
+            {"banner_image": 123},
+            {"tags": ["New A", "New B", "New C"]},  # This will let only 'New C' be sent
+        ],
+    )
+    def test_article_update_endpoint__provide_invalid_type_get_400(
+        self,
+        invalid_data,
+        article_factory,
+        authenticated_client,
+        normal_user,
+    ):
+        article = article_factory.create(author=normal_user)
+
+        endpoint = get_endpont(article.id)
+
+        # Act
+        response = authenticated_client.patch(endpoint, data=invalid_data)
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        article.refresh_from_db()
+        field = next(iter(invalid_data))
+        assert getattr(article, field) != invalid_data[field]

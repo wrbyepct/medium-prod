@@ -2,7 +2,8 @@ import pytest
 from django.db import IntegrityError
 from rest_framework import status
 
-from core.apps.articles.views import Clap, ClapCreateDestroyView
+from core.apps.articles.models import Article, Clap
+from core.apps.articles.views import ClapCreateDestroyView
 
 pytestmark = pytest.mark.django_db
 
@@ -71,9 +72,16 @@ def test_article_clap__create(
 def test_article_clap__destory(mocker, api_request_with_user):
     # Setup mocks
     request = api_request_with_user()
-    mock_clap = mocker.Mock()
+    article = "fake_article"
+    clap = mocker.Mock()
+
+    def side_effect(model, *args, **kwargs):
+        if model == Article:
+            return article
+        return clap
+
     mock_get_object_or_404 = mocker.patch(
-        "core.apps.articles.views.get_object_or_404", return_value=mock_clap
+        "core.apps.articles.views.get_object_or_404", side_effect=side_effect
     )
     article_id = "fake_article_id"
 
@@ -82,8 +90,14 @@ def test_article_clap__destory(mocker, api_request_with_user):
     response = view.delete(request, article_id)
 
     # Assert
-    mock_get_object_or_404.assert_called_once_with(
-        Clap, user=request.user, article=article_id
+    mock_get_object_or_404.assert_any_call(
+        Article,
+        id=article_id,
     )
-    mock_clap.delete.assert_called_once()
-    assert response.status_code == status.HTTP_204_NO_CONTENT
+    mock_get_object_or_404.assert_any_call(
+        Clap,
+        user=request.user,
+        article=article,
+    )
+    clap.delete.assert_called_once()
+    assert response.status_code == status.HTTP_200_OK
