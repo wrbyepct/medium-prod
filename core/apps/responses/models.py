@@ -78,7 +78,11 @@ class Response(TimestampedModel):
         Article, on_delete=models.CASCADE, related_name="responses"
     )
     parent = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
+        "self",
+        on_delete=models.CASCADE,
+        related_name="children",
+        null=True,
+        blank=True,
     )
 
     objects = ResponseManager()
@@ -88,6 +92,3 @@ class Response(TimestampedModel):
         return (
             f"User: {self.user.full_name}'s response to article: {self.article.title}"
         )
-
-
-# Create your models here.
