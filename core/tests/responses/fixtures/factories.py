@@ -24,8 +24,7 @@ class ResponseFactory(factory.django.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            responses = ResponseFactory.create_batch(size=extracted)
-            self.children.set(responses)
+            ResponseFactory.create_batch(size=extracted, parent=self)
 
     @factory.post_generation
     def with_claps(self, create, extracted, *args, **kwargs):

@@ -17,12 +17,17 @@ from .paginations import ResponsePagination
 from .serializers import ResponseSerializer
 
 
-class ResponseListCreateView(generics.ListCreateAPIView):
-    """Get top-level responses of an article."""
+class BaseResponseListCreateView(generics.ListCreateAPIView):
+    """Base Response List Create View."""
 
     serializer_class = ResponseSerializer
     pagination_class = ResponsePagination
     filter_backends = [OrderingFilter]
+
+
+class ResponseListCreateView(BaseResponseListCreateView):
+    """Get top-level responses of an article."""
+
     ordering_fields = ["claps_count", "replies_count", "created_at"]
     ordering = ["-claps_count", "-replies_count", "-created_at", "-updated_at"]
 
@@ -40,24 +45,22 @@ class ResponseListCreateView(generics.ListCreateAPIView):
         serializer.save(article=article, user=user)
 
 
-class ReplyListCreateView(generics.ListCreateAPIView):
+class ReplyListCreateView(BaseResponseListCreateView):
     """Get immediate child replies of a specified response."""
 
-    serializer_class = ResponseSerializer
-    pagination_class = ResponsePagination
-    filter_backends = [OrderingFilter]
+    ordering_fields = ["-claps_count", "-created_at"]
     ordering = ["-claps_count", "-created_at", "-updated_at"]
 
     def get_queryset(self):
         """Get child replies from a parent response to an article."""
         parent_id = self.kwargs.get("reply_to_id")
 
-        return Response.objects.filter(parent=parent_id)
+        return Response.objects.filter(parent__id=parent_id)
 
     def perform_create(self, serializer: ResponseSerializer):
         """Create next-child response with article and user and parent response instance."""
         parent_id = self.kwargs.get("reply_to_id")
-        parent_response = get_object_or_404(Response, id=parent_id)
+        parent_response = get_object_or_404(Response.objects.only("id"), id=parent_id)
         article = parent_response.article
         user = self.request.user
         serializer.save(article=article, user=user, parent=parent_response)
