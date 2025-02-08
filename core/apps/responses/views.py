@@ -22,6 +22,7 @@ class ResponseListCreateView(generics.ListCreateAPIView):
     serializer_class = ResponseSerializer
     pagination_class = ResponsePagination
     filter_backends = [OrderingFilter]
+    ordering_fields = ["claps_count", "replies_count", "created_at"]
     ordering = ["-claps_count", "-replies_count", "-created_at", "-updated_at"]
 
     def get_queryset(self):
