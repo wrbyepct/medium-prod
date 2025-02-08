@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response as Res
 from rest_framework.views import APIView
 
@@ -67,14 +68,14 @@ class ResponseUpdateDestroyView(generics.UpdateAPIView, generics.DestroyAPIView)
 
     queryset = Response.objects.all()
     serializer_class = ResponseSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     lookup_field = "id"
 
 
 class ResponseClapCreateDestroyView(APIView):
     """Clap or un clap a response by providing response id."""
 
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def post(self, request, response_id, format=None):
         """Clap a response."""
