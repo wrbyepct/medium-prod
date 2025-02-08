@@ -1,6 +1,7 @@
 """Response serializers."""
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from .models import Response
 
@@ -15,6 +16,14 @@ class ResponseSerializer(serializers.ModelSerializer):
     def get_user_full_name(self, obj: Response):
         """Return user full name."""
         return obj.user.full_name
+
+    def validate_content(self, value: str):
+        """Raise Validation Error if content provide is empty."""
+        value.strip()
+        if not value:
+            detail = "Response content cannot be empty."
+            raise ValidationError(detail=detail)
+        return value
 
     class Meta:
         model = Response

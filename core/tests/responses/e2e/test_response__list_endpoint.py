@@ -83,7 +83,6 @@ class TestResponseListEndpoint:
         for query in params:
             assert_query_order_correct(query=query)
 
-    @pytest.mark.abc
     def test_response_endpoint__with_invalid_ordering_query_result_resp_no_effect(
         self,
         article,
@@ -95,7 +94,7 @@ class TestResponseListEndpoint:
         for content in contents:
             response_factory.create(article=article, content=content)
 
-        # Arrange: get the first instance by desc content
+        # Arrange: get the first instance ordered by desc content
         query = "-content"
         response = Response.objects.all().order_by(query).first()
         assert response.content == "CCC"
