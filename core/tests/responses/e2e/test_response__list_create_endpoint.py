@@ -110,7 +110,6 @@ class TestResponseListEndpoint:
         assert resp.data["results"][0]["id"] != response.id
 
 
-
 class TestResponseCreateEndpoint:
     # Test unauth fail
     def test_response_create_endpoint__unauthed_get_401(self, client, article):
