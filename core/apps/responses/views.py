@@ -60,7 +60,7 @@ class ReplyListCreateView(BaseResponseListCreateView):
     def perform_create(self, serializer: ResponseSerializer):
         """Create next-child response with article and user and parent response instance."""
         parent_id = self.kwargs.get("reply_to_id")
-        parent_response = get_object_or_404(Response.objects.only("id"), id=parent_id)
+        parent_response = get_object_or_404(Response, id=parent_id)
         article = parent_response.article
         user = self.request.user
         serializer.save(article=article, user=user, parent=parent_response)

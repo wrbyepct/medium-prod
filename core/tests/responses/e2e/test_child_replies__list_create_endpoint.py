@@ -1,8 +1,8 @@
 import pytest
-from rest_framework import status
 from django.urls import reverse
-from core.apps.responses.serializers import ResponseSerializer
+from rest_framework import status
 
+from core.apps.responses.serializers import ResponseSerializer
 
 pytestmark = pytest.mark.django_db
 
