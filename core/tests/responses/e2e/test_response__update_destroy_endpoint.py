@@ -45,7 +45,6 @@ class TestResponseUpdateEndpoint:
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
         assert "Response content cannot be empty." in resp.data["content"]
 
-    @pytest.mark.bbb
     @pytest.mark.parametrize(
         "invalid_field, data",
         [
