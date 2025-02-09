@@ -102,8 +102,8 @@ class ResponseClapCreateDestroyView(APIView):
     def delete(self, request, response_id, format=None):
         """Unclap a response."""
         res_clap = get_object_or_404(
-            ResponseClap, response=response_id, user=request.user
+            ResponseClap, response__id=response_id, user=request.user
         )
         res_clap.delete()
         # TODO: Figure out why it still shows 200 instead of 204
-        return Res(status=status.HTTP_204_NO_CONTENT, data=None)
+        return Res(status=status.HTTP_200_OK)
