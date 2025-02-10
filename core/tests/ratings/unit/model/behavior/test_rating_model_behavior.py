@@ -25,7 +25,6 @@ def test_rating_model_behavior__create_successful_and_data_correct(rating_factor
     assert isinstance(rating.review, str)
 
 
-@pytest.mark.ccc
 def test_rating_model_behavior__str_method_correct(rating_factory):
     rating = rating_factory.create()
     user = rating.user
@@ -55,22 +54,20 @@ def test_rating_model_behavior__create_with_invalid_rating_raise_errors(
 
 # test remote model behave correct
 @pytest.mark.parametrize("remote_model", ["user", "article"])
-def test_rating_model_behavior__remote_model_delete_cascase(
+def test_rating_model_behavior__remote_instance_delete_cascade(
     rating_factory, remote_model, mock_article_index_delete
 ):
     rating = rating_factory.create()
     rating_id = rating.id
     assert Rating.objects.filter(id=rating_id).exists()
 
-    user = getattr(rating, remote_model)
-    user.delete()
+    remote_instance = getattr(rating, remote_model)
+    remote_instance.delete()
 
     assert not Rating.objects.filter(id=rating_id).exists()
 
 
-# remote field: missing mandatoryfields
-
-
+# missing mandatory fields
 @pytest.mark.parametrize(
     "mandatory_field",
     [

@@ -9,7 +9,7 @@ class RatingSerializer(serializers.ModelSerializer):
     """Rating serializer."""
 
     article_title = serializers.CharField(source="article.title", read_only=True)
-    user_full_name = serializers.CharField(source="user.first_name", read_only=True)
+    user_full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Rating

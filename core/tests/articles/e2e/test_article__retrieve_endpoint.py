@@ -1,4 +1,6 @@
 import json
+import time
+from datetime import datetime
 from uuid import uuid4
 
 import pytest
@@ -140,12 +142,13 @@ class TestArticleUpdateEndpoint:
             "responses_count": "some data",
             "claps_count": "some data",
             "clapped_by": "some data",
-            "created_at": "some data",
-            "updated_at": "some data",
+            "created_at": datetime.now(),
+            "updated_at": datetime.now(),
             "author_info": "some data",
         }
 
         # Act
+        time.sleep(1)  # Explicitly wait for 1s to see update_at difference
         endpoint = get_endpont(article.id)
         response = authenticated_client.patch(endpoint, data=update_data)
 
@@ -157,6 +160,7 @@ class TestArticleUpdateEndpoint:
 
         # Only updated_at will be differnt
         assert new_serializer.data["updated_at"] != old_serializer.data["updated_at"]
+        # But it's not the same as the provided data
         assert new_serializer.data["updated_at"] != update_data["updated_at"]
 
         old_data = dict(old_serializer.data)
