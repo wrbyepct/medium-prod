@@ -9,16 +9,14 @@ resp_fields = [
     "id",
     "user_full_name",
     "content",
-    "article",
-    "parent",
+    "article_id",
+    "parent_id",
     "claps_count",
     "replies_count",
     "created_at",
 ]
 
 read_only_fields = [
-    "article",
-    "parent",
     "created_at",
 ]
 

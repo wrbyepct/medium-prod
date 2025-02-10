@@ -58,4 +58,4 @@ class TestChildRepliesCreateEndpoint:
 
         assert resp.status_code == status.HTTP_201_CREATED
         assert resp.data["content"] == reply_data["content"]
-        assert resp.data["parent"] == response.pkid
+        assert resp.data["parent_id"] == response.id

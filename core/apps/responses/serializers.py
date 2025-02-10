@@ -12,6 +12,16 @@ class ResponseSerializer(serializers.ModelSerializer):
     user_full_name = serializers.SerializerMethodField()
     claps_count = serializers.IntegerField(read_only=True)
     replies_count = serializers.IntegerField(read_only=True)
+    article_id = serializers.SerializerMethodField()
+    parent_id = serializers.SerializerMethodField()
+
+    def get_article_id(self, obj: Response):
+        """Return response aritcle id."""
+        return obj.article.id
+
+    def get_parent_id(self, obj: Response):
+        """Return response aritcle id."""
+        return obj.parent.id if obj.parent else None
 
     def get_user_full_name(self, obj: Response):
         """Return user full name."""
@@ -31,14 +41,12 @@ class ResponseSerializer(serializers.ModelSerializer):
             "id",
             "user_full_name",
             "content",
-            "article",
-            "parent",
+            "article_id",
+            "parent_id",
             "claps_count",
             "replies_count",
             "created_at",
         ]
         read_only_fields = [
-            "article",
-            "parent",
             "created_at",
         ]
