@@ -9,6 +9,7 @@ from core.apps.bookmarks.models import ReadingCategory
 from core.tests.utils.misc import create_upload_image_file
 
 from .constants import (
+    ARTICLE_DOCUMENT_DELETE,
     ARTICLE_DOCUMENT_UPDATE,
     CREATE_USER_SIDE_EFFECT,
     PROFILE_CREATE,
@@ -43,8 +44,24 @@ def mock_request():
 
 
 @pytest.fixture
+def api_request_with_user(mocker):
+    def _make_request(user="fake_user"):
+        request = mocker.Mock()
+        request.user = user
+        return request
+
+    return _make_request
+
+
+@pytest.fixture
 def mock_article_index_update():
     with patch(ARTICLE_DOCUMENT_UPDATE):
+        yield
+
+
+@pytest.fixture
+def mock_article_index_delete():
+    with patch(ARTICLE_DOCUMENT_DELETE):
         yield
 
 

@@ -23,13 +23,3 @@ def setup_article_doc_index():
     yield
 
     TestArticleDocument._index.delete(ignore=[404])
-
-
-@pytest.fixture
-def api_request_with_user(mocker):
-    def _make_request(user="fake_user"):
-        request = mocker.Mock()
-        request.user = user
-        return request
-
-    return _make_request
