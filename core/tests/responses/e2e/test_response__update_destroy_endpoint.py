@@ -49,8 +49,8 @@ class TestResponseUpdateEndpoint:
         "invalid_field, data",
         [
             ("user_full_name", "Test Test"),
-            ("article", 123),
-            ("parent", 123),
+            ("parent_id", 123),
+            ("article_id", 123),
             ("claps_count", 123),
             ("replies_count", 123),
             ("created_at", datetime.now()),

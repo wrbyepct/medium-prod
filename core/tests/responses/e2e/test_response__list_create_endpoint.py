@@ -133,7 +133,7 @@ class TestResponseCreateEndpoint:
         assert resp.status_code == status.HTTP_201_CREATED
         assert resp.data["content"] == response.content
         assert resp.data["user_full_name"] == response.user.full_name
-        assert resp.data["article"] == response.article.pkid
+        assert resp.data["article_id"] == response.article.id
 
     # Test create with invlaid data
     @pytest.mark.parametrize("invalid_content", ["", "      "])

@@ -103,7 +103,6 @@ class TestResponseClapDestroyEndpoint:
         assert resp.status_code == status.HTTP_404_NOT_FOUND
 
     # delete not own 403
-    @pytest.mark.bbb
     def test_delet_not_own_clap_get_404(
         self, authenticated_client, response, response_clap_factory
     ):
