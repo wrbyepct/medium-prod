@@ -36,3 +36,7 @@ class Rating(TimestampedModel):
                 name="unqiue_rating_per_article_and_user",
             ),
         ]
+
+    def __str__(self) -> str:
+        """Return Article:{self.aritcle.titel} rated: {self.rating} by user: {self.user.full_name}."""
+        return f"Article:{self.article.title} rated: {self.rating} by user: {self.user.full_name}"
