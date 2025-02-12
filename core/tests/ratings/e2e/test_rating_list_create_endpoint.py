@@ -164,7 +164,6 @@ class TestRatingListEndpoint:
             assert resp.data["count"] == expected
 
 
-@pytest.mark.bbb
 class TestRatingCreateEndpoint:
     def test_unauthed_get_401(self, client, article):
         """Test unauthed get 401."""
