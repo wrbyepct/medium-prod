@@ -13,7 +13,6 @@ def get_endpoint(rating_id):
     return reverse("rating_update_destory", args=[rating_id])
 
 
-@pytest.mark.bbb
 class TestRatingUpdateEndpoint:
     # test unauth get 401
     def test_unauthed_get_401(self, client, rating):
@@ -63,7 +62,6 @@ class TestRatingUpdateEndpoint:
         assert resp.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.bbb
 class TestRatingDeleteEndpoint:
     # test unauth get 401
     def test_unauth_get_401(self, client, rating):

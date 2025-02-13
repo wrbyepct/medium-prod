@@ -41,7 +41,6 @@ def test_rating_serializer__serialize_correct(rating_factory, normal_user, artic
     assert data["user_full_name"] == normal_user.full_name
 
 
-@pytest.mark.ccc
 @pytest.mark.parametrize(
     "invalid_data",
     ["test", -1, None],

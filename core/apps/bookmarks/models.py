@@ -41,7 +41,7 @@ class ReadingCategory(TimestampedModel):
     is_reading_list = models.BooleanField(default=False)
     bookmarks = models.ManyToManyField(Article, through="BookmarksInCategories")
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="bookmark_categories"
+        User, on_delete=models.CASCADE, related_name="reading_categories"
     )
 
     objects = ReadingCategoryManager()
@@ -59,9 +59,7 @@ class BookmarksInCategories(models.Model):
     """Bookmark & Reading Category through table."""
 
     category = models.ForeignKey(ReadingCategory, on_delete=models.CASCADE)
-    bookmark = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name="reading_categories"
-    )
+    bookmark = models.ForeignKey(Article, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
