@@ -47,9 +47,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-COPY local logs 
+COPY local local
 COPY core core 
-COPY logs logs
 COPY pyproject.toml pyproject.toml
 
 COPY ["./docker/local/django/entrypoint", "./docker/local/django/start", "./docker/local/django/celery/worker/start_celeryworker", "./docker/local/django/celery/flower/start_flower", "/"]

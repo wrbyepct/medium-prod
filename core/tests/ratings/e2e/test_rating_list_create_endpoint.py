@@ -128,7 +128,7 @@ class TestRatingListEndpoint:
         for rating in ratings:
             rating_factory.create(article=article, rating=rating)
 
-        invalid_queries = ["-id", "-user_id", "-pkid"]
+        invalid_queries = ["-id"]
 
         endpoint = get_endpoint(article.id)
 

@@ -28,5 +28,52 @@ jobs:
       - name: Run lint ci
         run: |
           /bin/bash -x run lint:ci
+  
+  test:
+    runs-on: ubuntu-latest
+    environment: TEST
+    env:
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CELERY_BROKER: ${{ vars.CELERY_BROKER }}
+      IN_GITHUB: true
+    
+    services:
+      postgres:
+        image: postgres:15-bullseye
+        env:
+          POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+      
+      es:
+        image: elasticsearch:8.17.0
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: false      
+      
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip && pip install poetry
+          poetry config virtualenvs.in-project true
+          poetry install --no-root
+
+
+      - name: Run tests
+        run: |
+          /bin/bash -x run test:ci
 
          

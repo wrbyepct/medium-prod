@@ -170,7 +170,7 @@ markers = [
     "flow: tests for api flow."
 ]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::pytest.PytestCacheWarning", "ignore::pytest.PytestUnknownMarkWarning"]
-elasticsearch_executable = "./.venv/lib/python3.11/site-packages/elasticsearch"
+
 
 
 [tool.coverage.run]
