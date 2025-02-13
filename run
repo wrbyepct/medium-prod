@@ -32,6 +32,20 @@ api() {
     docker-compose -f local.yml exec api $@
 }
 
+# Lint-ci
+
+lint:ci() {
+    SKIP=no-commit-to-branch pre-commit run --all-files --show-diff-on-failure
+}
+
+lint() {
+    git add .; poetry run pre-commit run --all-files 
+}
+
+update-precommit() {
+    poetry run pre-commit uninstall; poetry run pre-commit clean; poetry run pre-commit install
+}
+
 # Tests
 test() {
     docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ 

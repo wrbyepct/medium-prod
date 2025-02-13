@@ -15,7 +15,7 @@ def test_user_create__signal_also_create_category_and_profile():
     }
     user = User.objects.create_user(**user_info)
     assert user.profile is not None
-    assert user.bookmark_categories.all().count() == 1
+    assert user.reading_categories.all().count() == 1
 
 
 def test_admin_create__signal_also_create_category_and_profile():
@@ -27,4 +27,4 @@ def test_admin_create__signal_also_create_category_and_profile():
     }
     user = User.objects.create_superuser(**user_info)
     assert user.profile is not None
-    assert user.bookmark_categories.all().count() == 1
+    assert user.reading_categories.all().count() == 1
