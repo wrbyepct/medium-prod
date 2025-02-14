@@ -39,6 +39,7 @@ def prepare_relevant_articles(
     return _create
 
 
+@pytest.mark.es
 @pytest.mark.parametrize(
     "field",
     ["title", "description", "body", "tags", "author"],

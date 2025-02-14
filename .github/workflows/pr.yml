@@ -31,6 +31,7 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
+    container: python:3.11.4-bullseye
     environment: TEST
     env:
 
@@ -49,35 +50,46 @@ jobs:
           POSTGRES_DB: ${{ vars.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        ports:
-          - 5432:5432
+
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 10s
           --health-retries 5
+
       es:
         image: elasticsearch:8.17.0
         env:
           discovery.type: single-node
           xpack.security.enabled: false      
-        ports: 
-          - "9200:9200"
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Setup python
-        uses: actions/setup-python@v5
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
         with:
-          python-version: 3.11
+          version: 1.7.1
+          virtualenvs-in-project: true
+          virtualenvs-create: true
+          virtualenvs-path: .venv
+          installer-parallel: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      
+      - name: Install PostgreSQL dependencies
+        run: |
+          apt-get update && apt-get install -y libpq-dev gcc
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip && pip install poetry
-          poetry config virtualenvs.in-project true
-          poetry install --no-root
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
 
       - name: Run tests
         run: |
