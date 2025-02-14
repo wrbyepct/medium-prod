@@ -72,7 +72,14 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
-ELASTICSEARCH_DSL = {"default": {"hosts": "http://es:9200"}}
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": [
+            "http://localhost:9200",
+            "http://es:9200",
+        ]
+    }
+}
 
 
 # TODO make ADMIN_URL more complcated later

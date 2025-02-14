@@ -58,9 +58,4 @@ if IN_GITHUB:
 
 settings += [project_settings]
 
-print(f"In Github: {IN_GITHUB}")
-print(f"In Docker: {IN_DOCKER}")
-print(f"Debug: {IN_DOCKER}")
-
-
 include(*settings)

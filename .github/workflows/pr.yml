@@ -33,28 +33,36 @@ jobs:
     runs-on: ubuntu-latest
     environment: TEST
     env:
+
+      DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       CELERY_BROKER: ${{ vars.CELERY_BROKER }}
       IN_GITHUB: true
-    
+
     services:
       postgres:
         image: postgres:15-bullseye
         env:
-          POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+          POSTGRES_HOST: ${{ vars.POSTGRES_HOST  }}
           POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
-      
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 5
       es:
         image: elasticsearch:8.17.0
         env:
           discovery.type: single-node
           xpack.security.enabled: false      
-      
+        ports: 
+          - "9200:9200"
 
     steps:
       - name: Checkout code
@@ -70,7 +78,6 @@ jobs:
           pip install --upgrade pip && pip install poetry
           poetry config virtualenvs.in-project true
           poetry install --no-root
-
 
       - name: Run tests
         run: |
