@@ -9,4 +9,4 @@ set -o nounset
 python -m core.manage migrate --no-input
 python -m core.manage collectstatic --no-input
 
-python -m core.manage runserver_plus 0.0.0.0:8000
+python -m core.manage runserver 0.0.0.0:8000

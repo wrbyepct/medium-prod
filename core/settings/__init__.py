@@ -1,12 +1,17 @@
+# ruff: noqa: T201
 from __future__ import annotations
 
-import os  # noqa: F401
 from pathlib import Path
 
 import environ
-from split_settings.tools import include, optional
+from split_settings.tools import include
 
 env = environ.Env()
+
+"""
+Default settings
+"""
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -14,8 +19,8 @@ APP_DIR = ROOT_DIR / "apps"
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
 IN_DOCKER = env.bool("IN_DOCKER", default=False)
-
 IN_TEST = env.bool("IN_TEST", default=False)
+IN_GITHUB = env.bool("IN_GITHUB", default=False)
 
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = str(ROOT_DIR / "staticfiles")
@@ -25,21 +30,37 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
 project_settings = "production.py"
 
-local_dev_preference: str | Path = ""
+
+settings = [
+    "base.py",
+    "project.py",
+]
+
+
+"""
+Dynamically change settings
+"""
 
 if DEBUG:
     project_settings = "local.py"
-    local_dev_preference = ROOT_DIR / "local/settings.dev.py"
+    settings += [
+        "loggings.py",
+        str(ROOT_DIR / "local/settings.dev.py"),
+    ]
 
 if IN_DOCKER:
     STATIC_ROOT = "/vol/api/staticfiles/"
     MEDIA_ROOT = "/vol/api/mediafiles/"
 
+if IN_GITHUB:
+    project_settings = "github.py"
 
-include(
-    "base.py",
-    "project.py",
-    "loggings.py",
-    project_settings,
-    optional(str(local_dev_preference)),
-)
+
+settings += [project_settings]
+
+print(f"In Github: {IN_GITHUB}")
+print(f"In Docker: {IN_DOCKER}")
+print(f"Debug: {IN_DOCKER}")
+
+
+include(*settings)

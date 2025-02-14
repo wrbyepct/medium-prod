@@ -1,4 +1,10 @@
-# type: ignore
+"""Settings for github workflow."""
+
+SECRET_KEY = env("DJANGO_SECRET_KEY")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost"])
+DEFAULT_FROM_EMAIL = "test@test.api.com"
+
+
 """Loggings settings."""
 
 LOGGING = {
@@ -21,12 +27,6 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-            "filters": [],
-        },
-        "file": {
-            "level": env("DJANGO_LOG_LEVEL", default="INFO"),
-            "class": "logging.FileHandler",
-            "filename": ROOT_DIR / "core" / "logs" / "debug.log",
             "filters": [],
         },
     },
