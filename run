@@ -63,7 +63,7 @@ test() {
 }
 
 test:ci() {
-    poetry run env IN_TEST=1 pytest -m debug \
+    poetry run env IN_TEST=1 pytest \
     -x \
     -n auto \
     --dist loadfile
