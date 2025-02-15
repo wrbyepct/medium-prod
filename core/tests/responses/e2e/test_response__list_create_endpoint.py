@@ -66,7 +66,6 @@ class TestResponseListEndpoint:
         assert_query_order_correct,
     ):
         # Arrange
-
         response_factory.create(with_children=1, article=article)
         response_factory.create(with_claps=1, with_children=2, article=article)
         response_factory.create(with_claps=2, article=article)

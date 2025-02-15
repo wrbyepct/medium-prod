@@ -170,17 +170,8 @@ class TestArticleUpdateEndpoint:
         new_data.pop("updated_at")
         assert new_data == old_data
 
-    @pytest.mark.parametrize(
-        "invalid_data",
-        [
-            {"title": "1" * 256},
-            {"banner_image": 123},
-            {"tags": ["New A", "New B", "New C"]},  # This will let only 'New C' be sent
-        ],
-    )
     def test_article_update_endpoint__provide_invalid_type_get_400(
         self,
-        invalid_data,
         article_factory,
         authenticated_client,
         normal_user,
@@ -189,11 +180,18 @@ class TestArticleUpdateEndpoint:
 
         endpoint = get_endpont(article.id)
 
-        # Act
-        response = authenticated_client.patch(endpoint, data=invalid_data)
+        invalid_data = [
+            {"title": "1" * 256},
+            {"banner_image": 123},
+            {"tags": ["New A", "New B", "New C"]},  # This will let only 'New C' be sent
+        ]
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        for data in invalid_data:
+            # Act
+            response = authenticated_client.patch(endpoint, data=data)
 
-        article.refresh_from_db()
-        field = next(iter(invalid_data))
-        assert getattr(article, field) != invalid_data[field]
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+            article.refresh_from_db()
+            field = next(iter(data))
+            assert getattr(article, field) != data[field]

@@ -19,8 +19,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
-      
+          python-version: 3.11.4
+
+      - name: Check pip cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/.pre-commit-config.yaml') }}
+     
       - name: Install pre-commit
         run: |
           pip install pre-commit
@@ -31,7 +37,7 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
-    container: python:3.11.4-bullseye
+    container: python:3.11.4-slim-buster
     environment: TEST
     env:
 
@@ -54,8 +60,8 @@ jobs:
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
-          --health-timeout 10s
           --health-retries 5
+          --health-timeout 10s
 
       es:
         image: elasticsearch:8.17.0
@@ -66,6 +72,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install PostgreSQL dependencies
+        run: |
+          apt-get update && apt-get install -y libpq-dev gcc
 
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
@@ -83,10 +93,6 @@ jobs:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
       
-      - name: Install PostgreSQL dependencies
-        run: |
-          apt-get update && apt-get install -y libpq-dev gcc
-
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root

@@ -204,25 +204,18 @@ class TestRatingCreateEndpoint:
 
     # test rating on non-existing article get 404
     def test_create_with_non_existing_article_get_404(self, authenticated_client):
-        data = {"rating": 1, "review": "good"}
         endpoint = get_endpoint(uuid4())
+        data = {"rating": 1, "review": "good"}
         resp = authenticated_client.post(endpoint, data=data)
 
         assert resp.status_code == status.HTTP_404_NOT_FOUND
 
     # test invalid data type get 400
-    @pytest.mark.parametrize(
-        "invalid_rating",
-        [
-            -1,
-            6,
-        ],
-    )
-    def test_create_with_invalid_data_get_400(
-        self, authenticated_client, article, invalid_rating
-    ):
-        data = {"rating": invalid_rating, "review": "good"}
+    def test_create_with_invalid_data_get_400(self, authenticated_client, article):
         endpoint = get_endpoint(article.id)
-        resp = authenticated_client.post(endpoint, data=data)
 
-        assert resp.status_code == status.HTTP_400_BAD_REQUEST
+        invalid_rating = [-1, 6]
+        for rating in invalid_rating:
+            data = {"rating": rating, "review": "good"}
+            resp = authenticated_client.post(endpoint, data=data)
+            assert resp.status_code == status.HTTP_400_BAD_REQUEST
