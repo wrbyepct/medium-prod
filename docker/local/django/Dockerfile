@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.11.4-bullseye
+ARG PYTHON_VERSION=3.11.4-slim-buster
 
 FROM python:${PYTHON_VERSION} as python
 
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libpq-dev \
     && pip install --upgrade pip \
     && pip install poetry==1.7.1 \
-    && poetry install --no-root --no-ansi 
+    && poetry install --no-root --no-ansi --with dev
 
 
 FROM python as runner

@@ -25,7 +25,11 @@ class ReadingCategoryManager(models.Manager):
             .get_queryset()
             .defer("created_at", "updated_at")
             .annotate(bookmarks_count=models.Count("bookmarks", distinct=True))
-            .prefetch_related("bookmarks")
+            .prefetch_related(
+                models.Prefetch(
+                    "bookmarks", queryset=Article.statistic_objects.preview_data()
+                ),
+            )
         )
 
 
@@ -72,6 +76,4 @@ class BookmarksInCategories(models.Model):
 
     def __str__(self):
         """Return Article: {self.bookmark.title} in user: {self.category.user.full_name}'s list: {self.category.title}."""
-        return f"Article: {self.bookmark.title} in user: \
-            {self.category.user.full_name}'s \
-                list: {self.category.title}."
+        return f"Article: {self.bookmark.title} in user: {self.category.user.full_name}'s list: {self.category.title}."

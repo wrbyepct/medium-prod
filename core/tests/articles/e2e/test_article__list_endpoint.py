@@ -50,44 +50,45 @@ class TestArticleListEndpoint:
         assert response.data["results"] == serializer.data
 
     # pagination
-    @pytest.mark.parametrize("page_size", ["", 5, 21])
     def test_article_list_endpoint__pagination_correct(
-        self, authenticated_client, existing_articles, page_size
+        self, authenticated_client, existing_articles
     ):
         # Gvien query data {"page_size": <number>} and make request
-        page_size_query_param = self.paginator.page_size_query_param
-        param = {page_size_query_param: page_size}
+        for page_size in ["", 5, 21]:
+            page_size_query_param = self.paginator.page_size_query_param
+            param = {page_size_query_param: page_size}
 
-        # and first page response 200
-        response = authenticated_client.get(self.endpoint, data=param)
-        assert response.status_code == status.HTTP_200_OK
-
-        remaining_pages = get_remaining_pages(
-            query_pages=page_size,
-            paginator=self.paginator,
-            total_count=response.data["count"],
-        )
-
-        for _ in range(remaining_pages):
+            # and first page response 200
+            response = authenticated_client.get(self.endpoint, data=param)
             assert response.status_code == status.HTTP_200_OK
-            assert response.data["next"] is not None
-            next_url = response.data["next"]
-            response = authenticated_client.get(next_url)
 
-        assert response.data["next"] is None
+            remaining_pages = get_remaining_pages(
+                query_pages=page_size,
+                paginator=self.paginator,
+                total_count=response.data["count"],
+            )
+
+            for _ in range(remaining_pages):
+                assert response.status_code == status.HTTP_200_OK
+                assert response.data["next"] is not None
+                next_url = response.data["next"]
+                response = authenticated_client.get(next_url)
+
+            assert response.data["next"] is None
 
     # ordering
-    @pytest.mark.parametrize("query", ["created_at", "-created_at", "title", "-title"])
+
     def test_article_list_view__ordering_query_correct(
-        self, article_factory, authenticated_client, query
+        self, article_factory, authenticated_client
     ):
         # Given db has 5 articles
         article_factory.create_batch(size=5)
 
-        # When request endpoint with order query
-        param = {"ordering": query}
-        response = authenticated_client.get(self.endpoint, data=param)
+        for query in ["created_at", "-created_at", "title", "-title"]:
+            # When request endpoint with order query
+            param = {"ordering": query}
+            response = authenticated_client.get(self.endpoint, data=param)
 
-        articles = Article.statistic_objects.all().order_by(query)
-        serializer = ArticleSerializer(articles, many=True)
-        assert response.data["results"] == serializer.data
+            articles = Article.statistic_objects.all().order_by(query)
+            serializer = ArticleSerializer(articles, many=True)
+            assert response.data["results"] == serializer.data

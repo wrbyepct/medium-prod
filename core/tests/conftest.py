@@ -7,6 +7,7 @@ pytest_plugins = [
     "core.tests.profiles.fixtures",
     "core.tests.responses.fixtures",
     "core.tests.ratings.fixtures",
+    "core.tests.bookmarks.fixtures",
 ]
 
 

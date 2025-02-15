@@ -82,7 +82,7 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "slug"]
 
     def update(self, instance, validated_data):
-        """Allow only updating is_private and description for 'Reading list' category."""
+        """Cannot update default 'Reading list' category's title."""
         if instance.is_reading_list:
             validated_data.pop("title", None)
             for attr, value in validated_data.items():
