@@ -4,7 +4,8 @@
 # mypy: disable-error-code="annotation-unchecked"
 
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -18,15 +19,10 @@ from .serializers import ReadingCategorySerializer
 
 
 # TODO: Consider refactor thie view class.
-class BookmarkCategoryListCreateView(generics.ListCreateAPIView):
-    """
-    GET: Show user's bookmark categories.
-
-    POST: Create a bookmark category
-    """
+class BookmarkCategoryListView(generics.ListAPIView):
+    """GET: Show user's bookmark categories."""
 
     queryset = ReadingCategory.objects.all()
-
     serializer_class = ReadingCategorySerializer
 
     # TODO: consider using Materilaized view on this query.
@@ -35,6 +31,23 @@ class BookmarkCategoryListCreateView(generics.ListCreateAPIView):
         return self.queryset.filter(user=self.request.user).order_by(
             "-is_reading_list", "-updated_at"
         )
+
+
+class BookmarkCategoryCreateView(generics.CreateAPIView):
+    """
+
+    Create a bookmark by adding an article to an existing category, by providing eixsting category id in the JSON body.
+
+    Or create a category on the fly, by providing "title", "description"(optional), "is_private"(optional).
+    """
+
+    serializer_class = ReadingCategorySerializer
+
+    def get_serializer_context(self):
+        """Provide article_id context for serializer."""
+        context = super().get_serializer_context()
+        context["article_id"] = self.request.query_params.get("article_id", None)
+        return context
 
     def perform_create(self, serializer):
         """Provide user instance in serializer's validated data."""
@@ -46,29 +59,8 @@ class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAP
 
     queryset = ReadingCategory.objects.all()
     serializer_class = ReadingCategorySerializer
-    permission_classes = [IsOwnerOrPublicOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrPublicOnly]
     lookup_field = "slug"
-
-
-class BookmarkCreateView(generics.CreateAPIView):
-    """
-
-    Create a bookmark by adding an article to an existing category, by providing "title" in the JSON body.
-
-    Or create a category on the fly, by providing "title", "description"(optional), "is_private"(optional).
-    """
-
-    serializer_class = ReadingCategorySerializer
-
-    def get_serializer_context(self):
-        """Provide article_id context for serializer."""
-        context = super().get_serializer_context()
-        context["article_id"] = self.kwargs.get("article_id")
-        return context
-
-    def perform_create(self, serializer):
-        """Provide user instance in serializer's validated data."""
-        serializer.save(user=self.request.user)
 
 
 class BookmarkDestoryView(APIView):
@@ -81,4 +73,4 @@ class BookmarkDestoryView(APIView):
 
         category.bookmarks.remove(article)
 
-        return Response(data=None, status=status.HTTP_204_NO_CONTENT)
+        return Response()

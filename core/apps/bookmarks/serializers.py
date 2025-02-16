@@ -10,7 +10,7 @@ from core.apps.articles.models import Article
 
 from .models import ReadingCategory
 
-PARTIAL_ARITCLE_BODY_LENGTH = 134
+PARTIAL_ARITCLE_BODY_MAX_LENGTH = 134
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -32,17 +32,18 @@ class BookmarkSerializer(serializers.ModelSerializer):
             "claps_count",
             "responses_count",
         ]
-        read_only_fields = ["title"]
+        read_only_fields = ["title", "banner_image"]
+
+    def _handle_text_length(self, text):
+        return (
+            text[:PARTIAL_ARITCLE_BODY_MAX_LENGTH]
+            if len(text) >= PARTIAL_ARITCLE_BODY_MAX_LENGTH
+            else text
+        )
 
     def get_partial_body(self, obj):
         """Return certain length of article's body."""
-        text = obj.description + obj.body
-
-        return (
-            text[:PARTIAL_ARITCLE_BODY_LENGTH]
-            if len(text) >= PARTIAL_ARITCLE_BODY_LENGTH
-            else text
-        )
+        return self._handle_text_length(obj.description + obj.body)
 
 
 class DynamicPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
@@ -56,11 +57,14 @@ class DynamicPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
-    title = serializers.CharField(required=False)
+    title = serializers.CharField(
+        required=False
+    )  # if existing category is selected, this field is not required
     category = DynamicPrimaryKeyRelatedField(
         queryset=ReadingCategory.objects.all(),
         allow_null=True,
         required=False,
+        write_only=True,
     )
 
     bookmarks = BookmarkSerializer(many=True, read_only=True)
@@ -92,15 +96,14 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-    def create(self, validated_data):
+    def get_or_create_category(self, validated_data):
         """
-        Create a bookmark category or use an existing one.
+        Get or create ReadingCategory instance.
 
-        Add a bookmark if specified.
+        Raise ValidationError if 'title' is not provided.
 
         """
         selected_category = validated_data.pop("category", None)
-
         if selected_category is None:
             title = validated_data.get("title", None)
             if title is None:
@@ -110,22 +113,26 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             validated_data["description"] = validated_data.get("description", "")
             validated_data["is_private"] = validated_data.get("is_private", False)
 
-            bookmark_category = ReadingCategory.objects.create(**validated_data)
+            return ReadingCategory.objects.create(**validated_data)
 
-        else:
-            bookmark_category = get_object_or_404(
-                ReadingCategory, id=selected_category.id
-            )
+        return get_object_or_404(
+            ReadingCategory, id=selected_category.id, user=validated_data["user"]
+        )
 
+    def handle_article_adding(self, bookmark_category):
+        """Add article to the category if specifed."""
         article_id = self.context.get("article_id", None)
+
         if article_id:
             article = get_object_or_404(Article, id=article_id)
             bookmark_category.bookmarks.add(article)
 
-        return bookmark_category
+    def create(self, validated_data):
+        """
+        Create a bookmark category or use an existing one.
 
-    def to_representation(self, instance):
-        """Remove category from representation."""
-        data = super().to_representation(instance)
-        data.pop("category")
-        return data
+        Add a bookmark if specified.
+        """
+        bookmark_category = self.get_or_create_category(validated_data)
+        self.handle_article_adding(bookmark_category)
+        return bookmark_category
