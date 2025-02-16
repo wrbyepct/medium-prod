@@ -115,6 +115,7 @@ class ArticleManager(models.Manager):
                 "title",
                 "created_at",
                 "banner_image",
+                "body",
                 "author__first_name",
                 "author__last_name",
             )
