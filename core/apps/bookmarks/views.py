@@ -5,6 +5,7 @@
 
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -24,13 +25,13 @@ class BookmarkCategoryListView(generics.ListAPIView):
 
     queryset = ReadingCategory.objects.all()
     serializer_class = ReadingCategorySerializer
+    filter_backends = [OrderingFilter]
+    ordering = ["-is_reading_list", "-updated_at"]
 
     # TODO: consider using Materilaized view on this query.
     def get_queryset(self):
         """Return only the user's bookmark category."""
-        return self.queryset.filter(user=self.request.user).order_by(
-            "-is_reading_list", "-updated_at"
-        )
+        return self.queryset.filter(user=self.request.user)
 
 
 class BookmarkCategoryCreateView(generics.CreateAPIView):
