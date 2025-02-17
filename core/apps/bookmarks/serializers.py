@@ -4,7 +4,6 @@
 
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from core.apps.articles.models import Article
 
@@ -57,9 +56,6 @@ class DynamicPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
 class ReadingCategorySerializer(serializers.ModelSerializer):
     """ReadingCategory Serializer."""
 
-    title = serializers.CharField(
-        required=False
-    )  # if existing category is selected, this field is not required
     category = DynamicPrimaryKeyRelatedField(
         queryset=ReadingCategory.objects.all(),
         allow_null=True,
@@ -96,29 +92,6 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-    def get_or_create_category(self, validated_data):
-        """
-        Get or create ReadingCategory instance.
-
-        Raise ValidationError if 'title' is not provided.
-
-        """
-        selected_category = validated_data.pop("category", None)
-        if selected_category is None:
-            title = validated_data.get("title", None)
-            if title is None:
-                detail = "Creating new category 'title' cannot be empty."
-                raise ValidationError(detail=detail)
-
-            validated_data["description"] = validated_data.get("description", "")
-            validated_data["is_private"] = validated_data.get("is_private", False)
-
-            return ReadingCategory.objects.create(**validated_data)
-
-        return get_object_or_404(
-            ReadingCategory, id=selected_category.id, user=validated_data["user"]
-        )
-
     def handle_article_adding(self, bookmark_category):
         """Add article to the category if specifed."""
         article_id = self.context.get("article_id", None)
@@ -133,6 +106,6 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
 
         Add a bookmark if specified.
         """
-        bookmark_category = self.get_or_create_category(validated_data)
+        bookmark_category = super().create(validated_data)
         self.handle_article_adding(bookmark_category)
         return bookmark_category

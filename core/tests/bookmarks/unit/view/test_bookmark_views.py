@@ -9,7 +9,7 @@ from core.apps.bookmarks.models import ReadingCategory
 from core.apps.bookmarks.views import (
     BookmarkCategoryCreateView,
     BookmarkCategoryListView,
-    BookmarkDestoryView,
+    BookmarkCreateDestoryView,
 )
 
 pytestmark = pytest.mark.django_db
@@ -105,7 +105,7 @@ def test_category_destory_view__side_effects_called_correct(mocker):
     request = mocker.Mock(user=stub_user)
 
     # Act
-    view = BookmarkDestoryView()
+    view = BookmarkCreateDestoryView()
     view.delete(request=request, slug=stub_slug, article_id=mock_article.id)
 
     # Assert
@@ -127,7 +127,7 @@ def test_category_destory_view__any_object_not_found_raise_http404(mocker):
     )
 
     stub_id = "stub_id"
-    view = BookmarkDestoryView()
+    view = BookmarkCreateDestoryView()
     with pytest.raises(Http404):
         view.delete(request="stub_request", slug="stub_slug", article_id=stub_id)
 

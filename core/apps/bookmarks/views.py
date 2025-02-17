@@ -4,7 +4,7 @@
 # mypy: disable-error-code="annotation-unchecked"
 
 from django.shortcuts import get_object_or_404
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -37,9 +37,9 @@ class BookmarkCategoryListView(generics.ListAPIView):
 class BookmarkCategoryCreateView(generics.CreateAPIView):
     """
 
-    Create a bookmark by adding an article to an existing category, by providing eixsting category id in the JSON body.
+    Create a ReadingCategory.
 
-    Or create a category on the fly, by providing "title", "description"(optional), "is_private"(optional).
+    If article id is provided, add the article the reading category.
     """
 
     serializer_class = ReadingCategorySerializer
@@ -64,8 +64,18 @@ class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAP
     lookup_field = "slug"
 
 
-class BookmarkDestoryView(APIView):
+class BookmarkCreateDestoryView(APIView):
     """View to remove a bookmark from a category."""
+
+    def post(self, request, slug, article_id, format=None):
+        """Try to add a bookmark from a bookmark category by providng bookmark category slug and article id."""
+        article = get_object_or_404(Article, id=article_id)
+        category = get_object_or_404(ReadingCategory, user=request.user, slug=slug)
+
+        category.bookmarks.add(article)
+        serializer = ReadingCategorySerializer(category)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, slug, article_id, format=None):
         """Try to delete a bookmark from a bookmark category by providng bookmark category slug and article id."""
