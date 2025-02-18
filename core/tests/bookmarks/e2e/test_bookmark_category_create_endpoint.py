@@ -18,7 +18,6 @@ def valid_data():
     }
 
 
-@pytest.mark.bbb
 class TestBookmarkCategoryCreateEndpoint:
     endpoint = reverse("bookmark_create")
 
