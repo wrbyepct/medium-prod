@@ -108,3 +108,41 @@ def create_profile(normal_user, profile_factory):
 def create_reading_category(normal_user):
     # TODO change ReadingCategory to factory later
     ReadingCategory.objects.create(user=normal_user)
+
+
+@pytest.fixture
+def assert_paginated_correct(authenticated_client):
+    def _assert(
+        resp,
+        query_num,
+        paginator,
+        total_count,
+    ):
+        """
+        Helper function fixture.
+
+        Make sure remaining pages is correct by running through the pages.
+        """
+        from rest_framework import status
+
+        from core.tests.utils.misc import get_remaining_pages
+
+        assert resp.status_code == status.HTTP_200_OK
+
+        remaining_pages = get_remaining_pages(
+            query_num,
+            paginator,
+            total_count,
+        )
+
+        for _ in range(remaining_pages):
+            assert resp.data["next"] is not None
+
+            endpoint = resp.data["next"]
+            resp = authenticated_client.get(endpoint)
+
+            assert resp.status_code == status.HTTP_200_OK
+
+        assert resp.data["next"] is None
+
+    return _assert

@@ -6,49 +6,13 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from core.apps.articles.models import Article
+from core.apps.articles.serializers import ArticlePreviewSerializer
 
 from .models import ReadingCategory
 
-PARTIAL_ARITCLE_BODY_MAX_LENGTH = 134
 
-
-class BookmarkSerializer(serializers.ModelSerializer):
+class BookmarkSerializer(ArticlePreviewSerializer):
     """Bookmark Serializer."""
-
-    author_fullname = serializers.SerializerMethodField()
-    claps_count = serializers.IntegerField(read_only=True)
-    responses_count = serializers.IntegerField(read_only=True)
-    partial_body = serializers.SerializerMethodField()
-    created_at = serializers.DateTimeField(format="%b %d, %Y", read_only=True)
-
-    class Meta:
-        model = Article
-        fields = [
-            "id",
-            "title",
-            "author_fullname",
-            "partial_body",
-            "banner_image",
-            "created_at",
-            "claps_count",
-            "responses_count",
-        ]
-        read_only_fields = ["title", "banner_image"]
-
-    def _handle_text_length(self, text):
-        return (
-            text[:PARTIAL_ARITCLE_BODY_MAX_LENGTH]
-            if len(text) >= PARTIAL_ARITCLE_BODY_MAX_LENGTH
-            else text
-        )
-
-    def get_author_fullname(self, obj):
-        """Return author's full name."""
-        return obj.author.full_name
-
-    def get_partial_body(self, obj):
-        """Return certain length of article's body."""
-        return self._handle_text_length(obj.description + obj.body)
 
 
 class DynamicPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):

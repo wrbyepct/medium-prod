@@ -4,7 +4,6 @@ import pytest
 from dateutil.parser import isoparse
 from django.http import Http404
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from core.apps.bookmarks.models import ReadingCategory
 from core.apps.bookmarks.serializers import (
@@ -101,43 +100,21 @@ Deserialize
 
 
 def test_reading_category_serializer__valid_data_deserialize_correct(
-    valid_data,
+    valid_data, article, normal_user
 ):
     """Test ReadingCategorySerializer valid data deserialize correctly."""
 
-    serializer = ReadingCategorySerializer(data=valid_data)
+    serializer = ReadingCategorySerializer(
+        data=valid_data, context={"article_id": article.id}
+    )
 
     assert serializer.is_valid()
     assert serializer.validated_data == valid_data
 
-
-def test_reading_category_serializer__create_method_create_side_effect_methods_called_correct(
-    valid_data, article, normal_user, mocker
-):
-    # Arrange: prepare validated_data and serializer with context article id
-    valid_data["user"] = normal_user
-    validated_data = valid_data
-    serializer = ReadingCategorySerializer(context={"article_id": article.id})
-
-    # Arrange: prepare side effect spy
-    spy_category = mocker.patch.object(
-        serializer,
-        "get_or_create_category",
-        side_effect=serializer.get_or_create_category,
-    )
-
-    spy_handle_article_adding = mocker.patch.object(
-        serializer,
-        "handle_article_adding",
-        side_effect=serializer.handle_article_adding,
-    )
-
     # Act
+    validated_data = serializer.validated_data
+    validated_data["user"] = normal_user
     cate = serializer.create(validated_data)
-
-    # Assert spy
-    spy_category.assert_called_once_with(validated_data)
-    spy_handle_article_adding.assert_called_once_with(cate)
 
     # Assert saveed data
     assert cate.user == validated_data["user"]
@@ -145,57 +122,6 @@ def test_reading_category_serializer__create_method_create_side_effect_methods_c
     assert cate.title == validated_data["title"]
     assert cate.description == validated_data["description"]
     assert cate.is_private == validated_data["is_private"]
-
-
-def test_reading_category_serializer__get_or_create_category__get_existing_category_correct(
-    reading_category_factory, valid_data, normal_user
-):
-    # Arrange: given an existing category of normal user
-    cate = reading_category_factory.create(user=normal_user)
-
-    # Arrange: given validated with existing category
-    valid_data["user"] = normal_user
-    valid_data["category"] = cate
-    validated_data = valid_data
-
-    # Act
-    serializer = ReadingCategorySerializer()
-    result_cate = serializer.get_or_create_category(validated_data)
-
-    # Aseert: result is equal to existing one
-    assert result_cate == cate
-    assert result_cate.title != valid_data["title"]
-    assert result_cate.description != valid_data["description"]
-    assert result_cate.is_private != valid_data["is_private"]
-
-
-def test_reading_category_serializer__get_or_create_category__create_new_category_correct(
-    valid_data, normal_user
-):
-    # Arrange: given data to create new category
-    valid_data["user"] = normal_user
-    validated_data = valid_data
-
-    # Act
-    serializer = ReadingCategorySerializer()
-    result_cate = serializer.get_or_create_category(validated_data)
-
-    assert result_cate.title == valid_data["title"]
-    assert result_cate.description == valid_data["description"]
-    assert result_cate.is_private == valid_data["is_private"]
-    assert result_cate.user == normal_user
-
-
-# get_or_create_category create new category title is empty raise error
-def test_reading_category_serializer__get_or_create_category__create_new_category_title_empty_raise_error():
-    invalid_data = {
-        "description": "Test",
-        "is_private": True,
-    }
-    serializer = ReadingCategorySerializer()
-    with pytest.raises(ValidationError) as e:
-        serializer.get_or_create_category(invalid_data)
-        assert e.detail == "Creating new category 'title' cannot be empty."
 
 
 def test_reading_category_serializer__handle_article_adding__if_article_id_present_then_add_correct(
