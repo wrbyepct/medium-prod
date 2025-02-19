@@ -7,6 +7,7 @@ from .views import (
     BookmarkCategoryListView,
     BookmarkCategoryRetrieveUpdateDestroyView,
     BookmarkCreateDestoryView,
+    BookmarkListView,
 )
 
 urlpatterns = [
@@ -24,6 +25,11 @@ urlpatterns = [
         "category/<slug:slug>/",
         BookmarkCategoryRetrieveUpdateDestroyView.as_view(),
         name="bookmark_category_retrieve_update_destroy",
+    ),
+    path(
+        "category/<slug:slug>/bookmarks/",
+        BookmarkListView.as_view(),
+        name="bookmarks_list",
     ),
     path(
         "category/<slug:slug>/<uuid:article_id>/",

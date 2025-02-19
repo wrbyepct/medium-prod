@@ -106,7 +106,7 @@ def test_hit_all_profiles_endpoint_page_links_work_correctly(profiles):
 )
 def _(page_size_num, paginator):
     return get_remaining_pages(
-        query_pages=page_size_num,
+        query_size=page_size_num,
         paginator=paginator,
         total_count=NUM_OF_PROFILES,
     )

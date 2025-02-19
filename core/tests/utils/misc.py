@@ -30,11 +30,11 @@ def full_url(
     return f"{protocol}://{domain}{url}{query_term if query_term else ''}"
 
 
-def get_remaining_pages(query_pages, paginator, total_count):
+def get_remaining_pages(query_size, paginator, total_count):
     from math import floor
 
-    max_pages = paginator.max_page_size
-    default_pages = paginator.page_size
+    max_page_size = paginator.max_page_size
+    default_page_size = paginator.page_size
 
-    per_page_count = min(query_pages, max_pages) if query_pages else default_pages
+    per_page_count = min(query_size, max_page_size) if query_size else default_page_size
     return floor(total_count / per_page_count)

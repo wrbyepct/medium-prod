@@ -13,8 +13,9 @@ from rest_framework.views import APIView
 from core.apps.articles.models import Article
 
 from .models import ReadingCategory
+from .paginations import BookmarkPagination
 from .permissions import IsOwnerOrPublicOnly
-from .serializers import ReadingCategorySerializer
+from .serializers import BookmarkSerializer, ReadingCategorySerializer
 
 # TODO: Implement feature that user can see if the article is bookmarked in what categories.
 
@@ -62,6 +63,28 @@ class BookmarkCategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAP
     serializer_class = ReadingCategorySerializer
     permission_classes = [IsAuthenticated, IsOwnerOrPublicOnly]
     lookup_field = "slug"
+
+
+class BookmarkListView(generics.ListAPIView):
+    """Get paginated bookmarks list."""
+
+    serializer_class = BookmarkSerializer
+    pagination_class = BookmarkPagination
+    permission_classes = [IsAuthenticated, IsOwnerOrPublicOnly]
+
+    def _get_category(self):
+        slug = self.kwargs.get("slug")
+        # We can see others' public reading categoreis
+        # So no need to filter on user
+        # But we need to check category's permission manually since it's a list view
+        cate = get_object_or_404(ReadingCategory, slug=slug)
+        self.check_object_permissions(self.request, cate)
+        return cate
+
+    def get_queryset(self):
+        """Get previewed version of articles that belong to the category."""
+        category = self._get_category()
+        return category.bookmarks.all()
 
 
 class BookmarkCreateDestoryView(APIView):

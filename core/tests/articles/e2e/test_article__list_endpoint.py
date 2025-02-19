@@ -63,7 +63,7 @@ class TestArticleListEndpoint:
             assert response.status_code == status.HTTP_200_OK
 
             remaining_pages = get_remaining_pages(
-                query_pages=page_size,
+                query_size=page_size,
                 paginator=self.paginator,
                 total_count=response.data["count"],
             )

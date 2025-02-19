@@ -15,6 +15,7 @@ PARTIAL_ARITCLE_BODY_MAX_LENGTH = 134
 class BookmarkSerializer(serializers.ModelSerializer):
     """Bookmark Serializer."""
 
+    author_fullname = serializers.SerializerMethodField()
     claps_count = serializers.IntegerField(read_only=True)
     responses_count = serializers.IntegerField(read_only=True)
     partial_body = serializers.SerializerMethodField()
@@ -25,6 +26,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "author_fullname",
             "partial_body",
             "banner_image",
             "created_at",
@@ -39,6 +41,10 @@ class BookmarkSerializer(serializers.ModelSerializer):
             if len(text) >= PARTIAL_ARITCLE_BODY_MAX_LENGTH
             else text
         )
+
+    def get_author_fullname(self, obj):
+        """Return author's full name."""
+        return obj.author.full_name
 
     def get_partial_body(self, obj):
         """Return certain length of article's body."""

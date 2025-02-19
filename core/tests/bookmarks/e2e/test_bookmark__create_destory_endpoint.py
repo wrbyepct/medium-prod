@@ -11,7 +11,7 @@ def get_endpoint(slug, article_id):
     return reverse("bookmark_create_delete", args=[slug, article_id])
 
 
-class TestBookmarkCreateView:
+class TestBookmarkCreateEndpoint:
     # unauth get 401
     def test_unauthed_get_401(self, client, article, reading_category_factory):
         cate = reading_category_factory.create()
@@ -79,8 +79,7 @@ class TestBookmarkCreateView:
         assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
-@pytest.mark.bbb
-class TestBookmarkDestroyView:
+class TestBookmarkDestroyEndpoint:
     # unauth get 401
     def test_unauthed_get_401(self, client, reading_category_factory, article):
         cate = reading_category_factory.create()
