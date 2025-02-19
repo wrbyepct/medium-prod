@@ -17,7 +17,7 @@ def test_get_remaining_pages_correc(page_size, expected):
     paginator = ArticlePagination()
 
     result = get_remaining_pages(
-        query_pages=page_size, paginator=paginator, total_count=21
+        query_size=page_size, paginator=paginator, total_count=21
     )
 
     assert result == expected

@@ -14,7 +14,7 @@ from core.apps.general.permissions import IsOwnerOrReadOnly
 from .filters import ArticleFilter
 from .models import Article, ArticleView, Clap
 from .paginations import ArticlePagination
-from .serializers import ArticleSerializer
+from .serializers import ArticlePreviewSerializer, ArticleSerializer
 from .services.es import full_text_search
 
 
@@ -45,7 +45,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
     """
 
-    serializer_class = ArticleSerializer
+    serializer_class = ArticlePreviewSerializer
     pagination_class = ArticlePagination
     filterset_class = ArticleFilter
     filter_backends = [OrderingFilter]
@@ -65,14 +65,14 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Return all articles, if search term is provided, return all articles based on the search terms."""
-        qs = Article.statistic_objects.all()
+        qs = Article.statistic_objects.preview_data()
         article_ids = self.handle_fulltext_search()
         if article_ids:
             return qs.filter(id__in=article_ids)
 
         return qs
 
-    def perform_create(self, serializer: ArticleSerializer):
+    def perform_create(self, serializer: ArticlePreviewSerializer):
         """Create article with author user info."""
         serializer.save(author=self.request.user)  # This will trigger user query
 

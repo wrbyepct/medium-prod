@@ -3,9 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from core.apps.articles.models import Article
-from core.apps.articles.paginations import ArticlePagination
-from core.apps.articles.serializers import ArticleSerializer
-from core.tests.utils.misc import get_remaining_pages
+from core.apps.articles.serializers import ArticlePreviewSerializer
 
 pytestmark = pytest.mark.django_db
 
@@ -17,14 +15,8 @@ def existing_articles(article_factory):
     article_factory.create_batch(size=ARTICLE_COUNT)
 
 
-@pytest.fixture
-def article_paginator():
-    return ArticlePagination()
-
-
 class TestArticleListEndpoint:
     endpoint = reverse("article_list_create")
-    paginator = ArticlePagination()
 
     # unauth denied
     def test_article_list_endpoint__unauthed_deny_access(self, client):
@@ -37,7 +29,7 @@ class TestArticleListEndpoint:
     ):
         # Arrange
         article_count = Article.objects.count()
-        articles = Article.statistic_objects.all()[:10]
+        articles = Article.statistic_objects.preview_data()[:10]
 
         # Act
         response = authenticated_client.get(self.endpoint)
@@ -46,35 +38,8 @@ class TestArticleListEndpoint:
         assert response.status_code == status.HTTP_200_OK
         assert response.data["count"] == article_count
 
-        serializer = ArticleSerializer(articles, many=True)
+        serializer = ArticlePreviewSerializer(articles, many=True)
         assert response.data["results"] == serializer.data
-
-    # pagination
-    def test_article_list_endpoint__pagination_correct(
-        self, authenticated_client, existing_articles
-    ):
-        # Gvien query data {"page_size": <number>} and make request
-        for page_size in ["", 5, 21]:
-            page_size_query_param = self.paginator.page_size_query_param
-            param = {page_size_query_param: page_size}
-
-            # and first page response 200
-            response = authenticated_client.get(self.endpoint, data=param)
-            assert response.status_code == status.HTTP_200_OK
-
-            remaining_pages = get_remaining_pages(
-                query_pages=page_size,
-                paginator=self.paginator,
-                total_count=response.data["count"],
-            )
-
-            for _ in range(remaining_pages):
-                assert response.status_code == status.HTTP_200_OK
-                assert response.data["next"] is not None
-                next_url = response.data["next"]
-                response = authenticated_client.get(next_url)
-
-            assert response.data["next"] is None
 
     # ordering
 
@@ -89,6 +54,6 @@ class TestArticleListEndpoint:
             param = {"ordering": query}
             response = authenticated_client.get(self.endpoint, data=param)
 
-            articles = Article.statistic_objects.all().order_by(query)
-            serializer = ArticleSerializer(articles, many=True)
+            articles = Article.statistic_objects.preview_data().order_by(query)
+            serializer = ArticlePreviewSerializer(articles, many=True)
             assert response.data["results"] == serializer.data

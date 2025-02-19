@@ -1,8 +1,8 @@
 import pytest
 
 from core.apps.articles.models import Article
+from core.apps.articles.serializers import PARTIAL_ARITCLE_BODY_MAX_LENGTH
 from core.apps.bookmarks.serializers import (
-    PARTIAL_ARITCLE_BODY_MAX_LENGTH,
     BookmarkSerializer,
 )
 

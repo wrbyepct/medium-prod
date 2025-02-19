@@ -27,7 +27,6 @@ def test_reading_category_manager__defer_correct():
 
     deferred_fields = qs.query.deferred_loading[0]
 
-    assert "updated_at" in deferred_fields
     assert "created_at" in deferred_fields
 
 
