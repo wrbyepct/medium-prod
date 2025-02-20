@@ -5,22 +5,35 @@ from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.urls import reverse
-from pytest_bdd import given, parsers, scenarios, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from rest_framework import status
-from rest_framework.test import APIClient
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.e2e,
+    pytest.mark.user(type="registraion_endpoint"),
+]
 
 
 User = get_user_model()
 
-scenarios("./features/auth__registrations.feature")
+
+@scenario("./features/auth.feature", "Regiter New User")
+def test_registration():
+    pass
+
+
+@scenario("./features/auth.feature", "Reset Password")
+def test_rest_password():
+    pass
 
 
 @given("I register user with correct data")
-def register_user(user_data, mock_create_user_side_effect, client, mocker):
-    client = APIClient()  # only it can store crendietial token
-
+def register_user(
+    user_data,
+    mock_create_user_side_effect,
+    client,
+):
     # Register user
     response = client.post(reverse("rest_register"), user_data)
     assert response.status_code == status.HTTP_201_CREATED
@@ -32,7 +45,7 @@ def veryfiy_email(client, user_data):
     # Get the validation key from mail body
     email_content = mail.outbox.pop(0)
     confirmation_lint = re.search(
-        r"http://.*?account-confirm-email/.*?/", email_content.body
+        r"http://.*?/account-confirm-email/.*?/", email_content.body
     ).group(0)
     key = confirmation_lint.split("/")[-2]
 
@@ -49,14 +62,14 @@ def login_user(user_data, client):
     # Login user
     login_data = {"email": user_data["email"], "password": user_data["password1"]}
     response = client.post(reverse("rest_login"), login_data)
+
     assert response.status_code == status.HTTP_200_OK
     assert "access" in response.data
 
 
 @given("Hitting reset password endpoint w/ email & receive confirm email")
-def reset_password(normal_user):
+def reset_password(normal_user, authenticated_client):
     # Request password reset
-    authenticated_client = APIClient(user=normal_user)
     response = authenticated_client.post(
         reverse("rest_password_reset"), {"email": normal_user.email}
     )
@@ -70,7 +83,7 @@ def confirm_reset_password(authenticated_client, new_password):
     email_content = mail.outbox.pop(0)
 
     confirmation_link = re.search(
-        "http://.*?password_rest/confirm/.*?/.*?/", email_content.body
+        "http://.*?/password_rest/confirm/.*?/.*?/", email_content.body
     ).group(0)
 
     split_link = confirmation_link.split("/")

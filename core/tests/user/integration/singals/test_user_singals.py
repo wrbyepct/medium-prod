@@ -1,7 +1,11 @@
 import pytest
 from django.contrib.auth import get_user_model
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.integration,
+    pytest.mark.user(type="signal"),
+]
 
 User = get_user_model()
 
@@ -15,7 +19,10 @@ def test_user_create__signal_also_create_category_and_profile():
     }
     user = User.objects.create_user(**user_info)
     assert user.profile is not None
-    assert user.reading_categories.all().count() == 1
+    assert user.reading_categories.count() == 1
+
+    cate = user.reading_categories.first()
+    assert cate.is_reading_list
 
 
 def test_admin_create__signal_also_create_category_and_profile():
@@ -27,4 +34,7 @@ def test_admin_create__signal_also_create_category_and_profile():
     }
     user = User.objects.create_superuser(**user_info)
     assert user.profile is not None
-    assert user.reading_categories.all().count() == 1
+    assert user.reading_categories.count() == 1
+
+    cate = user.reading_categories.first()
+    assert cate.is_reading_list

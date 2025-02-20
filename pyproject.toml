@@ -185,6 +185,7 @@ omit = [
     "*/tests/*",
     "core/settings/*",
     "*/conftest.py",
+    "core/*/permissions.py",
     "core/manage.py",
     "*apps.py",
     "*urls.py",

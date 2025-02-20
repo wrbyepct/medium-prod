@@ -9,7 +9,6 @@ pytestmark = pytest.mark.django_db
 TOTAL_PROFILES = 21
 
 
-@pytest.mark.bbb
 def test_profile_list_view__pagination_correct(
     authenticated_client,
     profile_factory,

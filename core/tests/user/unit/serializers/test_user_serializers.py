@@ -3,10 +3,18 @@ from rest_framework.serializers import ValidationError
 
 from core.apps.user.serializers import CustomRegisterSerializer, UserSerializer
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.unit,
+    pytest.mark.user(type="serializer"),
+]
+
+"""
+Serialize
+"""
 
 
-def test_user_serializer__convert_normal_user_instance_correctly(normal_user):
+def test_user_serializer__serialize_normal_user_and_data_correct(normal_user):
     serializer = UserSerializer(normal_user)
 
     assert "id" in serializer.data
@@ -21,7 +29,7 @@ def test_user_serializer__convert_normal_user_instance_correctly(normal_user):
     assert "admin" not in serializer.data
 
 
-def test_user_serializer__convert_super_user_instance_correctly(super_user):
+def test_user_serializer__serialize_super_user_and_data_correct(super_user):
     serializer = UserSerializer(super_user)
 
     assert "id" in serializer.data
@@ -35,6 +43,11 @@ def test_user_serializer__convert_super_user_instance_correctly(super_user):
     assert "city" in serializer.data
     assert "admin" in serializer.data
     assert serializer.data["admin"] is True
+
+
+"""
+Deserialize
+"""
 
 
 def test_user_register_serializer__save_method_return_user_instance(
@@ -58,7 +71,7 @@ def test_user_register_serializer__password_not_match_raise_validation_error():
         "last_name": "Test",
         "email": "test@example.com",
         "password1": "password12345",
-        "password2": "password12345_wrong",
+        "password2": "password12345_wrong",  # password not matching
     }
 
     with pytest.raises(ValidationError):
@@ -70,7 +83,7 @@ def test_user_register_serializer__password_not_match_raise_validation_error():
     "invalid_data",
     [
         {
-            "first_name": "T" * 51,
+            "first_name": "T" * 51,  # name exceeding limit
             "last_name": "Test",
             "email": "test@example.com",
             "password1": "password12345",
@@ -78,7 +91,7 @@ def test_user_register_serializer__password_not_match_raise_validation_error():
         },
         {
             "first_name": "Test",
-            "last_name": "T" * 51,
+            "last_name": "T" * 51,  # name exceeding limit
             "email": "test@example.com",
             "password1": "password12345",
             "password2": "password12345",

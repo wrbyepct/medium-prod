@@ -1,13 +1,15 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.e2e,
+    pytest.mark.user(type="detail_endpoint"),
+]
 
 
-def test_user_endpoint__retrieve_user_detail_unauthenticated_fail():
-    client = APIClient()
+def test_user_endpoint__retrieve_user_detail_unauthenticated_fail(client):
     response = client.get(reverse("user_details"))
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
