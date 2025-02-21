@@ -2,11 +2,15 @@ import pytest
 
 from core.apps.profiles.serializers import UpdateProfileSerializer
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.unit,
+    pytest.mark.profile(type="serializer"),
+]
 
 
 @pytest.mark.usefixtures("mock_media_dir")
-class TestUpdateProfileSerializerSuccess:
+class TestUpdateProfileDeSerializer:
     @pytest.fixture(autouse=True)
     def update_data(self, mock_image_upload):
         return {
@@ -18,7 +22,7 @@ class TestUpdateProfileSerializerSuccess:
             "twitter_handle": "@test12345",
         }
 
-    def test_profile_serializer__update_serialize_correct(self, update_data):
+    def test_profile_serializer__update_deserialize_correct(self, update_data):
         serializer = UpdateProfileSerializer(data=update_data)
         assert serializer.is_valid(), serializer.errors
 
@@ -41,17 +45,20 @@ class TestUpdateProfileSerializerSuccess:
         assert profile.country == update_data["country"]
         assert profile.phone_number == update_data["phone_number"]
         assert profile.about_me == update_data["about_me"]
-        assert profile.profile_photo.name == update_data["profile_photo"].name
+        assert profile.profile_photo.name.startswith("uploads/profiles/")
+        assert profile.profile_photo.name.endswith(".jpg")
         assert profile.twitter_handle == update_data["twitter_handle"]
 
-    def test_profile_serializer__serialize_invalid_fields_have_no_effect(self):
+    def test_profile_serializer__deserialize_non_consequential_fields_have_no_effect(
+        self,
+    ):
         invalid_data = {
             "gender": "M",
             "country": "GB",  # For UK
             "phone_number": "+8860911443567",
             "about_me": "Hey I'm test!",
             "twitter_handle": "@test12345",
-            # Invalid fields below
+            # non-consequential fields below
             "id": 20,
             "first_name": "Jim",
             "last_name": "Hall",
@@ -85,7 +92,7 @@ class TestUpdateProfileSerializerSuccess:
         ("phone_number", "12312"),  # Invalid number
     ],
 )
-def test_profile_serializer__invalid_gender_data(profile, field, value):
+def test_profile_serializer__invalid_data(profile, field, value):
     invalid_data = {field: value}
     serializer = UpdateProfileSerializer(instance=profile, data=invalid_data)
     assert not serializer.is_valid()

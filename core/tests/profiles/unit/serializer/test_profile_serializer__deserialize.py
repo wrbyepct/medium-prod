@@ -2,22 +2,26 @@ import pytest
 
 from core.apps.profiles.serializers import FollowingSerializer, ProfileSerializer
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.unit,
+    pytest.mark.profile(type="serializer"),
+]
 
 """
-Test ProfileSerializer & FollowerSerializer for deserialize only 
+Test ProfileSerializer & FollowerSerializer for serialize only 
 Because they are only used in representation.
 """
 
 
 # Test ProfileSerializer
-class TestProfileDeserializ:
-    def test_profile_serializer__deserialize_correct(self, profile):
+class TestProfileSerialize:
+    def test_profile_serializer__serialize_correct(self, profile):
         serializer = ProfileSerializer(profile)
         fields = ProfileSerializer.Meta.fields
 
         data = serializer.data
-        # Assert fields exist in serialized data
+        # Assert profile data
         for field in fields:
             assert field in data
 
@@ -33,7 +37,7 @@ class TestProfileDeserializ:
         assert data["id"] == str(profile.id)
         assert data["profile_photo"] == profile.profile_photo.url
 
-        # Assert field value correct
+        # Assert user data
         user_fields = [
             "first_name",
             "last_name",
@@ -45,7 +49,7 @@ class TestProfileDeserializ:
             assert data[field] == getattr(user, field)
 
     # Test FollowingSerializer
-    def test_profile_serializer__follower_deserialize_correct(self, profile):
+    def test_profile_serializer__follower_serialize_correct(self, profile):
         serializer = FollowingSerializer(profile)
         fields = FollowingSerializer.Meta.fields
 

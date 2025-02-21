@@ -8,6 +8,8 @@ from core.apps.profiles.models import Profile
 
 User = get_user_model()
 
+pytestmark = [pytest.mark.unit, pytest.mark.profile(type="model")]
+
 
 @pytest.mark.parametrize(
     "field_name, field_type",

@@ -17,15 +17,15 @@ urlpatterns = [
     path("me/", ProfileDetailAPIView.as_view(), name="me"),
     path("me/update/", ProfileUpdateAPIView.as_view(), name="me_update_profile"),
     path(
-        "<uuid:user_id>/following/",
+        "<uuid:profile_id>/following/",
         FollowingListAPIView.as_view(),
         name="user_following",
     ),
     path(
-        "<uuid:user_id>/followers/",
+        "<uuid:profile_id>/followers/",
         FollowersListAPIView.as_view(),
         name="user_followers",
     ),
-    path("<uuid:user_id>/follow/", FollowAPIView.as_view(), name="follow"),
-    path("<uuid:user_id>/unfollow/", UnfollowAPIView.as_view(), name="unfollow"),
+    path("<uuid:profile_id>/follow/", FollowAPIView.as_view(), name="follow"),
+    path("<uuid:profile_id>/unfollow/", UnfollowAPIView.as_view(), name="unfollow"),
 ]

@@ -1,19 +1,17 @@
 """Profile views."""
 
+# ruff: noqa: A002, ANN001, ARG002
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status
-from rest_framework.exceptions import NotFound
+from django.shortcuts import get_object_or_404
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.tools.email import inform_followed
-
-from .models import Profile
+from .models import Profile, ProfileQuerySet
 from .paginations import ProfilePagination
 from .renderers import ProfileListRenderer, ProfileRenderer
 from .serializers import FollowingSerializer, ProfileSerializer, UpdateProfileSerializer
-
-# ruff: noqa: A002, ANN001, ARG002
+from .services import FollowHandleService
 
 User = get_user_model()
 
@@ -21,7 +19,7 @@ User = get_user_model()
 class ProfileListAPIView(generics.ListAPIView):
     """Profile List API View."""
 
-    queryset = Profile.objects.select_related("user")
+    queryset = Profile.objects.all().join_user_table()
     serializer_class = ProfileSerializer
     pagination_class = ProfilePagination
     renderer_classes = [ProfileListRenderer]
@@ -39,7 +37,7 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
 
         So you don't have to query through profile for user.
         """
-        return Profile.objects.select_related("user")
+        return Profile.objects.all().join_user_table()
 
     def get_object(self):
         """Get object filter by requesting user."""
@@ -72,27 +70,26 @@ class BaseFollowListView(generics.ListAPIView):
         Return instances with necessary columns.
 
         Columns:
-           - "profile_photo"
-           - "about_me"
-           - "twitter_handle"
-           - "user__first_name"
-           - "user__last_name"
-
+           - profile_photo
+           - about_me
+           - twitter_handle
+           - user__first_name
+           - user__last_name
 
         By selecting joined table from user.
         """
-        return Profile.objects.only(
-            "profile_photo",
-            "about_me",
-            "twitter_handle",
-            "user__first_name",
-            "user__last_name",
-        ).select_related("user")
+        profile_id = self.kwargs.get("profile_id")
+        profile = get_object_or_404(Profile, id=profile_id)
+
+        follow_type = self.follow_type
+        qs: ProfileQuerySet = getattr(profile, follow_type).all()
+        return qs.follow_preview_info()
 
     def get(self, request, *args, **kwargs):
         """Return formatted response: follow_type_count, follow_type data."""
         response = super().get(request, *args, **kwargs)
         data = response.data
+
         follow_type = self.follow_type
         formatted_response = {
             f"{follow_type}_count": len(data),
@@ -106,90 +103,33 @@ class FollowersListAPIView(BaseFollowListView):
 
     follow_type = "followers"
 
-    def get_queryset(self):
-        """Filter results by selecting those who follow the user."""
-        user_id = self.kwargs.get("user_id")
-        return super().get_queryset().filter(following__user__id=user_id)
-
 
 class FollowingListAPIView(BaseFollowListView):
     """Get user's following by specifying user uuid."""
 
     follow_type = "following"
 
-    def get_queryset(self):
-        """Filter results by selecting those whose followers contain the user."""
-        user_id = self.kwargs.get("user_id")
-        return super().get_queryset().filter(followers__user__id=user_id)
-
 
 class FollowAPIView(APIView):
     """Follow API View."""
 
-    def post(self, request, user_id, format=None, *args, **kwargs):
+    def post(self, request, profile_id, format=None, *args, **kwargs):
         """To follow a user."""
-        try:
-            to_follow_profile = Profile.objects.get(user__id=user_id)
-
-        except Profile.DoesNotExist as profile_not_found:
-            detail = "You can't follow a profile that does not exist."
-            raise NotFound(detail=detail) from profile_not_found
-
-        if request.user.id == user_id:
-            return Response(
-                {"message": "You can't follow yourself."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         requesting_profile = request.user.profile
-        if requesting_profile.has_followed(to_follow_profile):
-            return Response(
-                {"message": "You already followed that user."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        service = FollowHandleService(requesting_profile, profile_id)
 
-        requesting_profile.follow(to_follow_profile)
+        service.check_invalid_follow()
 
-        email_data = {
-            "being_followed_user_first_name": to_follow_profile.user.first_name,
-            "to_email": to_follow_profile.user.email,
-            "user_fullname": requesting_profile.user.full_name,
-        }
-
-        inform_followed(**email_data)  # TODO: Will send email fail?
-
-        return Response(
-            {
-                "message": f"You successfully followed {to_follow_profile.user.full_name}.",
-            },
-            status=status.HTTP_200_OK,
-        )
+        return service.perform_follow()
 
 
 class UnfollowAPIView(APIView):
     """View to unfollow a user."""
 
-    def post(self, request, user_id, *args, **kwargs):
+    def post(self, request, profile_id, *args, **kwargs):
         """To unfollow a user."""
-        try:
-            to_unfollow_profile = Profile.objects.get(user__id=user_id)
-
-        except Profile.DoesNotExist as profile_not_found:
-            detail = "You can't unfollow a profile that does not exist."
-            raise NotFound(detail=detail) from profile_not_found
-
         requesting_profile = request.user.profile
+        service = FollowHandleService(requesting_profile, profile_id)
 
-        if not requesting_profile.has_followed(to_unfollow_profile):
-            return Response(
-                {"message": "You can't unfollow a user that you haven't follwoed!"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        requesting_profile.unfollow(to_unfollow_profile)
-        return Response(
-            {
-                "message": f"You have unfollowed {to_unfollow_profile.user.full_name}.",
-            },
-            status=status.HTTP_200_OK,
-        )
+        service.check_invalid_unfollow()
+        return service.perform_unfollow()
