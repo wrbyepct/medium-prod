@@ -4,12 +4,15 @@ from django_mock_queries.mocks import MockSet
 
 from core.apps.profiles.paginations import ProfilePagination
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.integration,
+    pytest.mark.profile(type="pagination"),
+]
 
 TOTAL_PROFILES = 21
 
 
-@pytest.mark.bbb
 def test_profile_list_view__pagination_correct(
     authenticated_client,
     profile_factory,

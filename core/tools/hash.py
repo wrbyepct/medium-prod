@@ -11,7 +11,7 @@ def generate_hashed_slug(instance):
     base_slug = slugify(instance.title)
 
     if instance.slug:
-        hash_part = instance.slug.split("-")[-1]
+        hash_part = instance.slug.split("-")[-1]  # keep the orignal hash part
     else:
         hash_part = hashlib.md5(str(instance.id).encode("utf-8")).hexdigest()[:13]  # noqa: S324
     return f"{base_slug}-{hash_part}"

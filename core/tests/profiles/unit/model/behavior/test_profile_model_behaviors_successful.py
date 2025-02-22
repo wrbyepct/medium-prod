@@ -2,7 +2,11 @@ import pytest
 
 from core.apps.profiles.models import Profile
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.unit,
+    pytest.mark.profile(type="model"),
+]
 
 
 def test_profile_model_behavior__create_profile_successful(

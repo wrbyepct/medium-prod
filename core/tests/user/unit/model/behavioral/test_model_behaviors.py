@@ -2,7 +2,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db, pytest.mark.unit, pytest.mark.user(type="model")]
 
 User = get_user_model()
 
@@ -31,7 +31,16 @@ class TestUserCreationSuccessful:
         assert not user.is_staff
         assert not user.is_superuser
 
-    def test_user_behavior__create_superuser_successful(self, super_user):
+    def test_user_behavior__create_superuser_successful(
+        self,
+        user_factory,
+    ):
+        user_info = self.user_info
+        user_info["is_staff"] = True
+        user_info["is_superuser"] = True
+
+        super_user = user_factory.create(**user_info)
+
         assert super_user.first_name is not None
         assert super_user.last_name is not None
         assert super_user.email is not None

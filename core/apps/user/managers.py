@@ -8,7 +8,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers
+from rest_framework.serializers import ValidationError as ValidationError_drf
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import AbstractBaseUser
@@ -18,24 +18,28 @@ class CustomUserManager(BaseUserManager):
     """
     Custom User Manager.
 
-    Functions:
-        validate_email
+    Methods
+        email_validate
         create_user
-        create_superuser
+        create_superuse
 
     """
 
     @staticmethod
     def email_validate(email: str) -> None:
-        """Validate emial."""
+        """
+        Validate email.
+
+        Provide custom message "Email provied: %s is invalid. Please provide a valid email." if email is invalid.
+        """
         try:
             validate_email(email)
 
-        except ValidationError as account_managers_CustomUserManager_error:
-            raise serializers.ValidationError(
+        except ValidationError as CustomUserManager_error:
+            raise ValidationError_drf(
                 _("Email provied: %s is invalid. Please provide a valid email.")
                 % email,
-            ) from account_managers_CustomUserManager_error
+            ) from CustomUserManager_error
 
     def create_user(
         self,
@@ -48,20 +52,17 @@ class CustomUserManager(BaseUserManager):
         """
         Create user.
 
-        Args: first_name, last_name, password, **extra_fields
-        ----
-            first_name (str): User's first name
-            last_name (str): User's first last name
-            email (str): User's email
+        Args:
+            first_name (str): User first name
+            last_name (str): User first last name
+            email (str): User email
             password (str): User passwrod
             **extra_fields: other keyword arguments
 
-        Raises
-        ------
+        Raises:
             ValueError: If one of first_name, last_namem password, email is not provided.
 
-        Returns
-        -------
+        Returns:
             user(AbstractBaseUser): user instance.
 
         """
@@ -112,21 +113,18 @@ class CustomUserManager(BaseUserManager):
         """
         Create super user.
 
-        Args: first_name, last_name, password, **extra_fields
-        ----
+        Args:
             first_name (str): User's first name
             last_name (str): User's first last name
             email (str): User's email
             password (str): User passwrod
             **extra_fields: other keyword arguments.
 
-        Raises
-        ------
+        Raises:
             ValueError: If one of 'is_staff' or 'is_superuser' is not set to True.
 
 
-        Returns
-        -------
+        Returns:
             user(AbstractBaseUser): user instance.
 
         """

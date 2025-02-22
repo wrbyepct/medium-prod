@@ -12,18 +12,26 @@ class ProfileFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def with_followers(self, create, extracted, **kwargs):
-        if not create:
+        if not extracted:
             return
-        if extracted:
+
+        if create:
             profiles = ProfileFactory.create_batch(size=extracted)
-            for p in profiles:
-                self.followers.add(p)
+        else:
+            profiles = ProfileFactory.build_batch(size=extracted)
+
+        for p in profiles:
+            self.followers.add(p)
 
     @factory.post_generation
     def with_following(self, create, extracted, **kwargs):
-        if not create:
+        if not extracted:
             return
-        if extracted:
+
+        if create:
             profiles = ProfileFactory.create_batch(size=extracted)
-            for p in profiles:
-                self.following.add(p)
+        else:
+            profiles = ProfileFactory.build_batch(size=extracted)
+
+        for p in profiles:
+            self.following.add(p)

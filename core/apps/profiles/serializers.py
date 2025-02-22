@@ -53,7 +53,7 @@ class UpdateProfileSerializer(BaseProfileSerializer):
 
 
 class FollowingSerializer(serializers.ModelSerializer):
-    """Show following user's serializer."""
+    """Serializer for showing followers/following profiles."""
 
     user_full_name = serializers.SerializerMethodField()
     profile_photo = serializers.SerializerMethodField()

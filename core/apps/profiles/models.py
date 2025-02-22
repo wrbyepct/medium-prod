@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from functools import partial
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -11,8 +13,49 @@ from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from core.apps.general.models import TimestampedModel
+from core.tools.image import generate_file_path
+
+upload_to = partial(generate_file_path, app_name="profiles")
 
 User = get_user_model()
+
+
+class ProfileQuerySet(models.QuerySet):
+    """Custom Profile queryset."""
+
+    def join_user_table(self):
+        """Return qs by joining table with user."""
+        return self.select_related("user")
+
+    def follow_preview_info(self):
+        """
+        Get only the necessary columns for follower/following info.
+
+        Columns:
+           - "profile_photo"
+           - "about_me"
+           - "twitter_handle"
+           - "user__first_name"
+           - "user__last_name"
+
+        By selecting joined table from user.
+        """
+        return self.join_user_table().only(
+            "profile_photo",
+            "about_me",
+            "twitter_handle",
+            "user__first_name",
+            "user__last_name",
+        )
+
+
+class ProfileManager(models.Manager):
+    """Custom profile manager."""
+
+    def get_queryset(self):
+        """Get orignal qs."""
+        return ProfileQuerySet(model=self.model, using=self._db)
+
 
 """
 Fields:
@@ -34,7 +77,7 @@ Behaviors:
 
 
 class ProfileFollowMixins:
-    """Add follow service to Profile Model."""
+    """Add follow actions to Profile Model."""
 
     def follow(self, profile: Profile):
         """Add other Profile instances as followers."""
@@ -76,6 +119,7 @@ class Profile(TimestampedModel, ProfileFollowMixins):
         max_length=20,
     )
     profile_photo = models.ImageField(
+        upload_to=upload_to,
         verbose_name=_("profile photo"),
         default="/profile_default.png",
     )
@@ -101,6 +145,8 @@ class Profile(TimestampedModel, ProfileFollowMixins):
         related_name="following",
         blank=True,
     )
+
+    objects = ProfileManager()
 
     def __str__(self) -> str:
         """Return string: {self.user.first_name}'s Profile."""

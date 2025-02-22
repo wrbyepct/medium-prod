@@ -1,53 +1,31 @@
 import pytest
 from django.urls import reverse
-from pytest_bdd import given, scenarios, then, when
 from rest_framework import status
 
-pytestmark = pytest.mark.django_db
+from core.apps.profiles.serializers import ProfileSerializer
+
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.e2e,
+    pytest.mark.profile(type="retrieve_endpoint"),
+]
 
 
-"""
-Feature: Profile retrieve
-    Scenario: Hit 'me' endpoint unauthed should fail
-        Given an unauthed client hitting 'all_profiles' endpoint
-        Then I should get response 401 unauthorized
-"""
-scenarios("./features/profile__retrieve.feature")
+class TestProfileRetrieveEndpoint:
+    endpoint = reverse("me")
 
-ME_PROFILE_URL = reverse("me")
+    def test_unauthed_get_401(self, client):
+        resp = client.get(self.endpoint)
 
+        assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
-@given("an unauthed client hitting 'all_profiles' endpoint", target_fixture="response")
-def _(client):
-    return client.get(ME_PROFILE_URL)
+    def test_authed_get_200_and_data_correct(
+        self, authenticated_client, normal_user, create_profile_for_normal_user
+    ):
+        resp = authenticated_client.get(self.endpoint)
 
+        profile = normal_user.profile
+        serializer = ProfileSerializer(profile)
 
-@then("I should get response 401 unauthorized")
-def _(response):
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
-
-
-"""
-    Scenario: Hit 'me' endpoint authed success
-        Given a user with profile
-        When hitting 'me' url with client authend by the user
-        Then I should get response 200 ok
-"""
-
-
-@given("a user with profile", target_fixture="client")
-def _(profile_factory, client):
-    profile = profile_factory.create()
-    user = profile.user
-    client.force_authenticate(user=user)
-    return client
-
-
-@when("hitting 'me' url with client authend by the user", target_fixture="response")
-def _(client):
-    return client.get(ME_PROFILE_URL)
-
-
-@then("I should get response 200 ok")
-def _(response):
-    assert response.status_code == status.HTTP_200_OK
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data == serializer.data

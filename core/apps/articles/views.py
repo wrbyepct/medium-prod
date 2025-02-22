@@ -53,7 +53,6 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     # We already set the default to DjangoFilterBackend at the settings.py
 
     # TODO: Try to optimize for TaggableManager's tag insertion
-
     # TODO: Think how to persoalize article feed.
 
     def handle_fulltext_search(self):

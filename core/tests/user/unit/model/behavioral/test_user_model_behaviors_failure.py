@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.serializers import ValidationError
 
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db, pytest.mark.unit, pytest.mark.user(type="model")]
 
 
 def test_user_behavior__create_superuser_with_is_staff_false_raise_error(user_factory):
@@ -68,6 +68,7 @@ def test_user_model_behavior__create_super_user_missing_fields_should_raise_valu
         user_factory(is_superuser=True, is_staff=True, **user_info)
 
 
+@pytest.mark.email
 @pytest.mark.parametrize(
     "invalid_mail",
     [

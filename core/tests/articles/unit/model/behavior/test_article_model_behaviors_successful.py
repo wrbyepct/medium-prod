@@ -17,7 +17,7 @@ def test_article_model_behavior__create_article_successful(
     assert article.title is not None
     assert article.description is not None
     assert article.body is not None
-    assert article.banner_image.name == "default.jpg"
+    assert article.banner_image.name.startswith("uploads/articles/")
     assert article.author == normal_user
     assert list(article.tags.names()) == ["a", "b"]
 

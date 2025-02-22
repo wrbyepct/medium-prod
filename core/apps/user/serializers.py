@@ -14,7 +14,17 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Custom User serializer for retrieval."""
+    """
+    Custom User serializer for retrieval.
+
+    Added field from User Profile:
+    ------------------------------
+        gender
+        phone_number
+        profile_photo
+        country
+        city
+    """
 
     gender = serializers.CharField(source="profile.gender")
     phone_number = PhoneNumberField(source="profile.phone_number")
@@ -67,8 +77,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         """
         Return the necessary user fields: 'email', 'fist_name', 'last_name', 'password1'.
 
-        Returns
-        -------
+        Return:
             dict: 'email', 'fist_name', 'last_name', 'password1'
 
         """

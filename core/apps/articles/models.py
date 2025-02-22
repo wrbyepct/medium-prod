@@ -4,6 +4,7 @@
 # ruff: noqa: D105
 from __future__ import annotations
 
+from functools import partial
 from typing import TYPE_CHECKING
 
 from autoslug import AutoSlugField
@@ -15,6 +16,7 @@ from taggit.managers import TaggableManager
 
 from core.apps.general.models import TimestampedModel
 from core.tools.hash import generate_hashed_slug
+from core.tools.image import generate_file_path
 
 from .services.read_time_engine import ArticleReadTimeEngine
 
@@ -22,6 +24,8 @@ if TYPE_CHECKING:
     from django.contrib.auth.models import AbstractBaseUser
 
 User = get_user_model()
+
+upload_to = partial(generate_file_path, app_name="articles")
 
 
 class Clap(TimestampedModel):
@@ -138,6 +142,7 @@ class Article(TimestampedModel):
     )
     body = models.TextField(verbose_name=_("article content"))
     banner_image = models.ImageField(
+        upload_to=upload_to,
         verbose_name=_("Banner Image"),
         null=True,
         blank=True,

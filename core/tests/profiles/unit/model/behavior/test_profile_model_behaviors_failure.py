@@ -1,7 +1,11 @@
 import pytest
 from django.db import DataError
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.unit,
+    pytest.mark.profile(type="model"),
+]
 
 
 @pytest.mark.parametrize(

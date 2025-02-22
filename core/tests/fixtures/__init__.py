@@ -100,11 +100,6 @@ def mock_image_upload():
 
 
 @pytest.fixture
-def create_profile(normal_user, profile_factory):
-    profile_factory.create(user=normal_user)
-
-
-@pytest.fixture
 def create_reading_category(normal_user):
     # TODO change ReadingCategory to factory later
     ReadingCategory.objects.create(user=normal_user)
