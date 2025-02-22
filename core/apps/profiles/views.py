@@ -4,7 +4,6 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Profile, ProfileQuerySet
@@ -64,6 +63,7 @@ class BaseFollowListView(generics.ListAPIView):
     """Template view for Following/Followers list view."""
 
     serializer_class = FollowingSerializer
+    pagination_class = ProfilePagination
 
     def get_queryset(self):
         """
@@ -84,18 +84,6 @@ class BaseFollowListView(generics.ListAPIView):
         follow_type = self.follow_type
         qs: ProfileQuerySet = getattr(profile, follow_type).all()
         return qs.follow_preview_info()
-
-    def get(self, request, *args, **kwargs):
-        """Return formatted response: follow_type_count, follow_type data."""
-        response = super().get(request, *args, **kwargs)
-        data = response.data
-
-        follow_type = self.follow_type
-        formatted_response = {
-            f"{follow_type}_count": len(data),
-            follow_type: response.data,
-        }
-        return Response(formatted_response)
 
 
 class FollowersListAPIView(BaseFollowListView):

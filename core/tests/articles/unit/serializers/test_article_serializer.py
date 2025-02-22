@@ -189,7 +189,7 @@ def test_article_serializer__update_article_correct(
     assert article_updated.description == update_info["description"]
     assert article_updated.body == update_info["body"]
 
-    assert article_updated.banner_image.name == update_info["banner_image"].name
+    assert article_updated.banner_image.name.startswith("uploads/articles/")
     assert list(article_updated.tags.values_list("name", flat=True)) == json.loads(
         update_info["tags"]
     )

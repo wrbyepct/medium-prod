@@ -184,7 +184,7 @@ omit = [
     "*/tests/*",
     "core/settings/*",
     "*/conftest.py",
-    "core/*/permissions.py",
+    "core/celery/celeryconfig.py",
     "core/manage.py",
     "*apps.py",
     "*urls.py",

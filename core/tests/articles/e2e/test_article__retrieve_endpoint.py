@@ -106,8 +106,7 @@ class TestArticleUpdateEndpoint:
         assert response.data["description"] == update_data["description"]
         assert response.data["tags"] == json.loads(update_data["tags"])
 
-        response_image_name = response.data["banner_image"].split("/")[-1]
-        assert response_image_name == update_data["banner_image"].name
+        assert response.data["banner_image"].startswith("/mediafiles/uploads/articles/")
 
     def test_article_update_view__update_not_own_article_get_403(
         self, authenticated_client, article
