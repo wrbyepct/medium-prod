@@ -24,7 +24,9 @@ def assert_query_order_correct(article, authenticated_client):
         assert resp.status_code == status.HTTP_200_OK
 
         # Assert result is equal to manually ordered data
-        responses = Response.objects.filter(article=article).order_by(query)
+        responses = (
+            Response.objects.default_data().filter(article=article).order_by(query)
+        )
         for result, response in zip(resp.data["results"], responses):
             assert result["id"] == str(response.id)
 
@@ -52,8 +54,10 @@ class TestResponseListEndpoint:
 
         # Acssert
         # Prepare serilaizer
-        responses = Response.objects.filter(article=article).order_by(
-            "-claps_count", "-replies_count", "-created_at", "-updated_at"
+        responses = (
+            Response.objects.default_data()
+            .filter(article=article)
+            .order_by("-claps_count", "-replies_count", "-created_at", "-updated_at")
         )
         serializer = ResponseSerializer(responses, many=True)
         assert resp.data["count"] == total_responses
@@ -111,9 +115,9 @@ class TestResponseListEndpoint:
 
 class TestResponseCreateEndpoint:
     # Test unauth fail
-    def test_response_create_endpoint__unauthed_get_401(self, client, article):
+    def test_response_create_endpoint__unauthed_get_401(self, client):
         response_data = {"content": "test"}
-        endpoint = get_endpoint(article.id)
+        endpoint = get_endpoint(uuid4())
         resp = client.post(endpoint, data=response_data)
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -147,7 +151,6 @@ class TestResponseCreateEndpoint:
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
 
     # Test create but cannot find article
-
     def test_response_create_endpont__create_on_non_existing_article_get_404(
         self, authenticated_client
     ):

@@ -2,7 +2,7 @@ import pytest
 from faker import Faker
 
 from core.apps.articles.services.es import full_text_search
-from core.tests.articles.fixtures.documents import TestArticleDocument
+from core.tests.articles.fixtures.documents import MockArticleDocument
 
 pytestmark = pytest.mark.django_db
 
@@ -38,14 +38,14 @@ def test_elasticsearch__full_text_search_article_content_correct(
 
     # Arrange: And register test doc with these 5 instances
     for instance in relevant_articles + irrelevant_articles:
-        TestArticleDocument().update(instance)
+        MockArticleDocument().update(instance)
 
     for field in ["title", "description", "body", "tags", "author"]:
         value = article_data[field]
         # When search through the instance by the value that relevant articles contain
         search_term = value.lower() if isinstance(value, str) else value[0]
         result_ids = full_text_search(
-            search_term=search_term, doc_cls=TestArticleDocument
+            search_term=search_term, doc_cls=MockArticleDocument
         )
 
         # Then the relevant article should be in the results

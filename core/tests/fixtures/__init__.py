@@ -5,7 +5,6 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory
 from faker import Faker
 
-from core.apps.bookmarks.models import ReadingCategory
 from core.tests.utils.misc import create_upload_image_file
 
 from .constants import (
@@ -100,9 +99,9 @@ def mock_image_upload():
 
 
 @pytest.fixture
-def create_reading_category(normal_user):
+def create_reading_category(normal_user, reading_category_factory):
     # TODO change ReadingCategory to factory later
-    ReadingCategory.objects.create(user=normal_user)
+    reading_category_factory.create(user=normal_user)
 
 
 @pytest.fixture

@@ -101,7 +101,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = adapter.save_user(request, user, self)
         user.save()
 
-        # This saves user' email to EmailAddress from allauth
+        # This saves user' email to EmailAddress  model from allauth
         # to track if the email is verified or not.
         setup_user_email(request, user, [])
 

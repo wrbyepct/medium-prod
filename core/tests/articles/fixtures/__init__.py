@@ -1,7 +1,7 @@
 import pytest
 from pytest_factoryboy import register
 
-from .documents import TestArticleDocument
+from .documents import MockArticleDocument
 from .factories import ArticleClapFactory, ArticleFactory, ArticleViewFactory
 
 register(ArticleFactory)
@@ -16,10 +16,10 @@ def article(article_factory):
 
 @pytest.fixture
 def setup_article_doc_index():
-    TestArticleDocument._get_connection()
-    TestArticleDocument._index.delete(ignore=[404])
-    TestArticleDocument._index.create()
+    MockArticleDocument._get_connection()
+    MockArticleDocument._index.delete(ignore=[404])
+    MockArticleDocument._index.create()
 
     yield
 
-    TestArticleDocument._index.delete(ignore=[404])
+    MockArticleDocument._index.delete(ignore=[404])

@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from core.apps.articles.models import Article
 from core.apps.general.permissions import IsOwnerOrReadOnly
 
+from .exceptions import CannotRepeatClap
 from .models import Response, ResponseClap
 from .paginations import ResponsePagination
 from .serializers import ResponseSerializer
@@ -35,13 +36,16 @@ class ResponseListCreateView(BaseResponseListCreateView):
         """Get top-level responses of an article."""
         article_id = self.kwargs.get("article_id")
 
-        return Response.objects.filter(article__id=article_id, parent__isnull=True)
+        return Response.objects.default_data().filter(
+            article__id=article_id, parent__isnull=True
+        )
 
     def perform_create(self, serializer: ResponseSerializer):
         """Create top-level response with article and user instance."""
         article_id = self.kwargs.get("article_id")
         article = get_object_or_404(Article.objects.only("id"), id=article_id)
         user = self.request.user
+
         serializer.save(article=article, user=user)
 
 
@@ -55,7 +59,7 @@ class ReplyListCreateView(BaseResponseListCreateView):
         """Get child replies from a parent response to an article."""
         parent_id = self.kwargs.get("reply_to_id")
 
-        return Response.objects.filter(parent__id=parent_id)
+        return Response.objects.default_data().filter(parent__id=parent_id)
 
     def perform_create(self, serializer: ResponseSerializer):
         """Create next-child response with article and user and parent response instance."""
@@ -63,13 +67,14 @@ class ReplyListCreateView(BaseResponseListCreateView):
         parent_response = get_object_or_404(Response, id=parent_id)
         article = parent_response.article
         user = self.request.user
+
         serializer.save(article=article, user=user, parent=parent_response)
 
 
 class ResponseUpdateDestroyView(generics.UpdateAPIView, generics.DestroyAPIView):
     """Update or delete a reponse by provding id."""
 
-    queryset = Response.objects.all()
+    queryset = Response.objects.default_data()
     serializer_class = ResponseSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     lookup_field = "id"
@@ -92,11 +97,8 @@ class ResponseClapCreateDestroyView(APIView):
                 },
                 "status": status.HTTP_201_CREATED,
             }
-        except IntegrityError:
-            res = {
-                "data": {"message": "You have already clapped this response."},
-                "status": status.HTTP_400_BAD_REQUEST,
-            }
+        except IntegrityError as integrity_error:
+            raise CannotRepeatClap from integrity_error
         return Res(**res)
 
     def delete(self, request, response_id, format=None):
@@ -105,5 +107,4 @@ class ResponseClapCreateDestroyView(APIView):
             ResponseClap, response__id=response_id, user=request.user
         )
         res_clap.delete()
-        # TODO: Figure out why it still shows 200 instead of 204
         return Res(status=status.HTTP_200_OK)

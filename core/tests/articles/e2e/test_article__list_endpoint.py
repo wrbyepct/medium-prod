@@ -7,13 +7,6 @@ from core.apps.articles.serializers import ArticlePreviewSerializer
 
 pytestmark = pytest.mark.django_db
 
-ARTICLE_COUNT = 21
-
-
-@pytest.fixture
-def existing_articles(article_factory):
-    article_factory.create_batch(size=ARTICLE_COUNT)
-
 
 class TestArticleListEndpoint:
     endpoint = reverse("article_list_create")
@@ -25,24 +18,25 @@ class TestArticleListEndpoint:
 
     # authed success
     def test_article_list_endpoint__authed_access_success(
-        self, authenticated_client, existing_articles
+        self, authenticated_client, article_factory
     ):
-        # Arrange
-        article_count = Article.objects.count()
-        articles = Article.statistic_objects.preview_data()[:10]
+        # Arrange:
+        article_total_num = 10
+        article_factory.create_batch(size=article_total_num)
+
+        articles = Article.statistic_objects.preview_data()
 
         # Act
         response = authenticated_client.get(self.endpoint)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
-        assert response.data["count"] == article_count
+        assert response.data["count"] == article_total_num
 
         serializer = ArticlePreviewSerializer(articles, many=True)
         assert response.data["results"] == serializer.data
 
     # ordering
-
     def test_article_list_view__ordering_query_correct(
         self, article_factory, authenticated_client
     ):

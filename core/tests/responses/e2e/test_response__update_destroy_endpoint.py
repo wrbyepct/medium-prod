@@ -14,7 +14,8 @@ def get_endpoint(response_id):
 
 class TestResponseUpdateEndpoint:
     def test_unauthed_get_401(self, client, response):
-        endpoint = get_endpoint(response.id)
+        stub_id = uuid4()
+        endpoint = get_endpoint(stub_id)
         resp = client.patch(endpoint)
 
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
@@ -70,14 +71,14 @@ class TestResponseUpdateEndpoint:
 
 class TestResponseDestroyEndpoint:
     # unauth 401
-    def test_unauthed_get_401(self, client, response):
-        endpoint = get_endpoint(response.id)
+    def test_unauthed_get_401(self, client):
+        stub_id = uuid4()
+        endpoint = get_endpoint(stub_id)
         resp = client.delete(endpoint)
 
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
-    # delete own success
-
+    # delete own response success
     def test_authed_get_200(self, authenticated_client, normal_user, response_factory):
         response = response_factory.create(user=normal_user)
 
