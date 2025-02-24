@@ -8,7 +8,7 @@ pytestmark = pytest.mark.django_db
 def test_response_model__has_annotated_fields(response_factory):
     response = response_factory.create()
 
-    response = Response.objects.get(id=response.id)
+    response = Response.objects.default_data().get(id=response.id)
 
     expected_fields = {
         "id",

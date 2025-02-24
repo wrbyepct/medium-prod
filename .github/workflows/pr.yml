@@ -81,9 +81,9 @@ jobs:
         uses: snok/install-poetry@v1
         with:
           version: 1.7.1
+          virtualenvs-path: .venv
           virtualenvs-in-project: true
           virtualenvs-create: true
-          virtualenvs-path: .venv
           installer-parallel: true
 
       - name: Load cached venv

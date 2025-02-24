@@ -4,7 +4,11 @@ from rest_framework import status
 
 from core.apps.responses.serializers import ResponseSerializer
 
-pytestmark = pytest.mark.django_db
+pytestmark = [
+    pytest.mark.django_db,
+    pytest.mark.e2e,
+    pytest.mark.reply(type="list_create"),
+]
 
 
 def get_endpoint(response_id):
@@ -24,7 +28,7 @@ class TestChildRepliesListEndpoint:
     ):
         children_count = 3
         response = response_factory(with_children=children_count)
-        children = response.children.all().order_by(
+        children = response.children.default_data().order_by(
             "-claps_count", "-created_at", "-updated_at"
         )
 

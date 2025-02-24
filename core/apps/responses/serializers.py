@@ -28,7 +28,7 @@ class ResponseSerializer(serializers.ModelSerializer):
         return obj.user.full_name
 
     def validate_content(self, value: str):
-        """Raise Validation Error if content provide is empty."""
+        """Raise Validation Error if content provided is empty."""
         value.strip()
         if not value:
             detail = "Response content cannot be empty."

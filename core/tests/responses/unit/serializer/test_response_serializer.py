@@ -24,7 +24,7 @@ read_only_fields = [
 def test_response_serializer__serilaize_correct(response_factory):
     # Arrange
     response = response_factory.create()
-    response = Response.objects.get(id=response.id)
+    response = Response.objects.default_data().get(id=response.id)
 
     user = response.user
 

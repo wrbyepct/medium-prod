@@ -4,6 +4,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from core.apps.responses.exceptions import CannotRepeatClap
 from core.apps.responses.models import ResponseClap
 
 pytestmark = pytest.mark.django_db
@@ -15,15 +16,14 @@ def get_endpoint(response_id):
 
 class TestResponseClapCreateEndpoint:
     # unauth
-
-    def test_unauthed_get_401(self, client, response):
-        endpoint = get_endpoint(response.id)
+    def test_unauthed_get_401(self, client):
+        stub_id = uuid4()
+        endpoint = get_endpoint(stub_id)
         resp = client.post(endpoint)
 
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
-    # auth & data correct 201
-
+    # create clap authed & data correct 201
     def test_authed_get_201(self, response, authenticated_client, normal_user):
         endpoint = get_endpoint(response.id)
 
@@ -36,7 +36,6 @@ class TestResponseClapCreateEndpoint:
         assert ResponseClap.objects.filter(user=normal_user, response=response).exists()
 
     # repeating clap 400
-
     def test_repeating_clap_get_400(
         self, authenticated_client, normal_user, response, response_clap_factory
     ):
@@ -48,7 +47,7 @@ class TestResponseClapCreateEndpoint:
         resp = authenticated_client.post(endpoint)
 
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
-        assert resp.data["message"] == "You have already clapped this response."
+        assert resp.data["detail"] == CannotRepeatClap.default_detail
 
     # non-existing 404
 
@@ -61,8 +60,7 @@ class TestResponseClapCreateEndpoint:
 
 
 class TestResponseClapDestroyEndpoint:
-    # unauth
-
+    # unauths
     def test_unauthed_get_401(self, client, response):
         endpoint = get_endpoint(response.id)
 
@@ -71,7 +69,6 @@ class TestResponseClapDestroyEndpoint:
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
     # auth & data correct 200
-
     def test_authed_get_200(
         self,
         authenticated_client,
