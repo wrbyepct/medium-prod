@@ -79,7 +79,3 @@ ELASTICSEARCH_DSL = {
         ]
     }
 }
-
-
-# TODO make ADMIN_URL more complcated later
-ADMIN_URL = "supersecret/"  # new

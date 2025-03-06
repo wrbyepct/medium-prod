@@ -6,9 +6,10 @@
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost"])
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost"])
+ADMIN_URL = "supersecret/"  # new
 
 # mailhog settings
 EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
