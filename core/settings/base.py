@@ -3,6 +3,7 @@
 
 AUTH_USER_MODEL = "user.User"
 
+ADMIN_URL = "supersecret/"  # new
 
 DJANGO_APPS = [
     "django.contrib.admin",
