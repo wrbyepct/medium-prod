@@ -45,7 +45,6 @@ if DEBUG:
     project_settings = "local.py"
     settings += [
         "loggings.py",
-        str(ROOT_DIR / "local/settings.dev.py"),
     ]
 
 if IN_DOCKER:

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+
+backup_dir=$(dirname $BASH_SOURCE[0])
+
+source "$backup_dir/_sourced/constants.sh"
+source "$backup_dir/_sourced/messages.sh"
+
+message_welcome "Here are the backups you've got: "
+ls -lht $DB_BACKUP_DIR_PATH

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+set -o pipefail 
+
+set -o nounset
+
+python -m core.manage migrate --no-input
+python -m core.manage collectstatic --no-input
+
+python -m core.manage runserver 0.0.0.0:8000

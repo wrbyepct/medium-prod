@@ -14,7 +14,7 @@ ADMIN_URL = "supersecret/"  # new
 # mailhog settings
 EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
 EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
-EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_PORT = env("EMAIL_PORT", default=1025)
 DEFAULT_FROM_EMAIL = "test@test.api.com"
 DOMAIN = env("DOMAIN")
 SITE_NAME = "Medium Clone"
