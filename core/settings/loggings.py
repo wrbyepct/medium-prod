@@ -23,12 +23,12 @@ LOGGING = {
             "formatter": "verbose",
             "filters": [],
         },
-        "file": {
-            "level": env("DJANGO_LOG_LEVEL", default="INFO"),
-            "class": "logging.FileHandler",
-            "filename": ROOT_DIR / "core" / "logs" / "debug.log",
-            "filters": [],
-        },
+        # "file": {
+        #     "level": env("DJANGO_LOG_LEVEL", default="INFO"),
+        #     "class": "logging.FileHandler",
+        #     "filename": ROOT_DIR / "core" / "logs" / "debug.log",
+        #     "filters": [],
+        # },
     },
     "loggers": {
         logger_name: {

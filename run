@@ -92,6 +92,31 @@ test-report() {
     --cov-config=pyproject.toml
 }
 
+##
+# Terraform
+##
+
+tf-init() {
+    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 init
+}
+
+tf-plan() {
+    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 plan
+}
+
+tf-deploy() {
+    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 deploy
+}
+
+tf-destroy() {
+    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 destroy
+}
+
+tf-fmt() {
+    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 fmt
+}
+
+
 help() {
     echo "${1} <task> <arg>s"
     echo "Tasks:"
