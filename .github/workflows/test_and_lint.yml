@@ -1,4 +1,4 @@
-name: PR
+name: Test and Lint
 
 on:
   pull_request:
@@ -38,7 +38,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: python:3.11.4-slim-buster
-    environment: TEST
+    environment: DEPLOY
     env:
 
       DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}

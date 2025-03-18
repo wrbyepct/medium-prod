@@ -1,0 +1,141 @@
+version: "3.9"
+
+services:
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "8025:8025"
+    restart: always
+    networks:
+      - medium-api
+
+
+  postgres:
+    container_name: postgres
+    build:
+      context: ./docker/local/postgres
+    volumes:
+      - prod_postgres_db:/var/lib/postgresql/data
+      - prod_postgres_db_backups:/db_backups
+    env_file:
+      - ./.envs/.prod/.postgres
+    restart: always
+    networks:
+      - medium-api
+
+
+  redis:
+    container_name: redis
+    image: redis:7.4-alpine
+    networks:
+      - medium-api
+
+
+  es: 
+    container_name: es
+    image: elasticsearch:8.17.0
+    environment:
+     - discovery.type=single-node
+     - xpack.security.enabled=false
+    ports: 
+     - "9200:9200"
+    volumes:
+     - es_data:/usr/share/elasticsearch/data
+    networks:
+     - medium-api
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./docker/prod/django/Dockerfile
+    volumes:
+      - ./core:/app/core
+      - prod_static_volume:/vol/api/staticfiles
+      - prod_media_volume:/vol/api/mediafiles
+    env_file:
+      - ./.envs/.prod/.django
+      - ./.envs/.prod/.postgres
+    expose:
+      - "8000"
+    depends_on:
+      - postgres
+      - redis
+      - es
+    command: /start
+    restart: always
+    networks:
+      - medium-api
+
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./docker/prod/nginx
+    volumes:
+      - prod_static_volume:/vol/staticfiles
+      - prod_media_volume:/vol/mediafiles
+    env_file:
+      - ./.envs/.prod/.nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: always
+    networks:
+      - medium-api
+  
+
+  celery_worker:
+    container_name: celery
+    build:
+      context: .
+      dockerfile: ./docker/prod/django/Dockerfile
+    volumes:
+      - ./core:/app/core
+    env_file:
+      - ./.envs/.prod/.django
+      - ./.envs/.prod/.postgres
+    command: /start_celeryworker
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+    networks:
+      - medium-api
+
+
+  flower:
+    container_name: flower
+    build:
+      context: .
+      dockerfile: ./docker/prod/django/Dockerfile
+    volumes:
+      - flower_data:/flower_data
+    env_file:
+      - ./.envs/.prod/.django
+      - ./.envs/.prod/.postgres
+    ports:
+      - "5555:5555"
+    command: /start_flower
+    depends_on:
+      - redis
+      - celery_worker
+      - postgres
+    networks:
+      - medium-api
+
+
+networks:
+  medium-api:
+    driver: bridge
+
+volumes:
+  prod_static_volume:
+  prod_media_volume:
+  prod_postgres_db: {}
+  prod_postgres_db_backups: {}
+  flower_data: {}
+  es_data:
+  

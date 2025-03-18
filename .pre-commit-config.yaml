@@ -19,6 +19,7 @@ repos:
     rev: v4.6.0
     hooks:
       - id: end-of-file-fixer
+        exclude: ^terraform/
       - id: check-yaml # Validate YAML files
       - id: check-added-large-files # Check for giant files
       - id: check-toml
