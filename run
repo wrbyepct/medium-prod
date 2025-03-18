@@ -98,14 +98,14 @@ test-report() {
 
 tf-lint:cd() {
     cd terraform
-    docker-compose -f tf.yml run run --rm terraform -chdir=setup init -backend=false
-    docker-compose -f tf.yml run run --rm terraform -chdir=deploy init -backend=false
+    docker compose -f tf.yml run run --rm terraform -chdir=setup init -backend=false
+    docker compose -f tf.yml run run --rm terraform -chdir=deploy init -backend=false
 
-    docker-compose -f tf.yml run run --rm terraform -chdir=setup validate
-    docker-compose -f tf.yml run run --rm terraform -chdir=setup fmt -check
+    docker compose -f tf.yml run run --rm terraform -chdir=setup validate
+    docker compose -f tf.yml run run --rm terraform -chdir=setup fmt -check
 
-    docker-compose -f tf.yml run run --rm terraform -chdir=deploy validate
-    docker-compose -f tf.yml run run --rm terraform -chdir=deploy fmt -check
+    docker compose -f tf.yml run run --rm terraform -chdir=deploy validate
+    docker compose -f tf.yml run run --rm terraform -chdir=deploy fmt -check
 
 }
 

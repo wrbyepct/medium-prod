@@ -2,13 +2,7 @@ name: Test and Lint
 
 on:
   workflow_call:
-    secrets:
-      DOCKERHUB_USER:
-        required: true  
-        description: User for DockerHub auth
-      DOCKERHUB_TOKEN:
-        required: true
-        description: Token for DockerHub auth
+
 
 jobs:
   terraform-lint:
@@ -59,7 +53,7 @@ jobs:
     environment: DEPLOY
     env:
       DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DJANGO_SECRET_KEY: ${{ secrets.POSTGRES_USER }}
       JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
       CELERY_BROKER: ${{ vars.CELERY_BROKER }}
       IN_GITHUB: true
@@ -68,12 +62,11 @@ jobs:
       postgres:
         image: postgres:15-bullseye
         env:
-          POSTGRES_HOST: ${{ vars.POSTGRES_HOST  }}
+          POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
           POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
           POSTGRES_DB: ${{ vars.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
