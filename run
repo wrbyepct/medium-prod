@@ -96,6 +96,19 @@ test-report() {
 # Terraform
 ##
 
+tf-lint:cd() {
+    cd terraform
+    docker-compose -f tf.yml run run --rm terraform -chdir=setup init -backend=false
+    docker-compose -f tf.yml run run --rm terraform -chdir=deploy init -backend=false
+
+    docker-compose -f tf.yml run run --rm terraform -chdir=setup validate
+    docker-compose -f tf.yml run run --rm terraform -chdir=setup fmt -check
+
+    docker-compose -f tf.yml run run --rm terraform -chdir=deploy validate
+    docker-compose -f tf.yml run run --rm terraform -chdir=deploy fmt -check
+
+}
+
 tf-init() {
     docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 init
 }

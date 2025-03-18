@@ -1,16 +1,34 @@
 name: Test and Lint
 
 on:
-  pull_request:
-    types: [opened, synchronize]
-
-  push:
-    branches:
-      - main
-
+  workflow_call:
+    secrets:
+      DOCKERUB_USER:
+        required: true  
+        description: User for DockerHub auth
+      DOCKERHUB_TOKEN:
+        required: true
+        description: Token for DockerHub auth
 
 jobs:
-  lint:
+  terraform-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint Terraform
+        run: |
+          /bin/bash -x run tf-lint:cd
+
+
+  django-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -40,7 +58,6 @@ jobs:
     container: python:3.11.4-slim-buster
     environment: DEPLOY
     env:
-
       DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
@@ -70,6 +87,12 @@ jobs:
           xpack.security.enabled: false      
 
     steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Checkout code
         uses: actions/checkout@v4
 
