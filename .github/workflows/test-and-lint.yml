@@ -3,7 +3,7 @@ name: Test and Lint
 on:
   workflow_call:
     secrets:
-      DOCKERUB_USER:
+      DOCKERHUB_USER:
         required: true  
         description: User for DockerHub auth
       DOCKERHUB_TOKEN:
