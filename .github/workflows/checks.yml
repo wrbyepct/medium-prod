@@ -10,6 +10,7 @@ jobs:
   test-lint:
     name: Test and Lint
     uses: ./.github/workflows/test-and-lint.yml
+    environment: DEPLOY
     secrets: 
       DOCKERHUB_USER: ${{ vars.DOCKERHUB_USER}}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
