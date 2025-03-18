@@ -58,7 +58,6 @@ jobs:
     container: python:3.11.4-slim-buster
     environment: DEPLOY
     env:
-
       DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
