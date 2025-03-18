@@ -156,6 +156,7 @@ max-complexity = 8
 "**/permissions.py" = ["ANN001", "ARG002"]
 "local/" = ["INP001"]
 "core/manage.py" = ["ALL"]
+"terraform/*" = ["ALL"]
 
 
 [tool.pytest.ini_options]
@@ -169,11 +170,6 @@ addopts = """
     --durations=10
 
 """
-markers = [
-    "view: tests for model views",
-    "behavior: tests for model behavior", 
-    "structure: tests for model structure.",
-]
 filterwarnings = ["ignore::DeprecationWarning", "ignore::pytest.PytestCacheWarning", "ignore::pytest.PytestUnknownMarkWarning"]
 
 
@@ -199,7 +195,7 @@ omit = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "9.1.0"  
+version = "0.1.0"  
 update_changelog_on_bump = true
 tag_format = "$version"
 

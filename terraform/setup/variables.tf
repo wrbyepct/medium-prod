@@ -21,8 +21,3 @@ variable "contact" {
   default     = "shandianskypian@gmail.com"
 
 }
-
-variable "region" {
-  description = "AWS region."
-  default     = "ap-northeast-1"
-}

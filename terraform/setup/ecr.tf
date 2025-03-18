@@ -22,4 +22,3 @@ resource "aws_ecr_repository" "proxy" {
   }
 
 }
-
