@@ -108,6 +108,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Install PostgreSQL denpendencies
+        run: |
+          apt-get update && apt-get install -y libpq-dev gcc
   
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
