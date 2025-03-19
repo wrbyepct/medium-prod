@@ -69,12 +69,6 @@ test() {
     docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ 
 }
 
-test:ci() {
-    poetry run env IN_TEST=1 pytest \
-    -x \
-    -n auto \
-    --dist loadfile
-}
 
 test-dist() {
     docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ \
@@ -91,6 +85,16 @@ test-report() {
     --cov=core \
     --cov-config=pyproject.toml
 }
+
+
+# CI
+test:ci() {
+    poetry run env IN_TEST=1 pytest \
+    -x \
+    -n auto \
+    --dist loadfile
+}
+
 
 ##
 # Terraform
