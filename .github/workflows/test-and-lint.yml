@@ -3,12 +3,23 @@ name: Test and Lint
 on:
   workflow_call:
     secrets:
-      DOCKERUB_USER:
-        required: true  
-        description: User for DockerHub auth
       DOCKERHUB_TOKEN:
         required: true
-        description: Token for DockerHub auth
+        description: Token to log in Docker Hub
+      POSTGRES_PASSWORD:
+        required: true
+        description: Password for PostgreSQL
+      POSTGRES_USER:
+        required: true
+        description: User for PostgreSQL
+      JWT_SIGNING_KEY:
+        required: true
+        description: Signing key for JWT
+      DJANGO_SECRET_KEY:
+        required: true
+        description: Secret key for Django
+
+
 
 jobs:
   terraform-lint:
@@ -17,7 +28,7 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERUB_USER }}
+          username: ${{ vars.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Checkout code
@@ -55,10 +66,13 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
-    container: python:3.11.4-slim-buster
-    environment: DEPLOY
+    container: 
+      image: python:3.11.4-slim-buster
+      credentials:
+        username: ${{ vars.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     env:
-      DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
+      DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{ vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
       CELERY_BROKER: ${{ vars.CELERY_BROKER }}
@@ -67,13 +81,15 @@ jobs:
     services:
       postgres:
         image: postgres:15-bullseye
+        credentials:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         env:
-          POSTGRES_HOST: ${{ vars.POSTGRES_HOST  }}
+          POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
           POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
           POSTGRES_DB: ${{ vars.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -82,24 +98,21 @@ jobs:
 
       es:
         image: elasticsearch:8.17.0
+        credentials:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}        
         env:
           discovery.type: single-node
           xpack.security.enabled: false      
 
     steps:
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERUB_USER }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install PostgreSQL dependencies
+      
+      - name: Install PostgreSQL denpendencies
         run: |
           apt-get update && apt-get install -y libpq-dev gcc
-
+  
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:

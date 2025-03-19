@@ -14,7 +14,7 @@ services:
   postgres:
     container_name: postgres
     build:
-      context: ./docker/local/postgres
+      context: ./docker/prod/postgres
     volumes:
       - prod_postgres_db:/var/lib/postgresql/data
       - prod_postgres_db_backups:/db_backups
