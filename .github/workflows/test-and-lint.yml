@@ -66,7 +66,6 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
-    container: python:3.11.4-slim-buster
     env:
       DATABASE_URL: postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{  vars.POSTGRES_HOST }}:${{ vars.POSTGRES_PORT }}/${{ vars.POSTGRES_DB }}
       DJANGO_SECRET_KEY: ${{ secrets.POSTGRES_USER }}
@@ -108,7 +107,12 @@ jobs:
       - name: Install PostgreSQL dependencies
         run: |
           apt-get update && apt-get install -y libpq-dev gcc
-
+      
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: 3.11.4
+  
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
