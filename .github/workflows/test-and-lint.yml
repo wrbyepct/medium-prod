@@ -104,10 +104,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install PostgreSQL dependencies
-        run: |
-          apt-get update && apt-get install -y libpq-dev gcc
-      
       - name: Install Python
         uses: actions/setup-python@v5
         with: 
