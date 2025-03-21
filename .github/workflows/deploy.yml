@@ -53,9 +53,9 @@ jobs:
           workspace=$(cat .workspace)
           
           cd terraform
-          docker compose -f tf.yml -chdir=deploy init 
-          docker compose -f tf.yml -chdir=deploy workspace select -or-create $workspace
-          docker compose -f tf.yml -chdir=deploy apply -auto-approve
+          docker compose -f tf.yml run --rm terrform -chdir=deploy init 
+          docker compose -f tf.yml run --rm terrform -chdir=deploy workspace select -or-create $workspace
+          docker compose -f tf.yml run --rm terrform -chdir=deploy apply -auto-approve
 
 
 
