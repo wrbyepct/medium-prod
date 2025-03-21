@@ -1,0 +1,26 @@
+name: Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Which Environment to Destroy for AWS
+        options:
+            - staging
+            - prod
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Destroy AWS resource in Specified Workspace
+        run: |
+          export=TF_WORKSPACE=${{ github.event.inputs.environment }}
+          cd terraform
+          docker compose -f tf.yml run --rm terrform -chdir=deploy init 
+          docker compose -f tf.yml run --rm terrform -chdir=deploy destroy -auto-approve
+      
