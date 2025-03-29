@@ -163,3 +163,146 @@ resource "aws_iam_user_policy_attachment" "ec2" {
   user       = aws_iam_user.cd.name
   policy_arn = aws_iam_policy.ec2.arn
 }
+
+
+#########################
+# Policy for RDS access #
+#########################
+
+data "aws_iam_policy_document" "rds" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "rds:DescribeDBSubnetGroups",
+      "rds:CreateDBSubnetGroup",
+      "rds:DeleteDBSubnetGroup",
+      "rds:DescribeDBInstances",
+      "rds:CreateDBInstance",
+      "rds:DeleteDBInstance",
+      "rds:ModifyDBInstance",
+      "rds:ListTagsForResource",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "rds" {
+  name        = "${aws_iam_user.cd.name}-rds"
+  description = "Allow user to manage RDS resources."
+  policy      = data.aws_iam_policy_document.rds.json
+}
+
+resource "aws_iam_user_policy_attachment" "rds" {
+  user       = aws_iam_user.cd.name
+  policy_arn = aws_iam_policy.rds.arn
+}
+
+
+#########################
+ # Policy for ECS access #
+ #########################
+ 
+ data "aws_iam_policy_document" "ecs" {
+   statement {
+     effect = "Allow"
+     actions = [
+       "ecs:DescribeClusters",
+       "ecs:CreateCluster",
+       "ecs:UpdateCluster",
+       "ecs:DeleteCluster",
+       #####################
+       "ecs:DescribeServices",
+       "ecs:CreateService",
+       "ecs:UpdateService",
+       "ecs:DeleteService",
+       #####################
+       "ecs:DescribeTaskDefinition",
+       "ecs:DeregisterTaskDefinition",
+       "ecs:RegisterTaskDefinition",
+     ]
+     resources = ["*"]
+   }
+ }
+ 
+ resource "aws_iam_policy" "ecs" {
+   name        = "${aws_iam_user.cd.name}-ecs"
+   description = "Allow user to manage ECS resources."
+   policy      = data.aws_iam_policy_document.ecs.json
+ }
+ 
+ resource "aws_iam_user_policy_attachment" "ecs" {
+   user       = aws_iam_user.cd.name
+   policy_arn = aws_iam_policy.ecs.arn
+ }
+ 
+ #########################
+ # Policy for IAM access #
+ #########################
+ 
+ data "aws_iam_policy_document" "iam" {
+   statement {
+     effect = "Allow"
+     actions = [
+       "iam:ListInstanceProfilesForRole",
+       #######################
+       "iam:ListAttachedRolePolicies",
+       "iam:AttachRolePolicy",
+       "iam:DetachRolePolicy",
+       "iam:ListRolePolicies",
+       #######################
+       "iam:CreateRole",
+       "iam:GetRole",
+       "iam:TagRole",
+       "iam:DeleteRole",
+       "iam:PassRole",
+       ######################
+       "iam:ListPolicyVersions",
+       "iam:GetPolicyVersion",
+       "iam:GetPolicy",
+       "iam:CreatePolicy",
+       "iam:DeletePolicy",
+       "iam:TagPolicy",
+     ]
+     resources = ["*"]
+   }
+ }
+ 
+ resource "aws_iam_policy" "iam" {
+   name        = "${aws_iam_user.cd.name}-iam"
+   description = "Allow user to manage IAM resources."
+   policy      = data.aws_iam_policy_document.iam.json
+ }
+ 
+ resource "aws_iam_user_policy_attachment" "iam" {
+   user       = aws_iam_user.cd.name
+   policy_arn = aws_iam_policy.iam.arn
+ }
+ 
+ ################################
+ # Policy for CloudWatch access #
+ ################################
+ 
+ data "aws_iam_policy_document" "logs" {
+   statement {
+     effect = "Allow"
+     actions = [
+       "logs:DescribeLogGroups",
+       "logs:CreateLogGroup",
+       "logs:DeleteLogGroup",
+       "logs:ListTagsLogGroup",
+       "logs:TagResource",
+     ]
+     resources = ["*"]
+   }
+ }
+ 
+ resource "aws_iam_policy" "logs" {
+   name        = "${aws_iam_user.cd.name}-logs"
+   description = "Allow user to manage CloudWatch resources."
+   policy      = data.aws_iam_policy_document.logs.json
+ }
+ 
+ resource "aws_iam_user_policy_attachment" "logs" {
+   user       = aws_iam_user.cd.name
+   policy_arn = aws_iam_policy.logs.arn
+ }

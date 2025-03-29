@@ -14,3 +14,23 @@ variable "contact" {
   default     = "shandianskypian@gmail.com"
 
 }
+
+variable "db_username" {
+  description = "DB name for RDS"
+  default     = "medium-api"
+
+}
+
+variable "db_password" {
+  description = "DB password for RDS"
+
+}
+
+variable "ecr_repo_proxy_image" {
+  description = "ECR Nginx proxy image"
+}
+
+variable "ecr_repo_app_image" {
+  description = "ECR Medium app image"
+}
+
