@@ -34,3 +34,15 @@ variable "ecr_repo_app_image" {
   description = "ECR Medium app image"
 }
 
+variable "django_secret_key" {
+  description = "Django App Secret Key"
+}
+
+
+variable "jwt_signing_key" {
+  description = "JWT signing key"
+}
+
+variable "django_admin_url" {
+  description = "Django Admin URL"
+}

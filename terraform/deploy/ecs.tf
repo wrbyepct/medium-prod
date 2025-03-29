@@ -67,17 +67,60 @@ resource "aws_ecs_task_definition" "api" {
 
   container_definitions = jsonencode([
     {
+      name              = "api"
+      image             = var.ecr_repo_app_image
+      essential         = true
+      memoryReservation = 256
+      user              = "medium-api"
+      environment = [
+        {
+          name  = "DJANGO_SECRET_KEY"
+          value = var.django_secret_key
+        },
+        {
+          name  = "DJANGO_ALLOWED_HOST"
+          value = "*"
+        },
+        {
+          name  = "JWT_SIGNING_KEY"
+          value = var.jwt_signing_key
+        },
+        {
+          name  = "DJANGO_ADMIN_URL"
+          value = var.django_admin_url
+        },
+        {
+          name  = "DATABASE_URL"
+          value = "postgresql://${aws_db_instance.main.username}:${aws_db_instance.main.password}@${aws_db_instance.main.address}:5432/${aws_db_instance.main.db_name}"
+        }
+      ]
+      mountPoints = [
+        {
+          readOnly      = false
+          containerPath = "/vol/api/staticfiles"
+          sourceVolume  = "static"
+        }
+      ]
+      logConfiguration = {
+        logDriver = "awsvpc"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs_task_logs
+          awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "api"
+        }
+      }
+    },
+    {
       name              = "medium"
       image             = var.ecr_repo_proxy_image
       essential         = true
-      memoryReservation = 100
+      memoryReservation = 256
       user              = "nginx"
       portMappings = [
         {
           containerPort = 80
           hostPort      = 8080
         }
-
       ]
       environment = [
         {
@@ -104,8 +147,8 @@ resource "aws_ecs_task_definition" "api" {
         logDriver = "awsvpc"
         options = {
           awslogs-group         = aws_cloudwatch_log_group.ecs_task_logs
-          awslogs-stream-prefix = "nginx"
           awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "nginx"
         }
 
       }
@@ -118,5 +161,43 @@ resource "aws_ecs_task_definition" "api" {
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
+  }
+}
+
+
+##
+# ECs security group
+##
+
+resource "aws_security_group" "ecs_service" {
+  description = "Access Rule for ECS"
+  name = "${local.prefix}-ecs-service"
+  vpc_id = aws_vpc.main.id   
+  
+  # For ECS to access endpoint
+  egress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # For ECS to access RDS
+  egress {
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    cidr_blocks = [
+      aws_subnet.private[0].cidr_block, 
+      aws_subnet.private[1].cidr_block
+    ]
+  }
+
+  # For client to connect into the api
+  ingress {
+    from_port = 8000
+    to_port = 8000
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
