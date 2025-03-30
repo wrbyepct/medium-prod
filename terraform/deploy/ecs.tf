@@ -61,11 +61,12 @@ resource "aws_ecs_task_definition" "api" {
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256
-  memory                   = 512
+  memory                   = 1024
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
 
   container_definitions = jsonencode([
+    # API container
     {
       name              = "api"
       image             = var.ecr_repo_app_image
@@ -110,16 +111,17 @@ resource "aws_ecs_task_definition" "api" {
         }
       }
     },
+    # NGINX container
     {
-      name              = "medium"
+      name              = "nginx"
       image             = var.ecr_repo_proxy_image
       essential         = true
       memoryReservation = 256
       user              = "nginx"
       portMappings = [
         {
-          containerPort = 80
           hostPort      = 8080
+          containerPort = 8080
         }
       ]
       environment = [
@@ -129,7 +131,7 @@ resource "aws_ecs_task_definition" "api" {
         },
         {
           name  = "LISTEN_PORT"
-          value = 80
+          value = 8080
         },
         {
           name  = "API_PORT"
@@ -171,33 +173,33 @@ resource "aws_ecs_task_definition" "api" {
 
 resource "aws_security_group" "ecs_service" {
   description = "Access Rule for ECS"
-  name = "${local.prefix}-ecs-service"
-  vpc_id = aws_vpc.main.id   
-  
+  name        = "${local.prefix}-ecs-service"
+  vpc_id      = aws_vpc.main.id
+
   # For ECS to access endpoint
   egress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   # For ECS to access RDS
   egress {
     from_port = 5432
-    to_port = 5432
-    protocol = "tcp"
+    to_port   = 5432
+    protocol  = "tcp"
     cidr_blocks = [
-      aws_subnet.private[0].cidr_block, 
+      aws_subnet.private[0].cidr_block,
       aws_subnet.private[1].cidr_block
     ]
   }
 
   # For client to connect into the api
   ingress {
-    from_port = 8000
-    to_port = 8000
-    protocol = "tcp"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
