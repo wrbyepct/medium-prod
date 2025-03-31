@@ -22,8 +22,8 @@ resource "aws_security_group" "lb" {
 
   egress {
     protocol = "tcp"
-    from_port = 8000
-    to_port = 8000
+    from_port = 8080
+    to_port = 8080
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -33,4 +33,18 @@ resource "aws_lb" "api" {
   load_balancer_type = "application"
   subnets = [aws_subnet.public[0].id, aws_subnet.public[1].id]
   security_groups = [aws_security_group.lb.id]
+}
+
+
+resource "aws_lb_target_group" "api" {
+  name = "${local.prefix}-lb-target-group"
+  vpc_id = aws_vpc.main.id
+  protocol = "HTTP"
+  port = 8080
+  target_type = "ip"
+
+  health_check {
+    path = "/api/v1/health/"
+  }
+  
 }
