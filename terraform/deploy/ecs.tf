@@ -200,6 +200,22 @@ resource "aws_security_group" "ecs_service" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.lb.id]
   }
+}
+
+##
+# ECS service 
+##
+
+resource "aws_ecs_service" "api" {
+  name = "${local.prefix}-ecs-service-api"
+  cluster = aws_ecs_cluster.main.name 
+  task_definition = aws_ecs_task_definition.api.family
+  desired_count = 1 
+  enable_execute_command = true
+  launch_type = "FARGATE"
+  platform_version = "1.4.0"
+
+
 }
