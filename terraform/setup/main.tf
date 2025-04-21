@@ -8,10 +8,10 @@ terraform {
 
   backend "s3" {
     bucket         = "devops-medium-api-tf-state-bucket"
-    region         = "ap-northeast-1"
-    key            = "tf-state-setup"
-    encrypt        = true
     dynamodb_table = "devops-medium-api-tf-lock-table"
+    encrypt        = true
+    key            = "tf-state-setup"
+    region         = "ap-northeast-1"
   }
 
 }

@@ -96,7 +96,7 @@ resource "aws_iam_user_policy_attachment" "ecr" {
 
 
 #########################
-# EC2 Policy access #
+# EC2 Policy access for creating VPC #
 #########################
 
 data "aws_iam_policy_document" "ec2" {
@@ -352,4 +352,85 @@ resource "aws_iam_policy" "elb" {
 resource "aws_iam_user_policy_attachment" "elb" {
   user       = aws_iam_user.cd.name
   policy_arn = aws_iam_policy.elb.arn
+}
+
+#########################
+# Policy for EFS access #
+#########################
+
+data "aws_iam_policy_document" "efs" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "elasticfilesystem:DescribeFileSystems",
+      "elasticfilesystem:CreateFileSystem",
+      "elasticfilesystem:DeleteFileSystem",
+      #######################################
+      "elasticfilesystem:DescribeAccessPoints",
+      "elasticfilesystem:CreateAccessPoint",
+      "elasticfilesystem:DeleteAccessPoint",
+      #######################################
+      "elasticfilesystem:DescribeMountTargets",
+      "elasticfilesystem:CreateMountTarget",
+      "elasticfilesystem:DeleteMountTarget",
+      #######################################
+      "elasticfilesystem:DescribeMountTargetSecurityGroups",
+      "elasticfilesystem:DescribeLifecycleConfiguration",
+      "elasticfilesystem:TagResource",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "efs" {
+  name        = "${aws_iam_user.cd.name}-efs"
+  description = "Allow user to manage EFS resources."
+  policy      = data.aws_iam_policy_document.efs.json
+}
+
+resource "aws_iam_user_policy_attachment" "efs" {
+  user       = aws_iam_user.cd.name
+  policy_arn = aws_iam_policy.efs.arn
+}
+
+
+#############################
+# Policy for Route53 access #
+#############################
+
+data "aws_iam_policy_document" "route53" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "route53:ListHostedZones",
+      "route53:ListHostedZones",
+      "route53:GetHostedZone",
+      ##########################
+      "route53:ChangeTagsForResource",
+      "route53:ListTagsForResource",
+      ##########################
+      "route53:ChangeResourceRecordSets",
+      "route53:ListResourceRecordSets",
+      "route53:GetChange",
+      ##########################
+      "acm:DescribeCertificate",
+      "acm:CreateCertificate",
+      "acm:DeleteCertificate",
+      "acm:RequestCertificate",
+      "acm:AddTagsToCertificate",
+      "acm:ListTagsForCertificate",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "route53" {
+  name        = "${aws_iam_user.cd.name}-route53"
+  description = "Allow user to manage Route53 resources."
+  policy      = data.aws_iam_policy_document.route53.json
+}
+
+resource "aws_iam_user_policy_attachment" "route53" {
+  user       = aws_iam_user.cd.name
+  policy_arn = aws_iam_policy.route53.arn
 }

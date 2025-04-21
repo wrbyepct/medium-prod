@@ -100,6 +100,11 @@ resource "aws_ecs_task_definition" "api" {
           readOnly      = false
           containerPath = "/vol/api/staticfiles"
           sourceVolume  = "static"
+        },
+        {
+          readOnly      = false
+          containerPath = "/vol/api/mediafiles"
+          sourceVolume  = "efs-media"
         }
       ]
       logConfiguration = {
@@ -141,8 +146,13 @@ resource "aws_ecs_task_definition" "api" {
       mountPoints = [
         {
           readOnly      = true
-          containerPath = "/vol/staticfiles"
+          containerPath = "/vol/staticfiles/"
           sourceVolume  = "static"
+        },
+        {
+          readOnly = true
+          containerPath = "/vol/mediafiles/"
+          sourceVolume = "efs-media"
         }
       ]
       logConfiguration = {
@@ -160,6 +170,19 @@ resource "aws_ecs_task_definition" "api" {
   volume {
     name = "static"
   }
+
+  volume {
+    name = "efs-media"
+    efs_volume_configuration {
+      file_system_id = aws_efs_file_system.media.id
+      transit_encryption = "ENABLED"
+
+      authorization_config {
+        access_point_id = aws_efs_access_point.media.id
+        iam = "DISABLED"
+      }
+    }
+  }
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
@@ -175,13 +198,13 @@ resource "aws_security_group" "ecs_service" {
   description = "Access Rule for ECS"
   name        = "${local.prefix}-ecs-service"
   vpc_id      = aws_vpc.main.id
-
-  # For ECS to access endpoint
-  egress {
-    from_port   = 443
-    to_port     = 443
+  
+  # For client to connect into the api
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.lb.id]
   }
 
   # For ECS to access RDS
@@ -195,13 +218,26 @@ resource "aws_security_group" "ecs_service" {
     ]
   }
 
-  # For client to connect into the api
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    security_groups = [aws_security_group.lb.id]
+  # For ECS to access EFS
+  egress {
+    from_port = 2049
+    to_port = 2049
+    protocol = "tcp"
+    cidr_blocks = [
+      aws_subnet.private[0].cidr_block,
+      aws_subnet.private[1].cidr_block
+    ]
   }
+
+  # For ECS to access vpc endpoints
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # do we really need this many ips?
+  }
+
+
 }
 
 ##
@@ -216,6 +252,19 @@ resource "aws_ecs_service" "api" {
   enable_execute_command = true
   launch_type = "FARGATE"
   platform_version = "1.4.0"
-
-
+  
+  network_configuration {
+    subnets = [
+      aws_subnet.private[0].id, 
+      aws_subnet.private[1].id
+    ]
+    security_groups = [aws_security_group.ecs_service.id]
+  }
+  
+  load_balancer {
+    target_group_arn = aws_lb_target_group.api.arn
+    container_name = "nginx"
+    container_port = 8080
+  }
 }
+

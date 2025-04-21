@@ -36,11 +36,11 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "main" {
-  instance_class = "db.t4g.micro"
+  instance_class = "db.t4g.micro" # Server size, smallest
 
   identifier = "${local.prefix}-db"
-  db_name    = "medium"
 
+  db_name    = "medium"
   username = var.db_username
   password = var.db_password
 
@@ -52,7 +52,7 @@ resource "aws_db_instance" "main" {
   auto_minor_version_upgrade = true
 
   skip_final_snapshot     = true  # in real project, we do want a bakcup when destroy the db
-  backup_retention_period = 0     # in real project, we want to a backup for period of time
+  backup_retention_period = 0     # in real project, we want to a backup for a period of time
   multi_az                = false # in real project, enable this for resilence, but here we try to keep the cost low 
 
   db_subnet_group_name   = aws_db_subnet_group.main.name

@@ -34,6 +34,29 @@ variable "ecr_repo_app_image" {
   description = "ECR Medium app image"
 }
 
+
+variable "dns_zone_name" {
+  description = "Domain Name"
+  default = ""
+  
+}
+
+variable "subdomain" {
+  description = "Subdomain based on workspace"
+  type = map(string)
+
+  default = {
+    "prod" = "api"
+    "staging" = "api.staging"
+    "dev" = "api.dev"
+  }
+  
+}
+
+##
+# Variable for Django app
+##
+
 variable "django_secret_key" {
   description = "Django App Secret Key"
 }
