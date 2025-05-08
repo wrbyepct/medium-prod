@@ -12,14 +12,14 @@ services:
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
       - AWS_DEFAULT_REGION=ap-northeast-1
 
-      - TF_WORKSPACE=${TR_WORKSPACE}
-      - TF_VAR_ecr_repo_proxy_image=${TR_VAR_ecr_repo_proxy_image}
+      - TF_WORKSPACE=${TF_WORKSPACE}
+      - TF_VAR_ecr_repo_proxy_image=${TF_VAR_ecr_repo_proxy_image}
       - TF_VAR_ecr_repo_app_image=${TF_VAR_ecr_repo_app_image}
 
-      - TF_VAR_smtp_email_host_user=${TR_VAR_smtp_email_host_user}
-      - TF_VAR_smtp_email_host_password=${TR_VAR_smtp_email_host_password}
+      - TF_VAR_smtp_email_host_user=${TF_VAR_smtp_email_host_user}
+      - TF_VAR_smtp_email_host_password=${TF_VAR_smtp_email_host_password}
 
-      - TF_VAR_db_password=${TR_VAR_db_password}
+      - TF_VAR_db_password=${TF_VAR_db_password}
       - TF_VAR_django_secret_key=${TF_VAR_django_secret_key}
       - TF_VAR_jwt_signing_key=${TF_VAR_jwt_signing_key}
       - TF_VAR_domain=${TF_VAR_domain}
