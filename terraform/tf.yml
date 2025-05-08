@@ -23,4 +23,6 @@ services:
       - TF_VAR_django_secret_key=${TF_VAR_django_secret_key}
       - TF_VAR_jwt_signing_key=${TF_VAR_jwt_signing_key}
       - TF_VAR_domain=${TF_VAR_domain}
+      - TF_VAR_celery_broker_url=${TF_VAR_celery_broker_url}
+      - TF_VAR_django_admin_url=${TF_VAR_django_admin_url}
 

@@ -648,10 +648,10 @@ resource "aws_iam_policy" "app_resources" {
       {
         Effect = "Allow",
         Action = [
-          "ecs:*",
-          "rds:*",
-          "elasticache:*",
           "ecr:*",
+          "rds:*",
+          "ecs:*",
+          "elasticache:*",
           "es:*",
           "kms:*"
         ],
