@@ -115,12 +115,12 @@ resource "aws_security_group" "endpoint_access" {
 
 module "vpc_endpoints" {
   source = "./modules/vpc_endpoints"
-  
-  vpc_id = aws_vpc.main.id
-  subnet_ids = [aws_subnet.private[0].id, aws_subnet.private[1].id]
+
+  vpc_id             = aws_vpc.main.id
+  subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
   security_group_ids = [aws_security_group.endpoint_access.id]
-  route_table_ids = [aws_route_table.private[0].id, aws_route_table.private[1].id]
-  
+  route_table_ids    = [aws_route_table.private[0].id, aws_route_table.private[1].id]
+
   interface_services = [
     "ecr.api",
     "ecr.dkr",
@@ -129,81 +129,6 @@ module "vpc_endpoints" {
   ]
 
   gateway_services = ["s3"]
-  
+
 }
 
-
-# resource "aws_vpc_endpoint" "ecr" {
-#   vpc_id             = aws_vpc.main.id
-#   vpc_endpoint_type  = "Interface"
-#   service_name       = "com.amazonaws.${data.aws_region.current.name}.ecr.api"
-#   subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
-#   security_group_ids = [aws_security_group.endpoint_access.id]
-
-#   private_dns_enabled = true
-
-#   tags = {
-#     Name = "${local.prefix}-ecr-api-endpoint"
-#   }
-# }
-
-# resource "aws_vpc_endpoint" "dkr" {
-#   vpc_id             = aws_vpc.main.id
-#   vpc_endpoint_type  = "Interface"
-#   service_name       = "com.amazonaws.${data.aws_region.current.name}.ecr.dkr"
-#   subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
-#   security_group_ids = [aws_security_group.endpoint_access.id]
-
-#   private_dns_enabled = true
-
-#   tags = {
-#     Name = "${local.prefix}-ecr-dkr-endpoint"
-#   }
-# }
-
-# resource "aws_vpc_endpoint" "cloudwatch_logs" {
-#   vpc_id             = aws_vpc.main.id
-#   vpc_endpoint_type  = "Interface"
-#   service_name       = "com.amazonaws.${data.aws_region.current.name}.logs"
-#   subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
-#   security_group_ids = [aws_security_group.endpoint_access.id]
-
-#   private_dns_enabled = true
-
-#   tags = {
-#     Name = "${local.prefix}-cloudwatch-endpoint"
-#   }
-# }
-
-# resource "aws_vpc_endpoint" "ssm" {
-#   vpc_id = aws_vpc.main.id
-
-#   vpc_endpoint_type = "Interface"
-
-#   service_name = "com.amazonaws.${data.aws_region.current.name}.ssmmessages"
-
-#   subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
-#   security_group_ids = [aws_security_group.endpoint_access.id]
-
-#   private_dns_enabled = true
-
-#   tags = {
-#     Name = "${local.prefix}-ssmmessages-endpoint"
-#   }
-# }
-
-
-# resource "aws_vpc_endpoint" "s3" {
-#   vpc_id = aws_vpc.main.id
-
-#   vpc_endpoint_type = "Gateway"
-
-#   service_name = "com.amazonaws.${data.aws_region.current.name}.s3"
-
-#   route_table_ids = [aws_route_table.private[0].id, aws_route_table.private[1].id]
-
-#   tags = {
-#     Name = "${local.prefix}-s3-endpoint"
-#   }
-
-# }

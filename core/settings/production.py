@@ -19,3 +19,28 @@ if env("AWS_EXECUTION_ENV"):
 
 # Mail service
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_MAIL", default="test@test.api.com")
+
+
+# AWS SES settings
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "email-smtp.ap-northeast-1.amazonaws.com"  # region must match SES
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # IAM user access key id
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  # Converted IAM user secret accessky
+
+DOMAIN = env("DOMAIN")
+SITE_NAME = "Medium Clone"
+
+
+# Elastic Search
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": [
+            env("ELASTICSEARCH_URL"),
+        ]
+    }
+}

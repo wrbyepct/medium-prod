@@ -40,7 +40,7 @@ resource "aws_vpc_endpoint" "interface_endpoints" {
   private_dns_enabled = true
 
   tags = {
-    Name = "${interface_services[count.index]}-endpoint"
+    Name = "${var.interface_services[count.index]}-endpoint"
   }
 }
 

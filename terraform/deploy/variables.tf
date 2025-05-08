@@ -37,20 +37,20 @@ variable "ecr_repo_app_image" {
 
 variable "dns_zone_name" {
   description = "Domain Name"
-  default = ""
-  
+  default     = "jamaisvu.click"
+
 }
 
 variable "subdomain" {
   description = "Subdomain based on workspace"
-  type = map(string)
+  type        = map(string)
 
   default = {
-    "prod" = "api"
+    "prod"    = "api"
     "staging" = "api.staging"
-    "dev" = "api.dev"
+    "dev"     = "api.dev"
   }
-  
+
 }
 
 ##
@@ -68,4 +68,20 @@ variable "jwt_signing_key" {
 
 variable "django_admin_url" {
   description = "Django Admin URL"
+}
+
+variable "celery_broker_url" {
+  description = "Redis Celery Broker URL"
+}
+
+variable "domain" {
+  description = "Django API Domain name"
+}
+
+variable "smtp_email_host_user" {
+  description = "IAM user Access ID that has SES permission to send email"
+}
+
+variable "smtp_email_host_password" {
+  description = "SMTP compatiable IAM User Secret Access Key"
 }

@@ -71,23 +71,3 @@ SPECTACULAR_SETTINGS = {
         "url": "https://testapi.com/contact",
     },
 }
-
-ELASTICSEARCH_DSL = {
-    "default": {
-        "hosts": [
-            "http://es:9200",
-        ]
-    }
-}
-
-# AWS SES settings
-EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"  # AWS SES backend name
-EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
-EMAIL_PORT = env("EMAIL_PORT", default=1025)
-DEFAULT_FROM_EMAIL = "test@test.api.com"
-DOMAIN = env("DOMAIN")
-SITE_NAME = "Medium Clone"
-
-
-EMAIL_HOST_USER = "YOUR_SMTP_USERNAME"  # IAM user access key id
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  # Converted IAM user secret accessky

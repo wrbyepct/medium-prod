@@ -35,3 +35,14 @@ def show_toolbar(request):
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
 }
+
+
+# Elastic Search
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": [
+            "http://es:9200",
+        ]
+    }
+}

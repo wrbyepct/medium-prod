@@ -1,6 +1,6 @@
 
 resource "aws_ses_domain_identity" "api" {
-  domain = "" # Your domain
+  domain = var.domain
 }
 
 
