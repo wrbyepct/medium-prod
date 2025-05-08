@@ -651,6 +651,7 @@ resource "aws_iam_policy" "app_resources" {
           "ecs:*",
           "rds:*",
           "elasticache:*",
+          "ecr:*",
           "es:*",
           "kms:*"
         ],
