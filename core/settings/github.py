@@ -47,3 +47,11 @@ LOGGING = {
         "handlers": ["console"],
     },
 }
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": [
+            "http://es:9200",
+        ]
+    }
+}
