@@ -70,8 +70,8 @@ jobs:
             --env AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
             --env AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
 
-            --env TF_VAR_ecr_repo_app_image=$TF_VAR_ecr_repo_app_image \
             --env TF_VAR_ecr_repo_proxy_image=$TF_VAR_ecr_repo_proxy_image \
+            --env TF_VAR_ecr_repo_app_image=$TF_VAR_ecr_repo_app_image \
 
             --env TF_VAR_smtp_email_host_user=$TF_VAR_smtp_email_host_user \
             --env TF_VAR_smtp_email_host_password=$TF_VAR_smtp_email_host_password \
@@ -82,7 +82,7 @@ jobs:
             --env TF_VAR_domain=$TF_VAR_domain \
             --env TF_VAR_celery_broker_url=$TF_VAR_celery_broker_url \
             --env TF_VAR_django_admin_url=$TF_VAR_django_admin_url \
-            
+
             terraform -chdir=deploy apply -auto-approve
 
 
