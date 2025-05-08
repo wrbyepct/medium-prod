@@ -44,7 +44,7 @@ resource "aws_opensearch_domain" "es" {
           AWS = aws_iam_role.app_task.arn
         },
         Action   = "es:*",
-        Resource = "arn:aws:es:${data.aws_region.current}:${data.aws_caller_identity.current.account_id}:domain/${local.prefix}-es/*"
+        Resource = "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${local.prefix}-es/*"
       }
     ]
   })
