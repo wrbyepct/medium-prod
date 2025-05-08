@@ -71,11 +71,3 @@ SPECTACULAR_SETTINGS = {
         "url": "https://testapi.com/contact",
     },
 }
-
-ELASTICSEARCH_DSL = {
-    "default": {
-        "hosts": [
-            "http://es:9200",
-        ]
-    }
-}

@@ -26,6 +26,7 @@ urlpatterns = [
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
+    path("api/v1/health/", include("core.apps.general.urls")),
     path("api/v1/profiles/", include("core.apps.profiles.urls")),
     path("api/v1/articles/", include("core.apps.articles.urls")),
     path("api/v1/ratings/", include("core.apps.ratings.urls")),

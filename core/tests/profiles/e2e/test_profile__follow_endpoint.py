@@ -60,7 +60,7 @@ def _(fan, idol):
 
 @when("fan follows idol, email should be sent", target_fixture="response")
 def _(idol, client, mocker):
-    mock_inform_followed = mocker.patch("core.apps.profiles.services.inform_followed")
+    mock_inform_followed = mocker.patch("core.celery.task.inform_followed.delay")
     response = client.post(reverse("follow", args=[idol.id]))
 
     mock_inform_followed.assert_called_once()

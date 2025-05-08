@@ -1,8 +1,10 @@
 """Celery config file."""
 
-import os
+import environ
 
-broker_url = os.environ.get("CELERY_BROKER")
+env = environ.Env()
+
+broker_url = env("CELERY_BROKER")
 result_backend = broker_url
 
 task_serializer = "json"

@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from core.apps.profiles.models import Profile
-from core.tools.email import inform_followed
+from core.celery.task import inform_followed
 
 from . import exceptions
 
@@ -131,7 +131,7 @@ class FollowHandleService:
         }
 
         try:
-            inform_followed(**email_data)
+            inform_followed.delay(**email_data)
         except Exception as e:  # noqa: BLE001
             logger.warning(f"Error happens during inform user being followed: {e}")
 
