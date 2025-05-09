@@ -7,6 +7,17 @@ resource "aws_ecs_cluster" "main" {
 }
 
 ##
+# Create one-time service linked role resources for ECS
+# To perform registering your container IP in a target group
+# Creating ENIs in your VPC/subnets
+# Sending health check data to CloudWatch
+##
+
+resource "aws_iam_service_linked_role" "ecs" {
+  aws_service_name = "ecs.amazonaws.com"
+}
+
+##
 # Fargate gets permission role from IAM
 ##
 resource "aws_iam_role" "ecs_execution_role" {
