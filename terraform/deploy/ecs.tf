@@ -91,7 +91,7 @@ resource "aws_ecs_task_definition" "api" {
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256
-  memory                   = 768
+  memory                   = 1024
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
 
@@ -101,7 +101,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "api"
       image             = var.ecr_repo_app_image
       essential         = true
-      memoryReservation = 256
+      memoryReservation = 384 
       user              = "medium-api"
 
       healthCheck = {
@@ -235,7 +235,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "celery"
       image             = var.ecr_repo_app_image
       essential         = true
-      memoryReservation = 256
+      memoryReservation = 384 
       command           = ["celery", "-A", "core.celery", "worker", "--loglevel=info"]
 
       environment = [
