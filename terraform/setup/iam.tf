@@ -614,9 +614,24 @@ resource "aws_iam_policy" "infra" {
           "elasticloadbalancing:*",
           "cloudwatch:*",
           "logs:*",
-          "efs:*",
           "route53:*",
           "acm:*",
+          "elasticfilesystem:DescribeFileSystems",
+          "elasticfilesystem:CreateFileSystem",
+          "elasticfilesystem:DeleteFileSystem",
+          #######################################
+          "elasticfilesystem:DescribeAccessPoints",
+          "elasticfilesystem:CreateAccessPoint",
+          "elasticfilesystem:DeleteAccessPoint",
+          #######################################
+          "elasticfilesystem:DescribeMountTargets",
+          "elasticfilesystem:CreateMountTarget",
+          "elasticfilesystem:DeleteMountTarget",
+          #######################################
+          "elasticfilesystem:DescribeMountTargetSecurityGroups",
+          "elasticfilesystem:DescribeLifecycleConfiguration",
+          "elasticfilesystem:TagResource",
+          "elasticfilesystem:PutLifecycleConfiguration", #  required to manage lifecycle_policy.
           "iam:List*",
           "iam:Get*",
           "iam:ListInstanceProfilesForRole",
@@ -673,7 +688,8 @@ resource "aws_iam_policy" "app_resources" {
           "ses:VerifyDomainIdentity",
           "ses:GetIdentityVerificationAttributes",
           "ses:VerifyDomainDkim",
-          "ses:GetIdentityDkimAttributes"
+          "ses:GetIdentityDkimAttributes",
+          "ses:DeleteIdentity"
         ],
         Resource = ["*"]
       }
