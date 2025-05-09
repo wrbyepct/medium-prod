@@ -193,11 +193,11 @@ resource "aws_ecs_task_definition" "api" {
         },
         {
           name  = "LISTEN_PORT"
-          value = 8080
+          value = "8080"
         },
         {
           name  = "API_PORT"
-          value = 8000
+          value = "8000"
         }
       ]
       mountPoints = [
@@ -307,7 +307,7 @@ resource "aws_ecs_task_definition" "api" {
 
       authorization_config {
         access_point_id = aws_efs_access_point.media.id
-        iam             = "DISABLED"
+        iam             = "ENABLED" # for kms decrypt in efs
       }
     }
   }
@@ -397,6 +397,11 @@ resource "aws_ecs_service" "api" {
     container_name   = "nginx"
     container_port   = 8080
   }
+  depends_on = [
+    aws_lb_listener.api_https,
+    aws_db_instance.main,
+    aws_elasticache_replication_group.redis
+  ]
 }
 
 
