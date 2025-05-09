@@ -104,6 +104,14 @@ resource "aws_ecs_task_definition" "api" {
       memoryReservation = 256
       user              = "medium-api"
 
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/health/ || exit 1"]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 10
+      }
+
       environment = [
         {
           name  = "DJANGO_SECRET_KEY"
