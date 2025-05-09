@@ -101,7 +101,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "api"
       image             = var.ecr_repo_app_image
       essential         = true
-      memoryReservation = 384 
+      memoryReservation = 384
       user              = "medium-api"
 
       healthCheck = {
@@ -235,7 +235,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "celery"
       image             = var.ecr_repo_app_image
       essential         = true
-      memoryReservation = 384 
+      memoryReservation = 384
       command           = ["celery", "-A", "core.celery", "worker", "--loglevel=info"]
 
       environment = [
