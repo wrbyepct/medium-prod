@@ -17,7 +17,7 @@ variable "contact" {
 
 variable "db_username" {
   description = "DB name for RDS"
-  default     = "medium-api"
+  default     = "mediumapi"
 
 }
 
