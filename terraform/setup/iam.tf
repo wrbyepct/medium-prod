@@ -619,11 +619,27 @@ resource "aws_iam_policy" "infra" {
           "acm:*",
           "iam:List*",
           "iam:Get*",
-          "iam:PassRole",
-          "iam:CreateRole",
-          "iam:DeleteRole",
+          "iam:ListInstanceProfilesForRole",
+          #######################
+          "iam:ListAttachedRolePolicies",
           "iam:AttachRolePolicy",
-          "iam:DetachRolePolicy"
+          "iam:DetachRolePolicy",
+          "iam:ListRolePolicies",
+          #######################
+          "iam:CreateRole",
+          "iam:GetRole",
+          "iam:TagRole",
+          "iam:DeleteRole",
+          "iam:PassRole",
+          ######################
+          "iam:ListPolicyVersions",
+          "iam:GetPolicyVersion",
+          "iam:PutRolePolicy",
+          "iam:GetPolicy",
+          "iam:CreatePolicy",
+          "iam:DeletePolicy",
+          "iam:TagPolicy",
+          "iam:CreateServiceLinkedRole" # ElastiCache and Load Balancer needs a service-linked IAM role
         ],
         Resource = ["*"]
       }
@@ -653,7 +669,11 @@ resource "aws_iam_policy" "app_resources" {
           "ecs:*",
           "elasticache:*",
           "es:*",
-          "kms:*"
+          "kms:*",
+          "ses:VerifyDomainIdentity",
+          "ses:GetIdentityVerificationAttributes",
+          "ses:VerifyDomainDkim",
+          "ses:GetIdentityDkimAttributes"
         ],
         Resource = ["*"]
       }

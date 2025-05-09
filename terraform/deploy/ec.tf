@@ -29,7 +29,7 @@ resource "aws_elasticache_replication_group" "redis" {
   automatic_failover_enabled = false # set true if multi-AZ
 
   engine         = "redis"
-  engine_version = "7.4"
+  engine_version = "7.1"
   port           = 6379
 
   subnet_group_name  = aws_elasticache_subnet_group.redis.name

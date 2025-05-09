@@ -43,7 +43,7 @@ resource "aws_kms_key" "efs" {
 
 resource "aws_efs_file_system" "api" {
   encrypted  = true
-  kms_key_id = aws_kms_key.efs.id
+  kms_key_id = aws_kms_key.efs.arn
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS" # This reduces storage cost a LOT → good for media files, logs, ES data → things that are not frequently read.
   }

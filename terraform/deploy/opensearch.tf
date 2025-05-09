@@ -30,7 +30,6 @@ resource "aws_opensearch_domain" "es" {
   vpc_options {
     subnet_ids = [
       aws_subnet.private[0].id,
-      aws_subnet.private[1].id,
     ]
     security_group_ids = [aws_security_group.es.id]
   }
