@@ -398,7 +398,7 @@ resource "aws_ecs_service" "api" {
     container_port   = 8080
   }
   depends_on = [
-    aws_lb_listener.api_https,  
+    aws_lb_listener.api_https,
     aws_db_instance.main,
     aws_elasticache_replication_group.redis
   ]
