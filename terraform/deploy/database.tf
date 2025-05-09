@@ -48,7 +48,7 @@ resource "aws_db_instance" "main" {
   storage_type      = "gp3"
 
   engine                     = "postgres"
-  engine_version             = "15.3"
+  engine_version             = "15.5"
   auto_minor_version_upgrade = true
 
   skip_final_snapshot     = true  # in real project, we do want a bakcup when destroy the db
