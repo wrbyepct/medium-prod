@@ -654,7 +654,10 @@ resource "aws_iam_policy" "infra" {
           "iam:CreatePolicy",
           "iam:DeletePolicy",
           "iam:TagPolicy",
-          "iam:CreateServiceLinkedRole" # ElastiCache and Load Balancer needs a service-linked IAM role
+          # ElastiCache and Load Balancer needs a service-linked IAM role
+          "iam:CreateServiceLinkedRole",
+          "iam:DeleteServiceLinkedRole",
+          "iam:GetServiceLinkedRoleDeletionStatus"
         ],
         Resource = ["*"]
       }

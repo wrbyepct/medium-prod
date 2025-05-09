@@ -38,7 +38,7 @@ jobs:
           docker build -f ./docker/prod/django/Dockerfile --compress -t ${{ vars.ECR_REPO_APP }}:$GITHUB_SHA ./
           docker push ${{ vars.ECR_REPO_APP }}:$GITHUB_SHA 
           docker build --compress -t ${{ vars.ECR_REPO_PROXY }}:$GITHUB_SHA ./docker/prod/nginx
-          docker push ${{ vars.ECR_REPO_PROXY }}:$GITHUB_SHA 
+          docker push ${{ vars.ECR_REPO_PROXY }}:$GITHUB_SHA
 
       - name: Switch Workspace and Do Terraform Apply
         env:
