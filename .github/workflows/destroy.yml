@@ -17,6 +17,9 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Destroy AWS resource in Specified Workspace
         run: |
           export=TF_WORKSPACE=${{ github.event.inputs.environment }}
