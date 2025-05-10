@@ -640,6 +640,7 @@ resource "aws_iam_policy" "infra" {
           "iam:AttachRolePolicy",
           "iam:DetachRolePolicy",
           "iam:ListRolePolicies",
+          "iam:DeleteRolePolicy",
           #######################
           "iam:CreateRole",
           "iam:GetRole",
