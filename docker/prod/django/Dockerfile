@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && poetry install --no-root --no-ansi
 
 
-FROM python as runner
+FROM python AS runner
 ARG APP_HOME=/app \
     VOLUME_DIR=/vol/api \
     UID=101

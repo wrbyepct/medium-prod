@@ -571,11 +571,11 @@ resource "aws_iam_policy" "tf_backend" {
         Action = [
           "s3:GetObject",
           "s3:PutObject",
-          "s3:DeleteObject"
+          "s3:DeleteObject",
         ],
         Resource = [
-          "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy/*",
-          "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy-env/*"
+          "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy",
+          "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy-env/*",
         ]
       },
       {
