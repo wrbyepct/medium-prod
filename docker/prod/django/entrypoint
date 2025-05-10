@@ -8,7 +8,7 @@ set -o nounset
 
 
 if [ -z "${POSTGRES_USER}" ]; then
-    base_postgres_image_defaul_user="medium"
+    base_postgres_image_defaul_user="mediumapi"
     export POSTGRES_USER="${base_postgres_image_defaul_user}"
 fi
 

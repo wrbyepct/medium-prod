@@ -114,7 +114,7 @@ resource "aws_ecs_task_definition" "api" {
       essential         = true
       memoryReservation = 384
       user              = "medium-api"
-
+      command           = ["/start"]
       healthCheck = {
         command     = ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/health/ || exit 1"]
         interval    = 30
@@ -163,7 +163,27 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "EMAIL_HOST_PASSWORD"
           value = var.smtp_email_host_password
-        }
+        },
+        {
+          name  = "POSTGRES_USER"
+          value = var.db_username
+        },
+        {
+          name  = "POSTGRES_PASSWORD"
+          value = var.db_password
+        },
+        {
+          name  = "POSTGRES_HOST"
+          value = var.db_username
+        },
+        {
+          name  = "POSTGRES_PORT"
+          value = var.db_port
+        },
+        {
+          name  = "POSTGRES_DB"
+          value = var.db_name
+        },
       ]
       mountPoints = [
         {
@@ -289,7 +309,27 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "EMAIL_HOST_PASSWORD"
           value = var.smtp_email_host_password
-        }
+        },
+        {
+          name  = "POSTGRES_USER"
+          value = var.db_username
+        },
+        {
+          name  = "POSTGRES_PASSWORD"
+          value = var.db_password
+        },
+        {
+          name  = "POSTGRES_HOST"
+          value = var.db_username
+        },
+        {
+          name  = "POSTGRES_PORT"
+          value = var.db_port
+        },
+        {
+          name  = "POSTGRES_DB"
+          value = var.db_name
+        },
       ]
       mountPoints = [
         {
