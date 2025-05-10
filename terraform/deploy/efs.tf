@@ -62,7 +62,7 @@ resource "aws_security_group" "efs" {
     to_port   = 2049
     protocol  = "tcp"
 
-    security_groups = [aws_ecs_service.api.id]
+    security_groups = [aws_security_group.ecs_service.id]
   }
 
 }
