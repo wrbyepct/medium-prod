@@ -22,8 +22,7 @@ jobs:
         
       - name: Destroy AWS resource in Specified Workspace
         run: |
-          export=TF_WORKSPACE=${{ github.event.inputs.environment }}
+          export TF_WORKSPACE=${{ github.event.inputs.environment }}
           cd terraform
           docker compose -f tf.yml run --rm terraform -chdir=deploy init 
           docker compose -f tf.yml run --rm terraform -chdir=deploy destroy -auto-approve
-          
