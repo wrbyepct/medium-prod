@@ -28,5 +28,5 @@ services:
       - TF_VAR_django_admin_url=${TF_VAR_django_admin_url}
 
       - TF_VAR_csrf_trusted_origins=${TF_VAR_csrf_trusted_origins}
-      - TF_VAR_django_allowed_host=${TF_VAR_django_allowed_hosts}
+      - TF_VAR_django_allowed_hosts=${TF_VAR_django_allowed_hosts}
 
