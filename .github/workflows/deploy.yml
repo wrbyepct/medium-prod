@@ -23,7 +23,7 @@ jobs:
       
       - name: Set Working Space Variables
         run: |
-          if [$GITHUB_REF == 'refs/heads/prod' ]; then
+          if [ "$GITHUB_REF" == 'refs/heads/prod' ]; then
             echo "prod" > .workspace
           else 
             echo "staging" > .workspace
