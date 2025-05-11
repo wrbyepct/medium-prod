@@ -61,7 +61,7 @@ jobs:
           TF_VAR_django_admin_url: ${{ vars.DJANGO_ADMIN_URL }}
           
           TF_VAR_csrf_trusted_origins: ${{ vars.CSRF_TRUSTED_ORIGINS }}
-          TF_VAR_django_allowed_host: ${{ vars.DJANGO_ALLOWED_HOSTS }}
+          TF_VAR_django_allowed_hosts: ${{ vars.DJANGO_ALLOWED_HOSTS }}
         run: |
 
           workspace=$(cat .workspace)
