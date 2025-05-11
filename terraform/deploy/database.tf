@@ -40,7 +40,7 @@ resource "aws_db_instance" "main" {
 
   identifier = "${local.prefix}-db"
 
-  db_name  = var.db_name
+  db_name  = "medium"
   username = var.db_username
   password = var.db_password
 
