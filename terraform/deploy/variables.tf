@@ -26,19 +26,6 @@ variable "db_password" {
 
 }
 
-variable "db_host" {
-  description = "DB host for RDS"
-}
-
-
-variable "db_port" {
-  description = "DB port for RDS"
-}
-
-variable "db_name" {
-  description = "DB name for RDS"
-}
-
 
 variable "ecr_repo_proxy_image" {
   description = "ECR Nginx proxy image"
