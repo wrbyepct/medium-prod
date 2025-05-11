@@ -99,3 +99,11 @@ variable "smtp_email_host_user" {
 variable "smtp_email_host_password" {
   description = "SMTP compatiable IAM User Secret Access Key"
 }
+
+variable "csrf_trusted_origins" {
+  description = "CSRF trusted Origins for Django API"
+}
+
+variable "django_allowed_hosts" {
+  description = "Allowed Hosts for Django API"
+}

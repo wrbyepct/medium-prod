@@ -165,24 +165,12 @@ resource "aws_ecs_task_definition" "api" {
           value = var.smtp_email_host_password
         },
         {
-          name  = "POSTGRES_USER"
-          value = var.db_username
+          name  = "CSRF_TRUSTED_ORIGINS"
+          value = var.csrf_trusted_origins
         },
         {
-          name  = "POSTGRES_PASSWORD"
-          value = var.db_password
-        },
-        {
-          name  = "POSTGRES_HOST"
-          value = var.db_username
-        },
-        {
-          name  = "POSTGRES_PORT"
-          value = var.db_port
-        },
-        {
-          name  = "POSTGRES_DB"
-          value = var.db_name
+          name  = "DJANGO_ALLOWED_HOSTS"
+          value = var.django_allowed_hosts
         },
       ]
       mountPoints = [
@@ -311,24 +299,12 @@ resource "aws_ecs_task_definition" "api" {
           value = var.smtp_email_host_password
         },
         {
-          name  = "POSTGRES_USER"
-          value = var.db_username
+          name  = "CSRF_TRUSTED_ORIGINS"
+          value = var.csrf_trusted_origins
         },
         {
-          name  = "POSTGRES_PASSWORD"
-          value = var.db_password
-        },
-        {
-          name  = "POSTGRES_HOST"
-          value = var.db_username
-        },
-        {
-          name  = "POSTGRES_PORT"
-          value = var.db_port
-        },
-        {
-          name  = "POSTGRES_DB"
-          value = var.db_name
+          name  = "DJANGO_ALLOWED_HOSTS"
+          value = var.django_allowed_hosts
         },
       ]
       mountPoints = [
