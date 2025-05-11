@@ -19,6 +19,8 @@ services:
       - TF_VAR_smtp_email_host_user=${TF_VAR_smtp_email_host_user}
       - TF_VAR_smtp_email_host_password=${TF_VAR_smtp_email_host_password}
 
+      - TF_VAR_db_password=${TF_VAR_db_password}
+
       - TF_VAR_django_secret_key=${TF_VAR_django_secret_key}
       - TF_VAR_jwt_signing_key=${TF_VAR_jwt_signing_key}
       - TF_VAR_domain=${TF_VAR_domain}
