@@ -50,10 +50,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 COPY core core 
 COPY pyproject.toml pyproject.toml
 
-COPY ["./docker/prod/django/entrypoint", "./docker/prod/django/start", "./docker/prod/django/celery/worker/start_celeryworker", "./docker/prod/django/celery/flower/start_flower", "/"]
+COPY ["./docker/prod/django/start", "./docker/prod/django/celery/worker/start_celeryworker", "./docker/prod/django/celery/flower/start_flower", "/"]
 
-RUN sed -i 's/\r$//g' /entrypoint /start /start_flower /start_celeryworker \
-    && chmod +x /entrypoint /start /start_flower /start_celeryworker
+RUN sed -i 's/\r$//g' /start /start_flower /start_celeryworker \
+    && chmod +x /start /start_flower /start_celeryworker
 
 RUN adduser \
     --uid $UID \
@@ -69,4 +69,4 @@ USER medium-api
 VOLUME $VOLUME_DIR/staticfiles
 VOLUME $VOLUME_DIR/mediafiles
 
-ENTRYPOINT [ "/entrypoint" ]
+ENTRYPOINT [ "/start" ]
