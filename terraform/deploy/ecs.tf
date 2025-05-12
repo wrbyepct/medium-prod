@@ -113,7 +113,9 @@ resource "aws_ecs_task_definition" "api" {
       image             = var.ecr_repo_app_image
       essential         = true
       memoryReservation = 384
+      command           = ["/start"]
       user              = "medium-api"
+
       healthCheck = {
         command     = ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/health/ || exit 1"]
         interval    = 30

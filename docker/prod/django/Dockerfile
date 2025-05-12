@@ -68,5 +68,3 @@ USER medium-api
 
 VOLUME $VOLUME_DIR/staticfiles
 VOLUME $VOLUME_DIR/mediafiles
-
-ENTRYPOINT [ "/start" ]
