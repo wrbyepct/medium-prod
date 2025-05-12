@@ -63,7 +63,7 @@ jobs:
           docker compose -f tf.yml run --rm terraform -chdir=deploy init 
           docker compose -f tf.yml run --rm terraform -chdir=deploy workspace select -or-create $ENVIRONMENT
           docker compose -f tf.yml run --rm terraform -chdir=deploy apply -auto-approve
-          workspace=$(docker compose run --rm terraform -chdir=deploy workspace show)
+          workspace=$(docker compose -f tf.yml  run --rm terraform -chdir=deploy workspace show)
           echo "Terraform applied in the $workspace workspace."
   
 
