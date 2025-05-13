@@ -203,7 +203,7 @@ resource "aws_ecs_task_definition" "api" {
       ]
       environment = [
         {
-          name  = "APP_HOST"
+          name  = "API_HOST"
           value = "127.0.0.1"
         },
         {
