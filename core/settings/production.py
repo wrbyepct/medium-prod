@@ -43,3 +43,6 @@ ELASTICSEARCH_DSL = {
         ]
     }
 }
+
+# Admin URL
+ADMIN_URL = env("DJANGO_ADMIN_URL")
