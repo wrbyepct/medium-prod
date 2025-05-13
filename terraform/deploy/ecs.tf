@@ -409,10 +409,13 @@ resource "aws_security_group" "ecs_service" {
 
   # Egress for OpenSearch(Elastic Search)
   egress {
-    from_port       = 9200
-    to_port         = 9200
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ecs_service.id] # allow ECS only
+    from_port = 9200
+    to_port   = 9200
+    protocol  = "tcp"
+    cidr_blocks = [
+      aws_subnet.private[0].cidr_block,
+      aws_subnet.private[1].cidr_block
+    ]
   }
 
   # For ECS to access vpc endpoints
