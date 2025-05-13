@@ -437,6 +437,8 @@ resource "aws_ecs_service" "api" {
   launch_type            = "FARGATE"
   platform_version       = "1.4.0"
 
+  health_check_grace_period_seconds = 90
+
   network_configuration {
     subnets = [
       aws_subnet.private[0].id,
