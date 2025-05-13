@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 
-class Commad(BaseCommand):
+class Command(BaseCommand):
     """Create default superuser."""
 
     def handle(self, *args, **options):
