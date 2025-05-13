@@ -16,7 +16,7 @@ server {
 
     location / {
 
-        proxy_pass  http://${API_HOST};
+        proxy_pass  http://api;
         include     /etc/nginx/proxy_params;
         client_max_body_size 20M;
 
