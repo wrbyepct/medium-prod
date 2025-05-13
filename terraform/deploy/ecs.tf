@@ -116,14 +116,6 @@ resource "aws_ecs_task_definition" "api" {
       command           = ["/start"]
       user              = "medium-api"
 
-      healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/health/ || exit 1"]
-        interval    = 30
-        timeout     = 5
-        retries     = 3
-        startPeriod = 60
-      }
-
       environment = [
         {
           name  = "DJANGO_SECRET_KEY"
@@ -202,12 +194,7 @@ resource "aws_ecs_task_definition" "api" {
       essential         = true
       memoryReservation = 256
       user              = "nginx"
-      dependsOn = [
-        {
-          containerName = "api"
-          condition     = "HEALTHY"
-        }
-      ]
+
       portMappings = [
         {
           hostPort      = 8080
