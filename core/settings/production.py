@@ -1,5 +1,6 @@
 """Production settings."""
 
+# ruff: noqa: ERA001
 from socket import gethostbyname, gethostname
 
 ADMINS = [("Jay", "test@test.com")]
@@ -22,13 +23,18 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_MAIL", default="test@test.api.com")
 
 # AWS SES settings
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "email-smtp.ap-northeast-1.amazonaws.com"  # region must match SES
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "email-smtp.ap-northeast-1.amazonaws.com"  # region must match SES
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # IAM user access key id
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  # Converted IAM user secret accessky
+# EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # IAM user access key id
+# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  # Converted IAM user secret accessky
+
+EMAIL_BACKEND = "django_ses.SESBackend"
+
+AWS_SES_REGION_NAME = env("AWS_REGION")
+AWS_SES_REGION_ENDPOINT = f"email.{AWS_SES_REGION_NAME}.amazonaws.com"
 
 DOMAIN = env("DOMAIN")
 SITE_NAME = "Medium Clone"

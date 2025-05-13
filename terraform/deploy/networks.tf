@@ -94,7 +94,7 @@ resource "aws_route_table_association" "private" {
 
 
 ##
-# Endpoints for Allowing Private Subnet ECS to Access CloudWatch, ECR, S3 and CloudWatch
+# Endpoints for Allowing Private Subnet ECS to Access CloudWatch, ECR, S3, SES and CloudWatch
 ##
 
 resource "aws_security_group" "endpoint_access" {
@@ -125,10 +125,10 @@ module "vpc_endpoints" {
     "ecr.api",
     "ecr.dkr",
     "logs",
-    "ssmmessages"
+    "ssmmessages",
+    "email"
   ]
 
   gateway_services = ["s3"]
 
 }
-
