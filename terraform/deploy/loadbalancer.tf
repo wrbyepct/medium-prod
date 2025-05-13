@@ -44,11 +44,11 @@ resource "aws_lb_target_group" "api" {
   target_type = "ip"
 
   health_check {
-    path = "/api/v1/health/"
+    path                = "/api/v1/health/"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
-    unhealthy_threshold = 10  # 👈 allow more failures before declaring unhealthy
+    unhealthy_threshold = 10 # 👈 allow more failures before declaring unhealthy
   }
 
 }
