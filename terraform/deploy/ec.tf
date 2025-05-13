@@ -3,24 +3,14 @@ resource "aws_security_group" "redis" {
   name   = "${local.prefix}-redis-sg"
   vpc_id = aws_vpc.main.id
 
-  # ingress {
-  #   from_port       = 6379
-  #   to_port         = 6379
-  #   protocol        = "tcp"
-  #   source_security_group_id =
-  #   # security_groups = [aws_security_group.ecs_service.id] # only allow ECS
-  # }
+  ingress {
+    from_port       = 6379
+    to_port         = 6379
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_service.id]
+  }
 }
 
-
-resource "aws_security_group_rule" "allow_ecs_to_redis" {
-  type                     = "ingress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.redis.id       # Redis SG
-  source_security_group_id = aws_security_group.ecs_service.id # ECS SG
-}
 
 resource "aws_elasticache_subnet_group" "redis" {
   name = "${local.prefix}-redis-subnet-group"
