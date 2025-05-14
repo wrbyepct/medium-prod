@@ -79,13 +79,6 @@ variable "domain" {
   description = "Django API Domain name"
 }
 
-variable "smtp_email_host_user" {
-  description = "IAM user Access ID that has SES permission to send email"
-}
-
-variable "smtp_email_host_password" {
-  description = "SMTP compatiable IAM User Secret Access Key"
-}
 
 variable "csrf_trusted_origins" {
   description = "CSRF trusted Origins for Django API"

@@ -59,9 +59,10 @@ resource "aws_iam_role_policy" "ssm_policy" {
 # Fargate Task role policy - Use KMS to descrypt/encrypt files in EFS
 ##
 
-resource "aws_iam_policy" "ecs_kms_access" {
-  name = "${local.prefix}-ecs-kms-access"
 
+resource "aws_iam_role_policy" "ecs_kms_access" {
+  name = "ECSKMSAccess"
+  role = aws_iam_role.app_task.name
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -80,9 +81,23 @@ resource "aws_iam_policy" "ecs_kms_access" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_kms_access" {
-  role       = aws_iam_role.app_task.name
-  policy_arn = aws_iam_policy.ecs_kms_access.arn
+resource "aws_iam_role_policy" "ecs_ses_send_policy" {
+  name = "AllowSESSend"
+  role = aws_iam_role.app_task.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 ##
@@ -114,7 +129,7 @@ resource "aws_ecs_task_definition" "api" {
       essential         = true
       memoryReservation = 384
       command           = ["/start"]
-      user              = "medium-api"
+      user              = "medium-api" # TODO: factor this out later
 
       environment = [
         {
@@ -150,12 +165,8 @@ resource "aws_ecs_task_definition" "api" {
           value = aws_route53_record.app.fqdn
         },
         {
-          name  = "EMAIL_HOST_USER"
-          value = var.smtp_email_host_user
-        },
-        {
-          name  = "EMAIL_HOST_PASSWORD"
-          value = var.smtp_email_host_password
+          name  = "AWS_REGION"
+          value = data.aws_region.current.name
         },
         {
           name  = "CSRF_TRUSTED_ORIGINS"
@@ -279,12 +290,8 @@ resource "aws_ecs_task_definition" "api" {
           value = aws_route53_record.app.fqdn
         },
         {
-          name  = "EMAIL_HOST_USER"
-          value = var.smtp_email_host_user
-        },
-        {
-          name  = "EMAIL_HOST_PASSWORD"
-          value = var.smtp_email_host_password
+          name  = "AWS_REGION"
+          value = data.aws_region.current.name
         },
         {
           name  = "CSRF_TRUSTED_ORIGINS"
@@ -403,14 +410,6 @@ resource "aws_security_group" "ecs_service" {
       aws_subnet.private[0].cidr_block,
       aws_subnet.private[1].cidr_block
     ]
-  }
-
-  # For ECS t connect to SES
-  egress {
-    from_port   = 587
-    to_port     = 587
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # For ECS to access vpc endpoints
