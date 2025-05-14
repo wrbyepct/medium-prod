@@ -165,6 +165,10 @@ resource "aws_ecs_task_definition" "api" {
           value = aws_route53_record.app.fqdn
         },
         {
+          name  = "EMAIL_HOST"
+          value = var.email_host
+        },
+        {
           name  = "EMAIL_HOST_USER"
           value = var.smtp_username
         },
@@ -292,6 +296,10 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "DOMAIN"
           value = aws_route53_record.app.fqdn
+        },
+        {
+          name  = "EMAIL_HOST"
+          value = var.email_host
         },
         {
           name  = "EMAIL_HOST_USER"

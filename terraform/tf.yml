@@ -18,6 +18,7 @@ services:
 
       - TF_VAR_smtp_username=${TF_VAR_smtp_username}
       - TF_VAR_smtp_password=${TF_VAR_smtp_password}
+      - TF_VAR_email_host=${TF_VAR_email_host}
 
       - TF_VAR_db_password=${TF_VAR_db_password}
 
