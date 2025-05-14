@@ -95,3 +95,7 @@ variable "smtp_username" {
 variable "smtp_password" {
   description = "SMTP password for SES"
 }
+
+variable "email_host" {
+  description = "SMTP host for SES"
+}
