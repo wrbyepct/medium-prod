@@ -81,24 +81,6 @@ resource "aws_iam_role_policy" "ecs_kms_access" {
   })
 }
 
-resource "aws_iam_role_policy" "ecs_ses_send_policy" {
-  name = "AllowSESSend"
-  role = aws_iam_role.app_task.name
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ses:SendEmail",
-          "ses:SendRawEmail"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
 
 ##
 # CloudWatch log Group 
@@ -117,7 +99,7 @@ resource "aws_ecs_task_definition" "api" {
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256
-  memory                   = 1024
+  memory                   = 2048
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
 
@@ -127,7 +109,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "api"
       image             = var.ecr_repo_app_image
       essential         = true
-      memoryReservation = 384
+      memoryReservation = 768
       command           = ["/start"]
       user              = "medium-api" # TODO: factor this out later
 
@@ -211,7 +193,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "nginx"
       image             = var.ecr_repo_proxy_image
       essential         = true
-      memoryReservation = 256
+      memoryReservation = 512
       user              = "nginx"
 
       portMappings = [
@@ -261,7 +243,7 @@ resource "aws_ecs_task_definition" "api" {
       name              = "celery"
       image             = var.ecr_repo_app_image
       essential         = true
-      memoryReservation = 384
+      memoryReservation = 768
       command           = ["celery", "-A", "core.celery", "worker", "--loglevel=info"]
 
       environment = [
