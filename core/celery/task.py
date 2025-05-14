@@ -1,9 +1,13 @@
 """Celery tasks."""
 
+import logging
+
 from celery import shared_task
 from django.core.mail import send_mail
 
 from core.settings import DEFAULT_FROM_EMAIL
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -28,6 +32,9 @@ def inform_followed(
         "message": f"Hi there, {being_followed_user_first_name}! The user {user_fullname} now follows you!",
         "from_email": from_email,
         "recipient_list": [to_email],
-        "fail_silently": True,
+        "fail_silently": False,
     }
-    send_mail(**mail_data)
+    try:
+        send_mail(**mail_data)
+    except Exception:
+        logger.exception()
