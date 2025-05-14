@@ -126,7 +126,7 @@ module "vpc_endpoints" {
     "ecr.dkr",
     "logs",
     "ssmmessages",
-    "email"
+    "email-smtp"
   ]
 
   gateway_services = ["s3"]

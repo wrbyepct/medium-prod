@@ -165,8 +165,12 @@ resource "aws_ecs_task_definition" "api" {
           value = aws_route53_record.app.fqdn
         },
         {
-          name  = "AWS_REGION"
-          value = data.aws_region.current.name
+          name  = "EMAIL_HOST_USER"
+          value = var.smtp_username
+        },
+        {
+          name  = "EMAIL_HOST_PASSWORD"
+          value = var.smtp_password
         },
         {
           name  = "CSRF_TRUSTED_ORIGINS"
@@ -290,8 +294,12 @@ resource "aws_ecs_task_definition" "api" {
           value = aws_route53_record.app.fqdn
         },
         {
-          name  = "AWS_REGION"
-          value = data.aws_region.current.name
+          name  = "EMAIL_HOST_USER"
+          value = var.smtp_username
+        },
+        {
+          name  = "EMAIL_HOST_PASSWORD"
+          value = var.smtp_password
         },
         {
           name  = "CSRF_TRUSTED_ORIGINS"
@@ -410,6 +418,12 @@ resource "aws_security_group" "ecs_service" {
       aws_subnet.private[0].cidr_block,
       aws_subnet.private[1].cidr_block
     ]
+  }
+  egress {
+    from_port   = 587
+    to_port     = 587
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # For ECS to access vpc endpoints
