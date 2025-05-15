@@ -11,4 +11,4 @@ python -m core.manage migrate --no-input
 python -m core.manage collectstatic --no-input
 python -m core.manage create_superuser
 
-gunicorn --bind 0.0.0.0:8000 --workers 1 core.wsgi
+gunicorn --bind 0.0.0.0:8000 --workers 4 core.wsgi
