@@ -39,7 +39,7 @@ EMAIL_FAIL_SILENTLY = False
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = f"noreply@{DOMAIN}.com"
+DEFAULT_FROM_EMAIL = f"noreply@{DOMAIN}"
 
 
 SITE_NAME = "Medium Clone"
