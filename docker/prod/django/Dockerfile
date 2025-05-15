@@ -42,6 +42,7 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 RUN apt-get update && apt-get install --no-install-recommends -y \
     libpq-dev \
     gettext  \
+    # For connection prob testing
     && apt-get install -y dnsutils telnet \
     && apt-get purge -y --auto-remove -o APT::AutoRemoveImportant=false \
     && apt-get clean \
