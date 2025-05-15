@@ -89,6 +89,7 @@ class ResponseManager(models.Manager):
             .with_necessary_colums_only()
             .with_count_data()
             .join_user_table()
+            .order_by("-created_at")
         )
 
 

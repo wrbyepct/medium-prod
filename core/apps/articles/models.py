@@ -123,6 +123,7 @@ class ArticleManager(models.Manager):
                 "author__first_name",
                 "author__last_name",
             )
+            .order_by("-created_at")
         )
 
     def with_view_count_and_avg_rating(self):

@@ -46,7 +46,7 @@ class TestBookmarkListEndpoint:
         # Assert response correct
         assert resp.status_code == status.HTTP_200_OK
 
-        bookmarks = cate.bookmarks.all()
+        bookmarks = cate.bookmarks.all().order_by("-created_at")
         serializer = BookmarkSerializer(bookmarks, many=True)
 
         # Assert data correct
