@@ -191,3 +191,4 @@ class ArticleSerializer(serializers.ModelSerializer):
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
         ]
+        read_onl_field = ["slug"]

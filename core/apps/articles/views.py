@@ -45,7 +45,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
     """
 
-    serializer_class = ArticlePreviewSerializer
+    serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
     filterset_class = ArticleFilter
     filter_backends = [OrderingFilter]
@@ -54,6 +54,12 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
     # TODO: Try to optimize for TaggableManager's tag insertion
     # TODO: Think how to persoalize article feed.
+
+    def get_serializer_class(self):
+        """Provide data-light serializer for get method."""
+        if self.request.method == "GET":
+            return ArticlePreviewSerializer
+        return ArticleSerializer
 
     def handle_fulltext_search(self):
         """Use Elasticsearch to return filtered article ids if search term is provided, else return None."""
@@ -71,7 +77,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
         return qs
 
-    def perform_create(self, serializer: ArticlePreviewSerializer):
+    def perform_create(self, serializer):
         """Create article with author user info."""
         serializer.save(author=self.request.user)  # This will trigger user query
 

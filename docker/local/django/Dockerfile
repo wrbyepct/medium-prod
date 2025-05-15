@@ -51,10 +51,10 @@ COPY local local
 COPY core core 
 COPY pyproject.toml pyproject.toml
 
-COPY ["./docker/local/django/start", "./docker/local/django/celery/worker/start_celeryworker", "./docker/local/django/celery/flower/start_flower", "/"]
+COPY ["./docker/local/django/entrypoint", "./docker/local/django/start", "./docker/local/django/celery/worker/start_celeryworker", "./docker/local/django/celery/flower/start_flower", "/"]
 
-RUN sed -i 's/\r$//g' /start /start_flower /start_celeryworker \
-    && chmod +x /start /start_flower /start_celeryworker
+RUN sed -i 's/\r$//g' /entrypoint /start /start_flower /start_celeryworker \
+    && chmod +x /entrypoint /start /start_flower /start_celeryworker
 
 RUN adduser \
     --disabled-password \
@@ -66,4 +66,4 @@ RUN adduser \
 
 USER medium-api
 
-ENTRYPOINT [ "/start" ]
+ENTRYPOINT [ "/entrypoint" ]
