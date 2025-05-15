@@ -44,6 +44,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     gettext  \
     && apt-get purge -y --auto-remove -o APT::AutoRemoveImportant=false \
     && apt-get clean \
+    && apt-get install -y dnsutils telnet \
     && rm -rf /var/lib/apt/lists/*
 
 
