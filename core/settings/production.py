@@ -17,9 +17,6 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["l27.0.0.1"])
 if env("AWS_EXECUTION_ENV"):
     ALLOWED_HOSTS.append(gethostbyname(gethostname()))
 
-# Mail service
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_MAIL", default="test@test.api.com")
-
 
 # AWS SES settings
 
@@ -40,6 +37,7 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 EMAIL_FAIL_SILENTLY = False
 
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = f"noreply@{DOMAIN}.com"
 
