@@ -40,12 +40,16 @@ class ProfileQuerySet(models.QuerySet):
 
         By selecting joined table from user.
         """
-        return self.join_user_table().only(
-            "profile_photo",
-            "about_me",
-            "twitter_handle",
-            "user__first_name",
-            "user__last_name",
+        return (
+            self.join_user_table()
+            .only(
+                "profile_photo",
+                "about_me",
+                "twitter_handle",
+                "user__first_name",
+                "user__last_name",
+            )
+            .order_by("user__first_name")
         )
 
 

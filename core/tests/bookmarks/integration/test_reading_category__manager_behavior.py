@@ -21,15 +21,6 @@ def categories(reading_category_factory):
     return cate1, cate2
 
 
-# defer correct
-def test_reading_category_manager__defer_correct():
-    qs = ReadingCategory.objects.all()
-
-    deferred_fields = qs.query.deferred_loading[0]
-
-    assert "created_at" in deferred_fields
-
-
 # bookmark_count in annotated field
 def test_reading_category_manager__bookmark_count_in_annoted_field(categories):
     cate1, cate2 = categories

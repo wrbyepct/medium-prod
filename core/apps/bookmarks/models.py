@@ -23,13 +23,13 @@ class ReadingCategoryManager(models.Manager):
         return (
             super()
             .get_queryset()
-            .defer("created_at")
             .annotate(bookmarks_count=models.Count("bookmarks", distinct=True))
             .prefetch_related(
                 models.Prefetch(
                     "bookmarks", queryset=Article.statistic_objects.preview_data()
                 ),
             )
+            .order_by("-is_reading_list", "-created_at")
         )
 
 

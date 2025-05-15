@@ -31,7 +31,9 @@ class TestProfileFollowersEndpoint:
 
         # Arrange
         assert resp.status_code == status.HTTP_200_OK
-        serializer = FollowingSerializer(profile.followers.all(), many=True)
+        serializer = FollowingSerializer(
+            profile.followers.all().order_by("user__first_name"), many=True
+        )
 
         assert resp.data["results"] == serializer.data
 
@@ -56,6 +58,8 @@ class TestProfileFollowingEndpoint:
 
         # Arrange
         assert resp.status_code == status.HTTP_200_OK
-        serializer = FollowingSerializer(profile.following.all(), many=True)
+        serializer = FollowingSerializer(
+            profile.following.all().order_by("user__first_name"), many=True
+        )
 
         assert resp.data["results"] == serializer.data
