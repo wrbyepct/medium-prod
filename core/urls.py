@@ -1,3 +1,4 @@
+# ruff: noqa: ERA001
 """Project level urls."""
 
 from dj_rest_auth.views import PasswordResetConfirmView
@@ -51,7 +52,7 @@ urlpatterns += [
 ]
 
 
-if settings.DEBUG and not settings.IN_TEST:
-    from debug_toolbar.toolbar import debug_toolbar_urls
+# if settings.DEBUG and not settings.IN_TEST:
+#     from debug_toolbar.toolbar import debug_toolbar_urls
 
-    urlpatterns = urlpatterns + debug_toolbar_urls()
+#     urlpatterns = urlpatterns + debug_toolbar_urls()
