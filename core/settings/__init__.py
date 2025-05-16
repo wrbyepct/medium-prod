@@ -1,4 +1,4 @@
-# ruff: noqa: T201
+# ruff: noqa: T201, ERA001
 from __future__ import annotations
 
 from pathlib import Path
@@ -41,11 +41,11 @@ settings = [
 Dynamically change settings
 """
 
-if DEBUG:
-    project_settings = "local.py"
-    settings += [
-        "loggings.py",
-    ]
+# if DEBUG:
+#     project_settings = "local.py"
+#     settings += [
+#         "loggings.py",
+#     ]
 
 if IN_DOCKER:
     STATIC_ROOT = "/vol/api/staticfiles/"

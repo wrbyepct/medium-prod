@@ -3,7 +3,7 @@
 # ruff: noqa: ERA001
 from socket import gethostbyname, gethostname
 
-ADMINS = [("Jay", "test@test.com")]
+ADMINS = [("Jay", "seaweednick3738@gmail.com")]
 # TODO: add domain name for the production server
 CSRF_TRUSTED_ORIGINS: list = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 SECRET_KEY = env("DJANGO_SECRET_KEY")
@@ -57,3 +57,28 @@ ELASTICSEARCH_DSL = {
 
 # Admin URL
 ADMIN_URL = env("DJANGO_ADMIN_URL")
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",  # or DEBUG for full tracebacks
+            "propagate": False,
+        },
+    },
+}
+
+DEBUG = True
