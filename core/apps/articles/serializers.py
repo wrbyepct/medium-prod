@@ -137,10 +137,12 @@ class ArticleSerializer(serializers.ModelSerializer):
     def to_representation(self, instance: Article):
         """Return article's banner image relative urls instead of absolute one."""
         data = super().to_representation(instance)
-        try:
-            data["banner_image"] = instance.banner_image.url
-        except ValueError:
-            data["banner_image"] = "No image"
+
+        data["banner_image"] = (
+            getattr(instance.banner_image, "url", "No image")
+            if instance.banner_image
+            else "No image"
+        )
 
         return data
 
@@ -191,4 +193,4 @@ class ArticleSerializer(serializers.ModelSerializer):
             "updated_at",  # serializer method: read-only
             "author_info",  # nested info: read-only
         ]
-        read_onl_field = ["slug"]
+        read_only_fields = ["slug"]
