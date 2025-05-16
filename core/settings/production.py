@@ -17,16 +17,11 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["l27.0.0.1"])
 if env("AWS_EXECUTION_ENV"):
     ALLOWED_HOSTS.append(gethostbyname(gethostname()))
 
+ALB_HOST = env("ALB_HOST")
+if ALB_HOST:
+    ALLOWED_HOSTS.append(ALB_HOST)
 
 # AWS SES settings
-
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "email-smtp.ap-northeast-1.amazonaws.com"  # region must match SES
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-
-# EMAIL_HOST_USER = env("EMAIL_HOST_USER")  # IAM user access key id
-# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")  # Converted IAM user secret accessky
 
 DOMAIN = env("DOMAIN")
 

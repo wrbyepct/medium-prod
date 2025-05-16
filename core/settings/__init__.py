@@ -41,11 +41,11 @@ settings = [
 Dynamically change settings
 """
 
-# if DEBUG:
-#     project_settings = "local.py"
-#     settings += [
-#         "loggings.py",
-#     ]
+if DEBUG:
+    project_settings = "local.py"
+    settings += [
+        "loggings.py",
+    ]
 
 if IN_DOCKER:
     STATIC_ROOT = "/vol/api/staticfiles/"

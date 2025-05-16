@@ -147,6 +147,10 @@ resource "aws_ecs_task_definition" "api" {
           value = aws_route53_record.app.fqdn
         },
         {
+          name  = "ALB_HOST"
+          value = aws_lb.api.dns_name
+        },
+        {
           name  = "EMAIL_HOST"
           value = var.email_host
         },
@@ -278,6 +282,10 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "DOMAIN"
           value = aws_route53_record.app.fqdn
+        },
+        {
+          name  = "ALB_HOST"
+          value = aws_lb.api.dns_name
         },
         {
           name  = "EMAIL_HOST"
