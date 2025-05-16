@@ -55,6 +55,26 @@ resource "aws_iam_role_policy" "ssm_policy" {
   policy = file("${path.module}/template/ecs/ssm-role-policy.json")
 }
 
+resource "aws_iam_role_policy" "opensearch_access" {
+  name = "OpenSearchAccess"
+  role = aws_iam_role.app_task.name
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "es:ESHttpPut",
+          "es:ESHttpPost",
+          "es:ESHttpGet"
+        ],
+        Resource = "arn:aws:es:ap-northeast-1:${data.aws_caller_identity.current.account_id}:domain/${local.prefix}-es/*"
+      }
+    ]
+  })
+}
+
+
 ##
 # Fargate Task role policy - Use KMS to descrypt/encrypt files in EFS
 ##
@@ -137,6 +157,10 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "CELERY_BROKER"
           value = "redis://${aws_elasticache_replication_group.redis.primary_endpoint_address}:6379/0"
+        },
+        {
+          name  = "AWS_DEFAULT_REGION"
+          value = data.aws_region.current.name
         },
         {
           name  = "ELASTICSEARCH_URL"
@@ -274,6 +298,10 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "CELERY_BROKER"
           value = "redis://${aws_elasticache_replication_group.redis.primary_endpoint_address}:6379/0"
+        },
+        {
+          name  = "AWS_DEFAULT_REGION"
+          value = data.aws_region.current.name
         },
         {
           name  = "ELASTICSEARCH_URL"
