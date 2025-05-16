@@ -1,4 +1,4 @@
-# ruff: noqa: ERA001
+# ruff: noqa: ERA001git
 """Project level urls."""
 
 from dj_rest_auth.views import PasswordResetConfirmView
