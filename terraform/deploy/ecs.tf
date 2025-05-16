@@ -407,16 +407,6 @@ resource "aws_security_group" "ecs_service" {
     ]
   }
 
-  # Egress for OpenSearch(Elastic Search)
-  egress {
-    from_port = 9200
-    to_port   = 9200
-    protocol  = "tcp"
-    cidr_blocks = [
-      aws_subnet.private[0].cidr_block,
-      aws_subnet.private[1].cidr_block
-    ]
-  }
   egress {
     from_port   = 587
     to_port     = 587
