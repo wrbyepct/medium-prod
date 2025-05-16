@@ -45,7 +45,7 @@ SITE_NAME = "Medium Clone"
 ELASTICSEARCH_DSL = {
     "default": {
         "hosts": [
-            env("ELASTICSEARCH_URL"),
+            f"{env('ELASTICSEARCH_URL')}:443",
         ]
     }
 }
