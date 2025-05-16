@@ -3,6 +3,10 @@
 # ruff: noqa: ERA001
 from socket import gethostbyname, gethostname
 
+import boto3
+from elasticsearch import RequestsHttpConnection
+from requests_aws4auth import AWS4Auth
+
 ADMINS = [("Jay", "seaweednick3738@gmail.com")]
 # TODO: add domain name for the production server
 CSRF_TRUSTED_ORIGINS: list = env.list("CSRF_TRUSTED_ORIGINS", default=[])
@@ -30,7 +34,7 @@ EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
-EMAIL_FAIL_SILENTLY = False
+EMAIL_FAIL_SILENTLY = False  # TODO: Set to true when in full prod mode
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -40,13 +44,30 @@ DEFAULT_FROM_EMAIL = f"noreply@{DOMAIN}"
 SITE_NAME = "Medium Clone"
 
 
-# Elastic Search
+# AWS OpenSearch
+session = boto3.Session()
+credentials = session.get_credentials()
+region = env("AWS_DEFAULT_REGION")
+aws_auth = AWS4Auth(
+    credentials.access_key,
+    credentials.secret_key,
+    region,
+    "es",
+    session_token=credentials.token,
+)
 
 ELASTICSEARCH_DSL = {
     "default": {
         "hosts": [
-            f"{env('ELASTICSEARCH_URL')}:443",
-        ]
+            {
+                "host": env("ELASTICSEARCH_URL"),
+                "port": 443,
+            }
+        ],
+        "http_auth": aws_auth,
+        "use_ssl": True,
+        "verify_certs": True,
+        "connection_class": RequestsHttpConnection,
     }
 }
 
@@ -76,4 +97,4 @@ LOGGING = {
     },
 }
 
-DEBUG = True
+DEBUG = True  # TODO: Set to true when in full prod mode
