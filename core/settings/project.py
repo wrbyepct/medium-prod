@@ -38,6 +38,7 @@ REST_AUTH = {
     "REGISTER_SERIALIZER": "core.apps.user.serializers.CustomRegisterSerializer",
 }
 
+
 # allauth
 AUTHENTICATION_BACKENDS = {
     "allauth.account.auth_backends.AuthenticationBackend",
@@ -56,6 +57,10 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
+SIGNUP_FIELDS = {
+    "email": {"required": True},
+    "username": {"required": False},
+}
 
 # Doc
 SPECTACULAR_SETTINGS = {

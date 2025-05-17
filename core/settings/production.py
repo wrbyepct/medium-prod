@@ -57,12 +57,7 @@ aws_auth = AWS4Auth(
 
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": [
-            {
-                "host": env("ELASTICSEARCH_URL"),
-                "port": 443,
-            }
-        ],
+        "hosts": f"{env('ELASTICSEARCH_URL')}:443",
         "http_auth": aws_auth,
         "use_ssl": True,
         "verify_certs": True,
