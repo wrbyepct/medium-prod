@@ -128,6 +128,8 @@ module "vpc_endpoints" {
   security_group_ids = [aws_security_group.endpoint_access.id]
   route_table_ids    = [aws_route_table.private[0].id, aws_route_table.private[1].id]
 
+  ecs_service_dependency = aws_ecs_service.api.id
+
   interface_services = [
     "ecr.api",
     "ecr.dkr",

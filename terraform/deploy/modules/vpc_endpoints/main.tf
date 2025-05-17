@@ -24,6 +24,11 @@ variable "gateway_services" {
   default = []
 }
 
+variable "ecs_service_dependency" {
+  description = "Trigger dependency on ECS service"
+  type        = string
+}
+
 
 data "aws_region" "current" {}
 
@@ -38,7 +43,7 @@ resource "aws_vpc_endpoint" "interface_endpoints" {
   subnet_ids = var.subnet_ids
   security_group_ids = var.security_group_ids
   private_dns_enabled = true
-
+  depends_on = [var.ecs_service_dependency]
   tags = {
     Name = "${var.interface_services[count.index]}-endpoint"
   }
