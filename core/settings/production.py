@@ -8,7 +8,6 @@ from elasticsearch import RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 
 ADMINS = [("Jay", "seaweednick3738@gmail.com")]
-# TODO: add domain name for the production server
 CSRF_TRUSTED_ORIGINS: list = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 

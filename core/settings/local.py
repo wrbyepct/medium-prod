@@ -1,7 +1,6 @@
 # type: ignore
 """Local settings."""
 
-
 # ruff: noqa: T201, ANN001, D103
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
