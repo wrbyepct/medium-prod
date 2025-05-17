@@ -14,7 +14,7 @@ resource "aws_security_group" "es" {
 
 resource "aws_opensearch_domain" "es" {
   domain_name    = "${local.prefix}-es"
-  engine_version = "Elasticsearch_7.10"
+  engine_version = "OpenSearch_2.11"
   cluster_config {
     instance_type          = "t3.small.search"
     instance_count         = 1
