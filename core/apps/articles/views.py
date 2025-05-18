@@ -24,7 +24,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
 
     You can filter results by:
 
-        1. Full-text search fields(Elasticsarch):
+        1. Full-text search fields(Search Term: ?search=<your-query>):
             - title
             - description
             - body

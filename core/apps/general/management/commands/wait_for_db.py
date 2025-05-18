@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 conn.cursor()
                 break
             except (Psycopg2OpError, OperationalError) as e:
-                sys.stderr.write("Waiting for PostgreSQL to become available...\n")
+                sys.stdout.write("Waiting for PostgreSQL to become available...\n")
                 if time.time() - start > suggest_unrecoverable_after:
                     sys.stderr.write(
                         f"This is taking longer than expected, the following exception may be indicative of an unrecoverable error: '{e}'\n"

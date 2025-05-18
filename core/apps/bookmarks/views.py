@@ -41,6 +41,8 @@ class BookmarkCategoryCreateView(generics.CreateAPIView):
     Create a ReadingCategory.
 
     If article id is provided, add the article the reading category.
+
+    To provide aritcle id, append "?article_id=<article-id>"
     """
 
     serializer_class = ReadingCategorySerializer
