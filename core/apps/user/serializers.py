@@ -26,11 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
         city
     """
 
-    gender = serializers.CharField(source="profile.gender")
-    phone_number = PhoneNumberField(source="profile.phone_number")
+    gender = serializers.ReadOnlyField(source="profile.gender")
     profile_photo = serializers.ReadOnlyField(source="profile.profile_photo.url")
-    country = CountryField(source="profile.country")
-    city = serializers.CharField(source="profile.city")
+    city = serializers.ReadOnlyField(source="profile.city")
+    phone_number = PhoneNumberField(source="profile.phone_number", read_only=True)
+    country = CountryField(source="profile.country", read_only=True)
 
     class Meta:
         model = User
