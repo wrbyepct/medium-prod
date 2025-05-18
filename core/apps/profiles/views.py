@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 
 from .models import Profile, ProfileQuerySet
 from .paginations import ProfilePagination
-from .renderers import ProfileListRenderer, ProfileRenderer
 from .serializers import FollowingSerializer, ProfileSerializer, UpdateProfileSerializer
 from .services import FollowHandleService
 
@@ -21,14 +20,12 @@ class ProfileListAPIView(generics.ListAPIView):
     queryset = Profile.objects.all().join_user_table()
     serializer_class = ProfileSerializer
     pagination_class = ProfilePagination
-    renderer_classes = [ProfileListRenderer]
 
 
 class ProfileDetailAPIView(generics.RetrieveAPIView):
     """Profile detail API view."""
 
     serializer_class = ProfileSerializer
-    renderer_classes = [ProfileRenderer]
 
     def get_queryset(self):
         """
@@ -48,7 +45,6 @@ class ProfileUpdateAPIView(generics.UpdateAPIView):
     """Profile API view for partial update."""
 
     serializer_class = UpdateProfileSerializer
-    renderer_classes = [ProfileRenderer]
 
     def get_object(self):
         """
