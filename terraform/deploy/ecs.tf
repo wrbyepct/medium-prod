@@ -164,7 +164,7 @@ resource "aws_ecs_task_definition" "api" {
         },
         {
           name  = "ELASTICSEARCH_URL"
-          value = "https://${aws_opensearch_domain.es.endpoint}"
+          value = aws_opensearch_domain.es.endpoint
         },
         {
           name  = "DOMAIN"

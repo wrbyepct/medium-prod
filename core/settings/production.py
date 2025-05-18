@@ -4,10 +4,8 @@
 from socket import gethostbyname, gethostname
 
 import boto3
-from opensearch_dsl.connections import connections
 from opensearchpy import (
     AWSV4SignerAuth,
-    OpenSearch,
     RequestsHttpConnection,
 )
 
@@ -51,20 +49,25 @@ SITE_NAME = "Medium Clone"
 session = boto3.Session()
 credentials = session.get_credentials()
 region = env("AWS_DEFAULT_REGION")
-aws_auth = AWSV4SignerAuth(
-    credentials,
-    region,
-)
 
-client = OpenSearch(
-    hosts=[{"host": env("ELASTICSEARCH_URL"), "port": 443}],
-    http_auth=aws_auth,
-    use_ssl=True,
-    verify_certs=True,
-    connection_class=RequestsHttpConnection,
-)
-
-connections.add_connection("default", client)
+OPENSEARCH_DSL = {
+    "default": {
+        # Use your OpenSearch domain host and port:
+        "hosts": [
+            {
+                "host": env(
+                    "ELASTICSEARCH_URL"
+                ),  # e.g. "my-domainID.us-west-2.es.amazonaws.com"
+                "port": 443,
+            }
+        ],
+        # Provide AWS SigV4 auth with IAM credentials
+        "http_auth": AWSV4SignerAuth(credentials, region, service="es"),
+        "use_ssl": True,
+        "verify_certs": True,
+        "connection_class": RequestsHttpConnection,
+    }
+}
 
 # Admin URL
 ADMIN_URL = env("DJANGO_ADMIN_URL")
