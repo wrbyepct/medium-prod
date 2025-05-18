@@ -1,7 +1,7 @@
 # type: ignore
 """Local settings."""
 
-# ruff: noqa: T201, ANN001, D103
+# ruff: noqa: T201, ANN001, D103, ERA001
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
@@ -20,9 +20,9 @@ SITE_NAME = "Medium Clone"
 
 
 # Django debug toolbar
-if DEBUG and not IN_TEST:
-    INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # += can also be used
-    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+# if DEBUG and not IN_TEST:
+#     INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # += can also be used
+#     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 
 def show_toolbar(request):

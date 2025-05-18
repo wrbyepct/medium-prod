@@ -32,6 +32,10 @@ class UserSerializer(serializers.ModelSerializer):
     phone_number = PhoneNumberField(source="profile.phone_number", read_only=True)
     country = CountryField(source="profile.country", read_only=True)
 
+    email = serializers.EmailField(required=False)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+
     class Meta:
         model = User
         fields = [

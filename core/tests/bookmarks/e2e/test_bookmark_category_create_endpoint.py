@@ -90,3 +90,13 @@ class TestBookmarkCategoryCreateEndpoint:
 
         assert resp.status_code == status.HTTP_400_BAD_REQUEST
         assert ReadingCategory.objects.count() == 0
+
+    def test_create_new_cetegory_with_invalid_category_field_has_no_effect(
+        self, valid_data, authenticated_client
+    ):
+        """Test submit creat data with 'category' field included does not throw error."""
+        # Arrange
+        valid_data["category"] = ""
+        resp = authenticated_client.post(self.endpoint, data=valid_data)
+
+        assert resp.status_code == status.HTTP_201_CREATED
