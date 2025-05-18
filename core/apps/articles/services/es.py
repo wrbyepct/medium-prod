@@ -1,6 +1,6 @@
 """Elasticsearch service."""
 
-from django_elasticsearch_dsl import Document
+from django_opensearch_dsl import Document
 
 from core.apps.articles.documents import ArticleDocument
 

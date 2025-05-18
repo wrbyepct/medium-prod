@@ -34,12 +34,13 @@ flower = "^2.0.1"
 django-celery-email = "^3.0.0"
 django-stubs = "^5.1.1"
 django-allauth = "^65.2.0"
-dj-rest-auth = "^7.0.1"
 requests = "^2.32.3"
 django-cleanup = "^9.0.0"
 boto3 = "^1.38.17"
 requests-aws4auth = "^1.3.1"
 django-elasticsearch-dsl = "<8.0.0"
+django-opensearch-dsl = "^0.7.0"
+dj-rest-auth = "v7.0.0"
 
 
 [tool.poetry.group.dev]

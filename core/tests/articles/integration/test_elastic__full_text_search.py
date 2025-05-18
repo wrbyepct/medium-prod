@@ -38,8 +38,9 @@ def test_elasticsearch__full_text_search_article_content_correct(
 
     # Arrange: And register test doc with these 5 instances
     for instance in relevant_articles + irrelevant_articles:
-        MockArticleDocument().update(instance)
+        MockArticleDocument().update(instance, action="index")
 
+    MockArticleDocument._index.refresh()
     for field in ["title", "description", "body", "tags", "author"]:
         value = article_data[field]
         # When search through the instance by the value that relevant articles contain

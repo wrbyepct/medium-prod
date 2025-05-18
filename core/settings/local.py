@@ -38,7 +38,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # Elastic Search
 
-ELASTICSEARCH_DSL = {
+OPENSEARCH_DSL = {
     "default": {
         "hosts": [
             "http://es:9200",

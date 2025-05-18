@@ -3,7 +3,7 @@
 # ruff: noqa: ARG001, ANN001
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django_elasticsearch_dsl.registries import registry
+from django_opensearch_dsl.registries import registry
 
 from core.apps.articles.models import Article
 

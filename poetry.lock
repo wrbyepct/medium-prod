@@ -647,6 +647,21 @@ files = [
 toml = ["tomli"]
 
 [[package]]
+name = "dateutils"
+version = "0.6.12"
+description = "Various utilities for working with date and datetime objects"
+optional = false
+python-versions = "*"
+files = [
+    {file = "dateutils-0.6.12-py2.py3-none-any.whl", hash = "sha256:f33b6ab430fa4166e7e9cb8b21ee9f6c9843c48df1a964466f52c79b2a8d53b3"},
+    {file = "dateutils-0.6.12.tar.gz", hash = "sha256:03dd90bcb21541bd4eb4b013637e4f1b5f944881c46cc6e4b67a6059e370e3f1"},
+]
+
+[package.dependencies]
+python-dateutil = "*"
+pytz = "*"
+
+[[package]]
 name = "decli"
 version = "0.6.2"
 description = "Minimal, easy-to-use, declarative cli tool"
@@ -670,20 +685,20 @@ files = [
 
 [[package]]
 name = "dj-rest-auth"
-version = "7.0.1"
+version = "7.0.0"
 description = "Authentication and Registration in Django Rest Framework"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dj-rest-auth-7.0.1.tar.gz", hash = "sha256:3f8c744cbcf05355ff4bcbef0c8a63645da38e29a0fdef3c3332d4aced52fb90"},
+    {file = "dj-rest-auth-7.0.0.tar.gz", hash = "sha256:08dbc03a35223872da9f59bc2d7a71bec2e721aa69f7cdc84c7a329aeae1f86e"},
 ]
 
 [package.dependencies]
-Django = ">=4.2,<6.0"
+Django = ">=3.2,<6.0"
 djangorestframework = ">=3.13.0"
 
 [package.extras]
-with-social = ["django-allauth[socialaccount] (>=64.0.0)"]
+with-social = ["django-allauth (>=0.56.0,<0.62.0)"]
 
 [[package]]
 name = "django"
@@ -912,6 +927,23 @@ djangorestframework = "*"
 model-bakery = ">=1.0.0"
 
 [[package]]
+name = "django-opensearch-dsl"
+version = "0.7.0"
+description = "Wrapper around opensearch-py for django models"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django_opensearch_dsl-0.7.0.tar.gz", hash = "sha256:a7b899e2a8bdf87a983f49928cded23eb8f0012ca95081ab85238f63bab0f8e7"},
+]
+
+[package.dependencies]
+dateutils = "*"
+opensearch-py = ">=2.2.0"
+
+[package.extras]
+celery = ["celery (>=4.1.0)"]
+
+[[package]]
 name = "django-phonenumber-field"
 version = "8.1.0"
 description = "An international phone number field for django models."
@@ -1092,6 +1124,16 @@ six = "*"
 
 [package.extras]
 develop = ["coverage (<5.0.0)", "mock", "pytest (>=3.0.0)", "pytest-cov", "pytest-mock (<3.0.0)", "pytz", "sphinx", "sphinx-rtd-theme"]
+
+[[package]]
+name = "events"
+version = "0.5"
+description = "Bringing the elegance of C# EventHandler to Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Events-0.5-py3-none-any.whl", hash = "sha256:a7286af378ba3e46640ac9825156c93bdba7502174dd696090fdfcd4d80a1abd"},
+]
 
 [[package]]
 name = "execnet"
@@ -1483,6 +1525,30 @@ files = [
     {file = "nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9"},
     {file = "nodeenv-1.9.1.tar.gz", hash = "sha256:6ec12890a2dab7946721edbfbcd91f3319c6ccc9aec47be7c7e6b7011ee6645f"},
 ]
+
+[[package]]
+name = "opensearch-py"
+version = "2.8.0"
+description = "Python client for OpenSearch"
+optional = false
+python-versions = "<4,>=3.8"
+files = [
+    {file = "opensearch_py-2.8.0-py3-none-any.whl", hash = "sha256:52c60fdb5d4dcf6cce3ee746c13b194529b0161e0f41268b98ab8f1624abe2fa"},
+    {file = "opensearch_py-2.8.0.tar.gz", hash = "sha256:6598df0bc7a003294edd0ba88a331e0793acbb8c910c43edf398791e3b2eccda"},
+]
+
+[package.dependencies]
+certifi = ">=2024.07.04"
+Events = "*"
+python-dateutil = "*"
+requests = ">=2.32.0,<3.0.0"
+urllib3 = {version = ">=1.26.19,<2.2.0 || >2.2.0,<2.2.1 || >2.2.1,<3", markers = "python_version >= \"3.10\""}
+
+[package.extras]
+async = ["aiohttp (>=3.9.4,<4)"]
+develop = ["black (>=24.3.0)", "botocore", "coverage (<8.0.0)", "jinja2", "myst_parser", "pytest (>=3.0.0)", "pytest-cov", "pytest-mock (<4.0.0)", "pytz", "pyyaml", "requests (>=2.0.0,<3.0.0)", "sphinx", "sphinx_copybutton", "sphinx_rtd_theme"]
+docs = ["aiohttp (>=3.9.4,<4)", "myst_parser", "sphinx", "sphinx_copybutton", "sphinx_rtd_theme"]
+kerberos = ["requests_kerberos"]
 
 [[package]]
 name = "packaging"
@@ -2643,4 +2709,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ea4378c5121fc14741aaa5b4cf6747bd9de06291df80c3180f89097e6d5cbc50"
+content-hash = "b55255626bd7ada18073757f0c7d54cc20dc02d6eeef5d6f24ad8146a9a5c021"

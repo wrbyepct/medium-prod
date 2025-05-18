@@ -40,27 +40,20 @@ REST_AUTH = {
 
 
 # allauth
+# allauth
 AUTHENTICATION_BACKENDS = {
     "allauth.account.auth_backends.AuthenticationBackend",
     "django.contrib.auth.backends.ModelBackend",
 }
 
-ACCOUNT_LOGIN_METHODS = {"email"}
-
-ACCOUNT_SIGNUP_FIELDS = [
-    "email*",  # the asterisk * means required
-    "password1*",
-    "password2*",
-]
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = None
 
-SIGNUP_FIELDS = {
-    "email": {"required": True},
-    "username": {"required": False},
-}
 
 # Doc
 SPECTACULAR_SETTINGS = {

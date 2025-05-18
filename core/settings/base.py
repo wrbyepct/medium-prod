@@ -29,7 +29,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "taggit",
-    "django_elasticsearch_dsl",
+    "django_opensearch_dsl",
     "django_cleanup.apps.CleanupConfig",  # Automatically clean file if new one cleans up
 ]
 
