@@ -50,7 +50,8 @@ LOGGING = {
     },
 }
 
-ELASTICSEARCH_DSL = {
+
+OPENSEARCH_DSL = {
     "default": {
         "hosts": [
             "http://es:9200",
