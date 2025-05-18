@@ -12,6 +12,8 @@ from core.apps.articles.models import Article
 from core.apps.general.models import TimestampedModel
 from core.tools.hash import generate_hashed_slug
 
+from .constants import MAX_TITLE_LENGTH
+
 User = get_user_model()
 
 
@@ -36,7 +38,9 @@ class ReadingCategoryManager(models.Manager):
 class ReadingCategory(TimestampedModel):
     """BookmarCategory."""
 
-    title = models.CharField(validators=[MinLengthValidator(1)], max_length=60)
+    title = models.CharField(
+        validators=[MinLengthValidator(1)], max_length=MAX_TITLE_LENGTH
+    )
     slug = AutoSlugField(
         populate_from=generate_hashed_slug, always_update=True, unique=True
     )
