@@ -34,16 +34,20 @@ services:
 
   es: 
     container_name: es
-    image: elasticsearch:8.17.0
+    image: opensearchproject/opensearch:2.11.0
     environment:
-     - discovery.type=single-node
-     - xpack.security.enabled=false
-    #  - xpack.security.transport.ssl.enabled=false
-    #  - xpack.security.http.ssl.enabled=false
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - plugins.security.disabled=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     ports: 
      - "9200:9200"
     volumes:
-     - es_data:/usr/share/elasticsearch/data
+      - opensearch_data:/usr/share/opensearch/data
     networks:
      - medium-api
 
@@ -141,5 +145,5 @@ volumes:
   local_postgres_db: {}
   local_postgres_db_backups: {}
   flower_data: {}
-  es_data:
+  opensearch_data:
   

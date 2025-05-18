@@ -4,8 +4,12 @@
 from socket import gethostbyname, gethostname
 
 import boto3
-from elasticsearch import RequestsHttpConnection
-from requests_aws4auth import AWS4Auth
+from opensearch_dsl.connections import connections
+from opensearchpy import (
+    AWSV4SignerAuth,
+    OpenSearch,
+    RequestsHttpConnection,
+)
 
 ADMINS = [("Jay", "seaweednick3738@gmail.com")]
 CSRF_TRUSTED_ORIGINS: list = env.list("CSRF_TRUSTED_ORIGINS", default=[])
@@ -47,23 +51,20 @@ SITE_NAME = "Medium Clone"
 session = boto3.Session()
 credentials = session.get_credentials()
 region = env("AWS_DEFAULT_REGION")
-aws_auth = AWS4Auth(
-    credentials.access_key,
-    credentials.secret_key,
+aws_auth = AWSV4SignerAuth(
+    credentials,
     region,
-    "es",
-    session_token=credentials.token,
 )
 
-ELASTICSEARCH_DSL = {
-    "default": {
-        "hosts": f"{env('ELASTICSEARCH_URL')}:443",
-        "http_auth": aws_auth,
-        "use_ssl": True,
-        "verify_certs": True,
-        "connection_class": RequestsHttpConnection,
-    }
-}
+client = OpenSearch(
+    hosts=[{"host": env("ELASTICSEARCH_URL"), "port": 443}],
+    http_auth=aws_auth,
+    use_ssl=True,
+    verify_certs=True,
+    connection_class=RequestsHttpConnection,
+)
+
+connections.add_connection("default", client)
 
 # Admin URL
 ADMIN_URL = env("DJANGO_ADMIN_URL")

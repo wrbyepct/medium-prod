@@ -55,7 +55,7 @@ def test_user_register_serializer__save_method_return_user_instance(
 ):
     serializer = CustomRegisterSerializer(data=user_data)
 
-    assert serializer.is_valid()
+    assert serializer.is_valid(), serializer.errors
 
     user = serializer.save(mock_request)
 

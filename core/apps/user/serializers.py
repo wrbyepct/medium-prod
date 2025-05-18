@@ -62,9 +62,9 @@ class CustomRegisterSerializer(RegisterSerializer):
     """
 
     username = None
+    email = serializers.EmailField(required=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    email = serializers.CharField(required=True)
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
