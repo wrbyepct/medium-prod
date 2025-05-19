@@ -25,3 +25,26 @@ def test_user_endpoint__change_password__new_password_not_matching_with_400_resp
     }
     response = authenticated_client.post(reverse("rest_password_change"), password_info)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_user_endpoint__update_profile_have_no_effect(
+    authenticated_client,
+    normal_user,
+    create_profile_for_normal_user,
+):
+    profile = normal_user.profile
+
+    profile_data = {
+        "gender": "F",
+        "country": "Taiwan",
+        "phone_number": "+8869000000000",
+    }
+
+    response = authenticated_client.put(reverse("user_details"), profile_data)
+
+    assert response.status_code == status.HTTP_200_OK
+
+    profile.refresh_from_db()
+    assert profile.gender != profile_data["gender"]
+    assert profile.country != profile_data["country"]
+    assert profile.phone_number != profile_data["phone_number"]
