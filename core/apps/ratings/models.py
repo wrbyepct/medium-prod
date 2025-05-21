@@ -7,15 +7,9 @@ from django.db import models
 from core.apps.articles.models import Article
 from core.apps.general.models import TimestampedModel
 
+from .managers import RatingManager
+
 User = get_user_model()
-
-
-class RatingManager(models.Manager):
-    """Custom rating manager."""
-
-    def get_queryset(self):
-        """Get rating queryset joining table fo user and article."""
-        return super().get_queryset().select_related("user", "article")
 
 
 class Rating(TimestampedModel):
