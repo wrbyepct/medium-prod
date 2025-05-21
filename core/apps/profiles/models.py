@@ -15,50 +15,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 from core.apps.general.models import TimestampedModel
 from core.tools.image import generate_file_path
 
+from .managers import ProfileManager
+
 upload_to = partial(generate_file_path, app_name="profiles")
 
 User = get_user_model()
-
-
-class ProfileQuerySet(models.QuerySet):
-    """Custom Profile queryset."""
-
-    def join_user_table(self):
-        """Return qs by joining table with user."""
-        return self.select_related("user")
-
-    def follow_preview_info(self):
-        """
-        Get only the necessary columns for follower/following info.
-
-        Columns:
-           - "profile_photo"
-           - "about_me"
-           - "twitter_handle"
-           - "user__first_name"
-           - "user__last_name"
-
-        By selecting joined table from user.
-        """
-        return (
-            self.join_user_table()
-            .only(
-                "profile_photo",
-                "about_me",
-                "twitter_handle",
-                "user__first_name",
-                "user__last_name",
-            )
-            .order_by("user__first_name")
-        )
-
-
-class ProfileManager(models.Manager):
-    """Custom profile manager."""
-
-    def get_queryset(self):
-        """Get orignal qs."""
-        return ProfileQuerySet(model=self.model, using=self._db)
 
 
 """

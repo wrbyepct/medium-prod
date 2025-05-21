@@ -32,7 +32,6 @@ class UserSerializer(serializers.ModelSerializer):
     phone_number = PhoneNumberField(source="profile.phone_number", read_only=True)
     country = CountryField(source="profile.country", read_only=True)
 
-    email = serializers.EmailField(required=False)
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
 
@@ -49,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
             "country",
             "city",
         ]
+        read_only_fields = ["email"]
 
     def to_representation(self, instance):  # noqa: ANN001
         """Add 'admin' boolean field if the user is superuser."""

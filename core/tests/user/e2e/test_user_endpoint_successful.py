@@ -61,7 +61,7 @@ def test_user_view__update_user_detail_successful(authenticated_client, normal_u
     resp = authenticated_client.patch(reverse("user_details"), data=new_data)
 
     assert resp.status_code == status.HTTP_200_OK
-    assert normal_user.email == new_data["email"]
+    assert normal_user.email != new_data["email"]  # Cannot udate email
     assert normal_user.first_name == new_data["first_name"]
     assert normal_user.last_name == new_data["last_name"]
 
