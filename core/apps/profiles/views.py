@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.views import APIView
 
-from .models import Profile, ProfileQuerySet
+from .models import Profile
 from .paginations import ProfilePagination
 from .serializers import FollowingSerializer, ProfileSerializer, UpdateProfileSerializer
 from .services import FollowHandleService
@@ -78,7 +78,7 @@ class BaseFollowListView(generics.ListAPIView):
         profile = get_object_or_404(Profile, id=profile_id)
 
         follow_type = self.follow_type
-        qs: ProfileQuerySet = getattr(profile, follow_type).all()
+        qs = getattr(profile, follow_type).all()
         return qs.follow_preview_info()
 
 

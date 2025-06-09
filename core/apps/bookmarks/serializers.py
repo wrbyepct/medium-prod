@@ -8,8 +8,7 @@ from rest_framework import serializers
 from core.apps.articles.models import Article
 from core.apps.articles.serializers import ArticlePreviewSerializer
 
-from .constants import MAX_TITLE_LENGTH
-from .exceptions import TitleEmptyError, TitleTooLongError
+from .exceptions import TitleEmptyError
 from .models import ReadingCategory
 
 
@@ -35,8 +34,6 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    title = serializers.CharField(required=False)
-
     bookmarks = BookmarkSerializer(many=True, read_only=True)
     bookmarks_count = serializers.IntegerField(read_only=True)
 
@@ -54,12 +51,7 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
             "bookmarks",
         ]
         read_only_fields = ["id", "slug"]
-
-    def validate_title(self, value):
-        """Validate too long."""
-        if len(value) > MAX_TITLE_LENGTH:
-            raise TitleTooLongError
-        return value
+        extra_kwargs = {"title": {"required": False}}
 
     def create(self, validated_data):
         """
