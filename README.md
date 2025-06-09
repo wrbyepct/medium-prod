@@ -1,81 +1,80 @@
-🎯 Project Objectives
+# 🎯 Project Objectives
 This project is designed to simulate a real-world API development and deployment environment. It emphasizes scalable architecture, DRF best practices, cloud deployment, and automation.
 
-🧱 Build a Medium-like REST API using Django REST Framework
+- 🧱 Build a Medium-like REST API using Django REST Framework
 
-🐳 Containerize the project using Docker
+- 🐳 Containerize the project using Docker
 
-🌐 Use NGINX as a reverse proxy for serving static/media files
+- 🌐 Use NGINX as a reverse proxy for serving static/media files
 
-🧪 Follow test-driven development (TDD) using pytest
+- 🧪 Follow test-driven development (TDD) using pytest
 
-🔍 Enforce code quality via pre-commit, linters, and formatters
+- 🔍 Enforce code quality via pre-commit, linters, and formatters
 
-⚙️ Practice DevOps with:
+- ⚙️ Practice DevOps with:
 
-Terraform (Infrastructure as Code)
+    - Terraform (Infrastructure as Code)
 
-GitHub Actions (CI/CD)
+    - GitHub Actions (CI/CD)
 
-AWS Cloud Deployment:
+    - AWS Cloud Deployment:
 
-VPC with public/private subnets across 2 AZs
+    - VPC with public/private subnets across 2 AZs
 
-RDS (PostgreSQL) for relational data
+    - RDS (PostgreSQL) for relational data
 
-ECS + ECR for containerized, serverless deployments
+    - ECS + ECR for containerized, serverless deployments
 
-ALB for routing and SSL
+    - ALB for routing and SSL
 
-Route53 + HTTPS via custom domain
+    - Route53 + HTTPS via custom domain
 
-📨 Add auxiliary services:
+- 📨 Add auxiliary services:
 
-Amazon SES for email notifications
+    - Amazon SES for email notifications
 
-OpenSearch for advanced article search
+    - OpenSearch for advanced article search
 
-ElastiCache (Redis) for asynchronous task queue with Celery
+    - ElastiCache (Redis) for asynchronous task queue with Celery
 
-🧩 Features
-📚 Articles
-Users can create, read, update, delete their own articles
+# 🧩 Features
+## 📚 Articles
+- Users can create, read, update, delete their own articles
 
-Articles can be rated (1–5 stars)
+- Articles can be rated (1–5 stars)
 
-💬 Responses
-Nestable replies to articles or responses
+## 💬 Responses
+- Nestable replies to articles or responses
 
-Users can edit/delete their own replies
+- Users can edit/delete their own replies
 
-🔖 Bookmarks
-Users have a default Reading List
+##🔖 Bookmarks
+- Users have a default Reading List
 
-Can create custom bookmark categories
+- Can create custom bookmark categories
 
-Bookmark articles into their categories
+- Bookmark articles into their categories
 
-⭐ Ratings
-Rate any article on a 1–5 scale
+## ⭐ Ratings
+- Rate any article on a 1–5 scale
 
-🙍‍♂️ Profiles
-Auto-created at signup
+## 🙍‍♂️ Profiles
+- Auto-created at signup
 
-Editable name, bio, and other details
+- Editable name, bio, and other details
 
-👥 Followers
-Follow/unfollow other users
+## 👥 Followers
+- Follow/unfollow other users
 
-View followers and followees
+- View followers and followees
 
-📨 Notifications (via Celery + SES)
-Get notified when someone follows you
+## 📨 Notifications (via Celery + SES)
+- Get notified when someone follows you
 
-⚙️ Tech Stack
-Layer	Tools Used
-Backend	Django, DRF, PostgreSQL
-Queue	Celery + Redis (ElastiCache)
-Infra	Terraform, ECS Fargate, RDS, ALB, ECR, Route53
-CI/CD	GitHub Actions
-Security	HTTPS, VPC isolation, IAM roles
-Extra	OpenSearch (search), Amazon SES (email), Docker Compose (local dev)
+#⚙️ Tech Stack
+- Backend:	Django, DRF, PostgreSQL
+- Queue:	Celery + Redis (ElastiCache)
+- Infra:	Terraform, ECS Fargate, RDS, ALB, ECR, Route53
+- CI/CD:	GitHub Actions
+- Security:	HTTPS, VPC isolation, IAM roles
+- Extra:	OpenSearch (search), Amazon SES (email), Docker Compose (local dev)
