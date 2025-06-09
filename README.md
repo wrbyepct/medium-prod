@@ -78,3 +78,20 @@ This project is designed to simulate a real-world API development and deployment
 - CI/CD:	GitHub Actions
 - Security:	HTTPS, VPC isolation, IAM roles
 - Extra:	OpenSearch (search), Amazon SES (email), Docker Compose (local dev)
+- 
+# 🛠️ How to user(Local Development)
+git clone https://github.com/wrbyepct/medium-prod.git
+cd medium-prod
+
+# Install package
+poetry install
+
+# Create environment file
+cp .example.envs .envs  # fill in values in .django .postgres
+
+# Start services
+docker-compose up --build
+
+# Run migrations
+docker-compose exec web python -m core.manage migrate
+
