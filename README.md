@@ -48,7 +48,7 @@ This project is designed to simulate a real-world API development and deployment
 
 - Users can edit/delete their own replies
 
-##🔖 Bookmarks
+## 🔖 Bookmarks
 - Users have a default Reading List
 
 - Can create custom bookmark categories
@@ -71,7 +71,7 @@ This project is designed to simulate a real-world API development and deployment
 ## 📨 Notifications (via Celery + SES)
 - Get notified when someone follows you
 
-#⚙️ Tech Stack
+# ⚙️ Tech Stack
 - Backend:	Django, DRF, PostgreSQL
 - Queue:	Celery + Redis (ElastiCache)
 - Infra:	Terraform, ECS Fargate, RDS, ALB, ECR, Route53
@@ -79,19 +79,33 @@ This project is designed to simulate a real-world API development and deployment
 - Security:	HTTPS, VPC isolation, IAM roles
 - Extra:	OpenSearch (search), Amazon SES (email), Docker Compose (local dev)
 - 
-# 🛠️ How to user(Local Development)
+# 🛠️ How to Use(Local Development)
+## Prerequisites
+- Docker
+- Poetry
+
+## Clone the project
+~~~
 git clone https://github.com/wrbyepct/medium-prod.git
+~~~
+~~~
 cd medium-prod
+~~~
 
-# Install package
+## Install package
+~~~
 poetry install
-
-# Create environment file
+~~~
+## Create environment file
+~~~
 cp .example.envs .envs  # fill in values in .django .postgres
+~~~
 
-# Start services
+## Start services
+~~~
 docker-compose up --build
-
-# Run migrations
+~~~
+## Run migrations
+~~~
 docker-compose exec web python -m core.manage migrate
-
+~~~
