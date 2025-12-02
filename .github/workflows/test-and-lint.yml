@@ -53,7 +53,7 @@ jobs:
       - name: Check pip cache
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pip
+          path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pip-${{ hashFiles('**/.pre-commit-config.yaml') }}
      
       - name: Install pre-commit
