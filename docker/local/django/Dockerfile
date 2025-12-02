@@ -1,9 +1,9 @@
-ARG PYTHON_VERSION=3.11.4-slim-buster
+ARG PYTHON_VERSION=3.11.4-slim-bookworm
 
-FROM python:${PYTHON_VERSION} as python
+FROM python:${PYTHON_VERSION} AS python
 
 
-FROM python as builder
+FROM python AS builder
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && poetry install --no-root --no-ansi --with dev
 
 
-FROM python as runner
+FROM python AS runner
 ARG APP_HOME=/app \
     VOLUME_DIR=/vol
 
