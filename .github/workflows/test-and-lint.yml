@@ -67,7 +67,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: 
-      image: python:3.11.4-slim-buster
+      image: python:3.11.4-slim-bookworm
       credentials:
         username: ${{ vars.DOCKERHUB_USER }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
