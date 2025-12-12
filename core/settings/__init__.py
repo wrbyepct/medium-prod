@@ -19,6 +19,8 @@ APP_DIR = ROOT_DIR / "apps"
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
 IN_DOCKER = env.bool("IN_DOCKER", default=False)
+IN_DEV = env.bool("IN_DEV", default=False)
+
 IN_TEST = env.bool("IN_TEST", default=False)
 IN_GITHUB = env.bool("IN_GITHUB", default=False)
 

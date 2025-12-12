@@ -78,10 +78,9 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_route_table" "private" {
-  count  = length(aws_subnet.private)
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${local.prefix}-private-rt-${data.aws_availability_zones.available.names[count.index]}"
+    Name = "${local.prefix}-private-rt"
   }
 
 }
@@ -89,7 +88,7 @@ resource "aws_route_table" "private" {
 resource "aws_route_table_association" "private" {
   count          = length(aws_subnet.private)
   subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private[count.index].id
+  route_table_id = aws_route_table.private.id
 }
 
 
@@ -126,7 +125,7 @@ module "vpc_endpoints" {
   vpc_id             = aws_vpc.main.id
   subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
   security_group_ids = [aws_security_group.endpoint_access.id]
-  route_table_ids    = [aws_route_table.private[0].id, aws_route_table.private[1].id]
+  route_table_ids    = [aws_route_table.private.id]
 
   ecs_service_dependency = aws_ecs_service.api.id
 

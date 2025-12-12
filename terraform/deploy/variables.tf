@@ -75,10 +75,6 @@ variable "celery_broker_url" {
   description = "Redis Celery Broker URL"
 }
 
-variable "domain" {
-  description = "Django API Domain name"
-}
-
 
 variable "csrf_trusted_origins" {
   description = "CSRF trusted Origins for Django API"

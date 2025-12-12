@@ -63,9 +63,9 @@ OPENSEARCH_DSL = {
         ],
         # Provide AWS SigV4 auth with IAM credentials
         "http_auth": AWSV4SignerAuth(credentials, region, service="es"),
-        "use_ssl": True,
-        "verify_certs": True,
-        "connection_class": RequestsHttpConnection,
+        "use_ssl": True,  # Use https
+        "verify_certs": True,  # verify domain cert on OpenSearch
+        "connection_class": RequestsHttpConnection,  # allow es to use http request
     }
 }
 

@@ -76,33 +76,6 @@ resource "aws_iam_role_policy" "opensearch_access" {
 
 
 ##
-# Fargate Task role policy - Use KMS to descrypt/encrypt files in EFS
-##
-
-
-resource "aws_iam_role_policy" "ecs_kms_access" {
-  name = "ECSKMSAccess"
-  role = aws_iam_role.app_task.name
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect : "Allow",
-        Action : [
-          "kms:Decrypt",
-          "kms:Encrypt",
-          "kms:ReEncrypt*",
-          "kms:GenerateDataKey*",
-          "kms:DescribeKey"
-        ],
-        Resource : aws_kms_key.efs.arn
-      }
-    ]
-  })
-}
-
-
-##
 # CloudWatch log Group 
 ##
 resource "aws_cloudwatch_log_group" "ecs_task_logs" {
@@ -371,7 +344,7 @@ resource "aws_ecs_task_definition" "api" {
 
       authorization_config {
         access_point_id = aws_efs_access_point.media.id
-        iam             = "ENABLED" # for kms decrypt in efs
+        iam             = "DISABLED" # for kms decrypt in efs
       }
     }
   }
@@ -406,9 +379,9 @@ resource "aws_security_group" "ecs_service" {
     from_port = 5432
     to_port   = 5432
     protocol  = "tcp"
-    cidr_blocks = [
+    security_groups = [
       aws_subnet.private[0].cidr_block,
-      aws_subnet.private[1].cidr_block
+      aws_subnet.private[1].cidr_block,
     ]
   }
 
