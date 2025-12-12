@@ -44,19 +44,20 @@ resource "aws_db_instance" "main" {
   username = var.db_username
   password = var.db_password
 
-  allocated_storage = 20 # GB
-  storage_type      = "gp3"
-
   engine                     = "postgres"
   engine_version             = "17.5"
   auto_minor_version_upgrade = true
 
-  skip_final_snapshot     = true  # in real project, we do want a bakcup when destroy the db
-  backup_retention_period = 0     # in real project, we want to a backup for a period of time
-  multi_az                = false # in real project, enable this for resilence, but here we try to keep the cost low 
-  # deletion_protection = true    # Uncommen it in produciton
-  db_subnet_group_name   = aws_db_subnet_group.main.name
+  allocated_storage = 20 # GB
+  storage_type      = "gp3"
+
+  skip_final_snapshot     = true # in real project, we do want a bakcup when destroy the db
+  backup_retention_period = 0    # in real project, we want a backup for a period of time
+  # deletion_protection = true    # Uncomment it in produciton
+
   vpc_security_group_ids = [aws_security_group.rds.id]
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  multi_az               = false # in real project, enable this for resilence, but here we try to keep the cost low 
 
   tags = {
     Name = "${local.prefix}-rds-instance"
