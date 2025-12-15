@@ -30,15 +30,8 @@ if ALB_HOST:
 
 DOMAIN = env("DOMAIN")
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-
-EMAIL_FAIL_SILENTLY = False  # TODO: Set to true when in full prod mode
-
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = "django_ses.SESBackend"
+AWS_SES_REGION_NAME = env("AWS_DEFAULT_REGION")
 DEFAULT_FROM_EMAIL = f"noreply@{DOMAIN}"
 
 
