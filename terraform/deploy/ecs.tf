@@ -52,13 +52,19 @@ resource "aws_iam_role" "app_task" {
 resource "aws_iam_role_policy" "ses_policy" {
   name = "SESPolicy"
   role = aws_iam_role.app_task.name
+
   policy = jsonencode({
-    "Effect" : "Allow",
-    "Action" : [
-      "ses:SendEmail",
-      "ses:SendRawEmail"
-    ],
-    "Resource" : "*"
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ]
+        Resource = "*"
+      }
+    ]
   })
 }
 
