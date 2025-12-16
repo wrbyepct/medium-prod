@@ -108,13 +108,7 @@ resource "aws_security_group" "endpoint_access" {
     protocol    = "tcp"
     cidr_blocks = [aws_vpc.main.cidr_block]
   }
-  # For SMTP email to SES
-  ingress {
-    from_port   = 587
-    to_port     = 587
-    protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
-  }
+
 
 }
 
@@ -134,7 +128,7 @@ module "vpc_endpoints" {
     "ecr.dkr",
     "logs",
     "ssmmessages",
-    "email-smtp"
+    "email"
   ]
 
   gateway_services = ["s3"]
