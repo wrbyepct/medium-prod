@@ -406,13 +406,6 @@ resource "aws_security_group" "ecs_service" {
     ]
   }
 
-  egress {
-    from_port   = 587
-    to_port     = 587
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   # For ECS to access vpc endpoints
   egress {
     from_port   = 443

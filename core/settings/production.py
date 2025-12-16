@@ -13,7 +13,7 @@ ADMINS = [("Jay", "seaweednick3738@gmail.com")]
 CSRF_TRUSTED_ORIGINS: list = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["l27.0.0.1"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["127.0.0.1"])
 
 
 # Dynamically get the host address if we are running on ECS.
