@@ -45,6 +45,22 @@ resource "aws_iam_role" "app_task" {
 
 }
 
+##
+# Fargate Task Role Policy - Allow ECS task to use SES to sen mails
+##
+
+resource "aws_iam_role_policy" "ses_policy" {
+  name = "SESPolicy"
+  role = aws_iam_role.app_task.name
+  policy = jsonencode({
+    "Effect" : "Allow",
+    "Action" : [
+      "ses:SendEmail",
+      "ses:SendRawEmail"
+    ],
+    "Resource" : "*"
+  })
+}
 
 ##
 # Fargate Task role policy - Allow connect to System Service Manager 
@@ -146,18 +162,6 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "ALB_HOST"
           value = aws_lb.api.dns_name
-        },
-        {
-          name  = "EMAIL_HOST"
-          value = var.email_host
-        },
-        {
-          name  = "EMAIL_HOST_USER"
-          value = var.smtp_username
-        },
-        {
-          name  = "EMAIL_HOST_PASSWORD"
-          value = var.smtp_password
         },
         {
           name  = "CSRF_TRUSTED_ORIGINS"
@@ -287,18 +291,6 @@ resource "aws_ecs_task_definition" "api" {
         {
           name  = "ALB_HOST"
           value = aws_lb.api.dns_name
-        },
-        {
-          name  = "EMAIL_HOST"
-          value = var.email_host
-        },
-        {
-          name  = "EMAIL_HOST_USER"
-          value = var.smtp_username
-        },
-        {
-          name  = "EMAIL_HOST_PASSWORD"
-          value = var.smtp_password
         },
         {
           name  = "CSRF_TRUSTED_ORIGINS"
