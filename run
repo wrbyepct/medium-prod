@@ -134,7 +134,7 @@ tf-fmt() {
 }
 
 tf-validate() {
-    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 fmt
+    docker-compose -f terraform/tf.yml run --rm terraform -chdir=$1 validate
 }
 
 

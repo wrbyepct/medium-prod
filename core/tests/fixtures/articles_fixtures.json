@@ -1,0 +1,302 @@
+[
+  {
+    "model": "articles.article",
+    "pk": 1,
+    "fields": {
+      "title": "Kent Beck's Code Simplification Process",
+      "slug": "kent-becks-code-simplification-process",
+      "description": "Make it work, make it right, make it fast - the proper order for building software that matters.",
+      "body": "## Kent Beck's Code Simplification Process\n\n1. Make it work\n2. Make it right\n3. Make it fast\n\nMost developers start at step 3. But premature optimization kills clarity. You can't optimize what you don't understand, and you can't understand what doesn't work yet.\n\n### The Three Steps Explained\n\n**Step 1: Make it work** - Get a working solution, even if it's ugly. Prove the concept works.\n\n**Step 2: Make it right** - Refactor for clarity, maintainability, and correctness. Clean up the mess.\n\n**Step 3: Make it fast** - Only now should you optimize. Profile first, then optimize the bottlenecks.\n\n### Why This Order Matters\n\nPremature optimization is the root of all evil. You can't optimize what you don't understand, and you can't understand what doesn't work yet. Working code that's slow can be profiled and optimized. Perfect code that doesn't work is worthless.",
+      "tags": ["coding", "best-practices", "optimization", "software-development"],
+      "author": 2,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 2,
+    "fields": {
+      "title": "Dieter Rams' Design Philosophy",
+      "slug": "dieter-rams-design-philosophy",
+      "description": "Less but better - the minimalist approach to creating products that last.",
+      "body": "## Dieter Rams' Design Philosophy\n\n1. Remove every element\n2. Add back only what serves the user's core need\n3. Remove decoration\n4. Reduce to essence\n\nGood design isn't adding features. It's having the discipline to say no to everything except what matters.\n\n### The Subtractive Method\n\nMost designers add. Great designers subtract. Start with everything, then remove until you can't remove anymore without losing function.\n\n### Application in Software\n\nThis applies to UI/UX design perfectly:\n- Remove every button, field, and option\n- Add back only what users actually need\n- Remove decorative elements that don't serve function\n- What remains is the essence\n\n### The Result\n\nProducts that are timeless, intuitive, and last decades. Rams' designs from the 1960s still look modern today.",
+      "tags": ["design", "minimalism", "product-development", "ux"],
+      "author": 3,
+      "created_at": "2024-01-15T11:00:00Z",
+      "updated_at": "2024-01-15T11:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 3,
+    "fields": {
+      "title": "Jeff Bezos' Meeting Framework",
+      "slug": "jeff-bezos-meeting-framework",
+      "description": "Ban PowerPoint and use narrative memos to expose fuzzy thinking.",
+      "body": "## Jeff Bezos' Meeting Framework\n\n1. Ban PowerPoint\n2. Write a 6-page narrative memo\n3. Spend 20 minutes in silence reading it\n4. Then discuss\n\nIf you can't write it clearly, you don't understand it. Slides hide fuzzy thinking. Narratives expose it.\n\n### Why PowerPoint Fails\n\nBullet points allow you to skip the hard work of thinking:\n- \"Increase revenue\" sounds good, but HOW?\n- \"Improve customer satisfaction\" is vague without specifics\n- Slides let you hand-wave past the details\n\n### Why Narratives Work\n\nWriting in complete sentences forces clarity:\n- You must connect ideas logically\n- You can't hide behind ambiguity\n- Readers catch gaps in logic immediately\n\n### The Silent Reading\n\nEveryone reads at their own pace. No presenter bias. Everyone starts the discussion from the same understanding.",
+      "tags": ["productivity", "communication", "decision-making", "leadership"],
+      "author": 4,
+      "created_at": "2024-01-15T12:00:00Z",
+      "updated_at": "2024-01-15T12:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 4,
+    "fields": {
+      "title": "Richard Feynman's Learning Algorithm",
+      "slug": "richard-feynmans-learning-algorithm",
+      "description": "If you can't explain it simply, you don't understand it well enough.",
+      "body": "## Richard Feynman's Learning Algorithm\n\n1. Pick a concept you want to understand\n2. Teach it to a 12-year-old\n3. Identify gaps where you struggle\n4. Go back to source material\n5. Simplify and use analogies\n\nIf you can't explain it simply, you don't understand it well enough.\n\n### The Feynman Technique\n\nFeynman was famous for explaining quantum mechanics using simple analogies. He believed that true understanding meant being able to explain complex ideas in simple terms.\n\n### Why Teaching Works\n\nWhen you try to teach:\n- You discover what you actually don't know\n- You're forced to organize information logically\n- You must find clear examples\n- You learn 2x faster than passive studying\n\n### The 12-Year-Old Test\n\nIf a smart 12-year-old can't follow your explanation, you're either:\n1. Using jargon as a crutch\n2. Don't understand it yourself\n3. Haven't found the right analogy yet",
+      "tags": ["learning", "teaching", "understanding", "education"],
+      "author": 2,
+      "created_at": "2024-01-15T13:00:00Z",
+      "updated_at": "2024-01-15T13:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 5,
+    "fields": {
+      "title": "David Allen's GTD Task Processing",
+      "slug": "david-allens-gtd-task-processing",
+      "description": "Your mind is for having ideas, not holding them. Empty your mental RAM.",
+      "body": "## David Allen's GTD Task Processing\n\n1. Capture everything\n2. Clarify: is it actionable?\n3. If no → trash, reference, or someday\n4. If yes → do it (2 min), delegate, or defer\n5. Never use your brain as storage\n\nYour mind is for having ideas, not holding them. The RAM of your brain should be empty.\n\n### The Core Insight\n\nYour brain is terrible at remembering things but excellent at processing them. Every incomplete task you're trying to remember creates mental drag.\n\n### The Capture Habit\n\nCapture EVERYTHING into a trusted system:\n- Ideas\n- Tasks\n- Commitments\n- Things to remember\n\nOnce captured, your mind lets go.\n\n### The Two-Minute Rule\n\nIf it takes less than 2 minutes, do it now. The overhead of tracking it is higher than just doing it.\n\n### The Weekly Review\n\nOnce a week, process your inbox. This is where the magic happens - turning chaos into clear next actions.",
+      "tags": ["productivity", "organization", "time-management", "systems"],
+      "author": 3,
+      "created_at": "2024-01-15T14:00:00Z",
+      "updated_at": "2024-01-15T14:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 6,
+    "fields": {
+      "title": "John Boyd's OODA Loop",
+      "slug": "john-boyds-ooda-loop",
+      "description": "Speed through the decision loop beats perfection. Make good decisions fast, not perfect decisions slow.",
+      "body": "## John Boyd's OODA Loop (Military Strategy)\n\n1. Observe (gather data)\n2. Orient (analyze context)\n3. Decide (choose action)\n4. Act (execute)\n\nSpeed through the loop beats perfection. Make a good decision fast, not a perfect decision slow.\n\n### The Military Origin\n\nBoyd developed this framework studying fighter pilot dogfights. The pilot who could cycle through OODA faster won, even with inferior equipment.\n\n### Why Speed Matters\n\nIn business and life:\n- Markets change faster than strategic planning\n- Perfect information never arrives\n- Action creates information\n- Fast iteration beats slow perfection\n\n### Getting Inside the Loop\n\nIf you complete your OODA loop faster than your competition, you're always one step ahead. They're reacting to your last move while you're already on your next.\n\n### Application in Startups\n\nBuild → Measure → Learn, faster than anyone else. Speed of iteration is competitive advantage.",
+      "tags": ["decision-making", "strategy", "productivity", "execution"],
+      "author": 4,
+      "created_at": "2024-01-15T15:00:00Z",
+      "updated_at": "2024-01-15T15:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 7,
+    "fields": {
+      "title": "Ray Dalio's Radical Transparency",
+      "slug": "ray-dalios-radical-transparency",
+      "description": "Don't treat symptoms. Build systems that prevent problems from recurring.",
+      "body": "## Ray Dalio's Radical Transparency\n\n1. State the problem explicitly\n2. Identify root cause (not symptoms)\n3. Design a system change (not a one-time fix)\n4. Measure if it actually worked\n\nDon't treat symptoms. Don't solve the same problem twice. Build machines that prevent problems.\n\n### The Five Whys\n\nKeep asking \"why\" until you hit the root cause:\n- \"Why did the deploy fail?\" → The test didn't catch the bug\n- \"Why didn't the test catch it?\" → We don't test that code path\n- \"Why don't we test it?\" → No one added tests when the feature was built\n- \"Why weren't tests required?\" → No policy requiring test coverage\n- \"Why no policy?\" → **Root cause: No system for enforcing quality**\n\n### System > Symptom\n\nBad: \"Let's be more careful next time\"\nGood: \"Let's add automated checks that prevent this class of errors\"\n\n### Measure Everything\n\nIf you can't measure the problem, you can't know if your fix worked. Track metrics before and after the system change.",
+      "tags": ["problem-solving", "systems-thinking", "management", "continuous-improvement"],
+      "author": 2,
+      "created_at": "2024-01-15T16:00:00Z",
+      "updated_at": "2024-01-15T16:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 8,
+    "fields": {
+      "title": "Donald Knuth's Optimization Wisdom",
+      "slug": "donald-knuths-optimization-wisdom",
+      "description": "Premature optimization is the root of all evil. Profile first, optimize the 3% that matters.",
+      "body": "## Donald Knuth's Optimization Wisdom\n\n1. Profile first (measure, don't guess)\n2. Find the actual bottleneck\n3. Optimize only that 3% of code\n4. Ignore the other 97%\n\n\"Premature optimization is the root of all evil.\" Most code doesn't need to be fast. Find the code that does.\n\n### The 97% Rule\n\nIn most programs, 97% of the code has negligible impact on performance. Only 3% matters. But which 3%?\n\n### Humans Are Terrible Guessers\n\nDevelopers consistently guess wrong about bottlenecks:\n- \"This loop must be slow\" → Actually runs 10 times\n- \"This is trivial\" → Actually called 10 million times\n\n### Profile-Driven Optimization\n\n1. Write clean, simple code first\n2. Profile with real data\n3. Find the actual hot path\n4. Optimize ONLY that\n5. Profile again to verify improvement\n\n### The Cost of Premature Optimization\n\n- Harder to read code\n- Harder to maintain code\n- Time wasted optimizing code that doesn't matter\n- Bugs introduced by clever optimizations",
+      "tags": ["coding", "optimization", "best-practices", "performance"],
+      "author": 3,
+      "created_at": "2024-01-15T17:00:00Z",
+      "updated_at": "2024-01-15T17:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 9,
+    "fields": {
+      "title": "Barbara Oakley's Learning Technique",
+      "slug": "barbara-oakleys-learning-technique",
+      "description": "Your brain solves problems when you're not trying. Staring harder doesn't work. Walking away does.",
+      "body": "## Barbara Oakley's Learning Technique\n\n1. Focused mode: intense concentration\n2. Diffuse mode: relaxed, wandering mind\n3. Alternate between them\n4. Sleep on it\n\nYour brain solves problems when you're not trying. Staring harder doesn't work. Walking away does.\n\n### Two Modes of Thinking\n\n**Focused mode:** Concentrated, logical, sequential thinking. Good for executing known patterns.\n\n**Diffuse mode:** Relaxed, big-picture, creative thinking. Good for new insights and connections.\n\n### Why Diffuse Mode Works\n\nWhen you're stuck:\n- Focused mode keeps trying the same failed approach\n- Diffuse mode explores different neural pathways\n- Insights come when you're not forcing them\n\n### The Practical Application\n\n1. Work intensely for 25-50 minutes (focused)\n2. Take a real break - walk, shower, nap (diffuse)\n3. Return to the problem with fresh perspective\n4. Sleep on hard problems\n\n### The Shower Insight\n\nWhy do solutions come in the shower? Because you finally stopped trying so hard.",
+      "tags": ["learning", "productivity", "cognitive-science", "studying"],
+      "author": 4,
+      "created_at": "2024-01-15T18:00:00Z",
+      "updated_at": "2024-01-15T18:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 10,
+    "fields": {
+      "title": "Paul Graham's Startup Advice",
+      "slug": "paul-grahams-startup-advice",
+      "description": "Startups fail by building what nobody wants. Not by lack of features, funding, or credentials.",
+      "body": "## Paul Graham's Startup Advice\n\n1. Make something people want\n2. Talk to users\n3. Build, measure, learn (repeat)\n4. Ignore everything else\n\nStartups fail by building what nobody wants. Not by lack of features, funding, or credentials.\n\n### The Only Thing That Matters\n\nProduct-market fit. Nothing else matters until you have it. Not your tech stack, not your office, not your logo.\n\n### Talk to Users Daily\n\nNot surveys. Not analytics. Real conversations:\n- What problem are you trying to solve?\n- How do you solve it now?\n- What would make this 10x better?\n\n### The Danger of Building in Isolation\n\nEngineers love to build. But building the wrong thing efficiently is still failure. \n\n### Do Things That Don't Scale\n\nIn the early days:\n- Manually onboard every user\n- Do customer support yourself\n- Hand-hold users through the product\n\nThis feels inefficient but teaches you what users actually need.",
+      "tags": ["entrepreneurship", "product-development", "innovation", "startups"],
+      "author": 2,
+      "created_at": "2024-01-15T19:00:00Z",
+      "updated_at": "2024-01-15T19:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 11,
+    "fields": {
+      "title": "Linus Torvalds' Code Review Process",
+      "slug": "linus-torvalds-code-review-process",
+      "description": "Code should be boring. If it's clever, reject it. If you can't understand it, reject it.",
+      "body": "## Linus Torvalds' Code Review Process\n\n1. Read the code\n2. If you can't understand it → reject\n3. If it's clever → reject\n4. If it's simple and obvious → accept\n\n\"Bad programmers worry about code. Good programmers worry about data structures.\" Code should be boring.\n\n### The Simplicity Principle\n\nComplex code is easy to write. Simple code is hard.\n\n### Clever Code is a Liability\n\nThat one-liner using obscure language features?\n- You'll forget how it works in 3 months\n- No one else can maintain it\n- It probably has subtle bugs\n- It's not as fast as you think\n\n### Boring Code is Maintainable\n\nIf code is boring:\n- Anyone can understand it\n- Bugs are obvious\n- Changes are safe\n- It survives decades\n\n### The Data Structure Focus\n\nGood data structures make the code trivial. Bad data structures make even simple operations complex.\n\nShow me your code and I'll have to see your data. Show me your data structures and I won't need to see your code.",
+      "tags": ["coding", "best-practices", "code-quality", "software-development"],
+      "author": 3,
+      "created_at": "2024-01-15T20:00:00Z",
+      "updated_at": "2024-01-15T20:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 12,
+    "fields": {
+      "title": "Charles Darwin's Scientific Method",
+      "slug": "charles-darwins-scientific-method",
+      "description": "Don't prove yourself right. Try to prove yourself wrong. What survives is truth.",
+      "body": "## Charles Darwin's Scientific Method\n\n1. Observe without bias\n2. Form hypothesis\n3. Actively seek contradicting evidence\n4. Update or discard hypothesis\n\nDon't prove yourself right. Try to prove yourself wrong. What survives is truth.\n\n### The Confirmation Bias Trap\n\nHumans naturally seek evidence that confirms their beliefs and ignore evidence that contradicts them.\n\n### Darwin's Approach\n\nWhen he formed a hypothesis, he:\n- Actively looked for exceptions\n- Collected cases that contradicted his theory\n- Updated his thinking based on contradictions\n- Discarded ideas that didn't survive scrutiny\n\n### Application in Software\n\nWhen you think you've found the bug:\n- Don't just look for evidence it's that bug\n- Try to prove it's NOT that bug\n- If your theory survives contradictory evidence, it's likely correct\n\n### The Falsification Principle\n\nA theory that can't be proven wrong isn't scientific. Always ask: \"What evidence would prove me wrong?\"",
+      "tags": ["learning", "critical-thinking", "research", "methodology"],
+      "author": 4,
+      "created_at": "2024-01-15T21:00:00Z",
+      "updated_at": "2024-01-15T21:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 13,
+    "fields": {
+      "title": "Marie Kondo's Organization Method",
+      "slug": "marie-kondos-organization-method",
+      "description": "You can't organize clutter. You can only organize what remains after elimination.",
+      "body": "## Marie Kondo's Organization\n\n1. Discard first, organize later\n2. Keep only what \"sparks joy\"\n3. Everything needs a specific home\n4. No \"miscellaneous\" category\n\nYou can't organize clutter. You can only organize what remains after elimination.\n\n### Why Organization Systems Fail\n\nMost organization systems fail because they try to organize too much stuff. The real problem isn't organization - it's accumulation.\n\n### Discard First\n\nBefore organizing anything:\n- Remove what you don't need\n- Be ruthless about elimination\n- If you're keeping it \"just in case\", throw it out\n\n### Application to Code\n\nIn software:\n- Delete unused code first\n- Remove dead features\n- Eliminate unnecessary dependencies\n- Then organize what remains\n\n### The Miscellaneous Trap\n\n\"Miscellaneous\" is where organization goes to die. If something is truly miscellaneous, you probably don't need it.\n\n### Everything Has a Home\n\nIf you can't define where something belongs, it doesn't belong in your system.",
+      "tags": ["productivity", "organization", "minimalism", "decluttering"],
+      "author": 2,
+      "created_at": "2024-01-15T22:00:00Z",
+      "updated_at": "2024-01-15T22:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 14,
+    "fields": {
+      "title": "Steve Krug's UX Principle",
+      "slug": "steve-krugs-ux-principle",
+      "description": "Don't make users think. Thinking is work. Work is friction. Friction is abandonment.",
+      "body": "## Steve Krug's UX Principle\n\n1. Make it obvious\n2. If not obvious, make it self-explanatory\n3. If not self-explanatory, add instructions\n4. If instructions needed → redesign\n\nDon't make users think. Thinking is work. Work is friction. Friction is abandonment.\n\n### The Three-Second Rule\n\nIf a user can't figure out what to do in 3 seconds, your design failed.\n\n### Obvious Beats Clever\n\nClever designs make designers feel good. Obvious designs make users successful.\n\n### The Cost of Thinking\n\nEvery moment a user spends figuring out your interface:\n- They're not accomplishing their goal\n- They're getting frustrated\n- They're considering alternatives\n- They're closer to leaving\n\n### Self-Explanatory Elements\n\nGood design:\n- Buttons look clickable\n- Links look like links\n- Forms are clearly labeled\n- Next steps are obvious\n\n### When Instructions Are Needed\n\nIf you need instructions, the design is too complex. Redesign it to be simpler.",
+      "tags": ["design", "ux", "product-development", "usability"],
+      "author": 3,
+      "created_at": "2024-01-15T23:00:00Z",
+      "updated_at": "2024-01-15T23:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 15,
+    "fields": {
+      "title": "Charlie Munger's Mental Models",
+      "slug": "charlie-mungers-mental-models",
+      "description": "You don't want to be a hammer seeing every problem as a nail. Be a Swiss Army knife.",
+      "body": "## Charlie Munger's Mental Models\n\n1. Collect fundamental principles from multiple disciplines\n2. Build a latticework of models\n3. Apply 3-4 models to each problem\n4. Avoid single-lens thinking\n\nYou don't want to be a hammer seeing every problem as a nail. Be a Swiss Army knife.\n\n### The Latticework Approach\n\nMunger argues that having many mental models from different fields gives you better judgment:\n- Psychology\n- Economics\n- Biology\n- Physics\n- Mathematics\n- Engineering\n\n### Why Multiple Models\n\nEach discipline offers a different lens:\n- Economics sees incentives\n- Psychology sees biases\n- Biology sees systems\n- Physics sees forces\n\nApplying multiple models reveals what single-lens thinking misses.\n\n### The 3-4 Model Rule\n\nFor any important decision, consciously apply 3-4 different mental models. What do they each suggest?\n\n### Avoiding the Hammer Problem\n\nIf you only know one way to solve problems, every problem looks solvable that way (whether it is or not).",
+      "tags": ["learning", "decision-making", "critical-thinking", "wisdom"],
+      "author": 4,
+      "created_at": "2024-01-16T00:00:00Z",
+      "updated_at": "2024-01-16T00:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 16,
+    "fields": {
+      "title": "Naval Ravikant's Leverage Principle",
+      "slug": "naval-ravikants-leverage-principle",
+      "description": "Your time doesn't scale. Code scales. Writing scales. Build things that work while you sleep.",
+      "body": "## Naval Ravikant's Leverage Principle\n\n1. Build with no marginal cost (code, media)\n2. Avoid trading time for money\n3. Create assets, not services\n4. Let others distribute\n\nYour time doesn't scale. Code scales. Writing scales. Videos scale. Build things that work while you sleep.\n\n### The Three Types of Leverage\n\n**Labor:** Other people's time (employees, contractors)\n**Capital:** Other people's money (investors)\n**Code & Media:** Permissionless leverage with zero marginal cost\n\n### Why Code & Media Win\n\n- No permission needed to create\n- Zero marginal cost to replicate\n- Global distribution for free\n- Works 24/7 without you\n\n### The Service Trap\n\nServices require your time:\n- Consulting: You trade hours for dollars\n- Freelancing: You're still trading time\n- Agency: You're trading other people's time\n\nNone scale efficiently.\n\n### The Product Advantage\n\nProducts work while you sleep:\n- SaaS: Build once, sell forever\n- Course: Record once, sell forever\n- Book: Write once, sell forever",
+      "tags": ["entrepreneurship", "productivity", "strategy", "wealth-creation"],
+      "author": 2,
+      "created_at": "2024-01-16T01:00:00Z",
+      "updated_at": "2024-01-16T01:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 17,
+    "fields": {
+      "title": "James Clear's Habit Formation",
+      "slug": "james-clears-habit-formation",
+      "description": "Don't rely on motivation. Design your environment so good habits are the path of least resistance.",
+      "body": "## James Clear's Habit Formation\n\n1. Make it obvious (cue)\n2. Make it attractive (craving)\n3. Make it easy (response)\n4. Make it satisfying (reward)\n\nDon't rely on motivation. Design your environment so good habits are the path of least resistance.\n\n### The Four Laws of Behavior Change\n\n**Cue (Make it obvious):**\n- Put your running shoes by the bed\n- Put your guitar on a stand, not in a case\n- Put healthy food at eye level\n\n**Craving (Make it attractive):**\n- Pair habits you need to do with habits you want to do\n- Join a culture where your desired behavior is normal\n\n**Response (Make it easy):**\n- Reduce friction for good habits\n- Start with 2 minutes\n- Optimize for starting, not completing\n\n**Reward (Make it satisfying):**\n- Track your progress visually\n- Never miss twice\n- Celebrate small wins\n\n### Environment Design\n\nWillpower is overrated. Environment is underrated. Make good habits inevitable.",
+      "tags": ["productivity", "personal-development", "psychology", "habits"],
+      "author": 3,
+      "created_at": "2024-01-16T02:00:00Z",
+      "updated_at": "2024-01-16T02:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 18,
+    "fields": {
+      "title": "Ed Catmull's Creative Process",
+      "slug": "ed-catmulls-creative-process",
+      "description": "Perfectionism kills creativity. First drafts are supposed to be terrible. That's not failure, that's process.",
+      "body": "## Ed Catmull's (Pixar) Creative Process\n\n1. Ship something ugly early\n2. Expect it to suck\n3. Iterate in public\n4. Embrace failure as data\n\nPerfectionism kills creativity. First drafts are supposed to be terrible. That's not failure, that's process.\n\n### The Pixar Story Process\n\nEvery Pixar movie's first version is bad. Not mediocre. Bad.\n\nToy Story's first cut was so bad they almost shut down the project. But that's expected.\n\n### Why Ugly First Drafts Work\n\n- Perfectionism paralyzes\n- Shipping ugly v1 breaks the paralysis\n- Feedback only works on real work, not ideas\n- Iteration compounds\n\n### The Braintrust\n\nPixar's secret weapon: Regular feedback sessions where:\n- Anyone can criticize anything\n- No ego protection\n- Problem identification, not solution prescription\n- Truth over politeness\n\n### Embracing Failure\n\nFailure isn't the opposite of success. It's part of the process.\n\nIf you're not failing, you're not trying hard enough.",
+      "tags": ["creativity", "innovation", "product-development", "iteration"],
+      "author": 4,
+      "created_at": "2024-01-16T03:00:00Z",
+      "updated_at": "2024-01-16T03:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 19,
+    "fields": {
+      "title": "Peter Thiel's Zero to One",
+      "slug": "peter-thiels-zero-to-one",
+      "description": "Don't compete. Create. Going from 1 to n is incremental. Going from 0 to 1 is innovation.",
+      "body": "## Peter Thiel's Zero to One\n\n1. Ask: what truth do few people agree with you on?\n2. Build that\n3. Avoid competition\n4. Create a monopoly\n\nDon't compete. Create. Going from 1 to n is incremental. Going from 0 to 1 is innovation.\n\n### The Contrarian Question\n\n\"What important truth do very few people agree with you on?\"\n\nThis is the foundation of innovation. Consensus is already priced in.\n\n### Competition is for Losers\n\nThiel's controversial take: Competition destroys profits.\n\n- Perfect competition → zero profit\n- Monopoly → sustainable profit\n- Google has a search monopoly → massively profitable\n- Restaurants compete fiercely → most fail\n\n### Going from 0 to 1\n\n**0 to 1:** Creating something new that never existed\n**1 to n:** Copying what works (globalization)\n\n### How to Create 0 to 1\n\n1. Find a small market you can dominate\n2. Start with monopoly in a niche\n3. Expand from there\n4. Don't compete on existing dimensions",
+      "tags": ["entrepreneurship", "innovation", "strategy", "startups"],
+      "author": 2,
+      "created_at": "2024-01-16T04:00:00Z",
+      "updated_at": "2024-01-16T04:00:00Z",
+      "banner_image": ""
+    }
+  },
+  {
+    "model": "articles.article",
+    "pk": 20,
+    "fields": {
+      "title": "Tim Ferriss' Fear-Setting",
+      "slug": "tim-ferriss-fear-setting",
+      "description": "We overestimate risks and underestimate our ability to recover. Fear dissipates when examined.",
+      "body": "## Tim Ferriss' Fear-Setting\n\n1. Define your worst-case scenario\n2. List what you'd do to prevent it\n3. List how you'd repair it if it happened\n4. List benefits of attempting\n5. Calculate the cost of inaction\n\nWe overestimate risks and underestimate our ability to recover. Fear dissipates when examined.\n\n### Why Goal-Setting Fails\n\nSetting goals sounds nice but often paralyzes:\n- \"What if I fail?\"\n- \"What if it doesn't work?\"\n- \"What if I lose everything?\"\n\nFear keeps us stuck.\n\n### Fear-Setting Instead\n\n**Step 1: Define worst case**\nWhat's the absolute worst that could happen?\n\n**Step 2: Prevent**\nWhat could you do to prevent this?\n\n**Step 3: Repair**\nIf it did happen, how would you recover?\n\n**Step 4: Benefits**\nWhat are the benefits of attempting this?\n\n**Step 5: Cost of inaction**\nWhat will your life look like in 6 months, 1 year, 3 years if you do nothing?\n\n### The Key Insight\n\nOnce you realize:\n- Worst case isn't that bad\n- You can prevent most of it\n- You can recover from the rest\n- Cost of inaction is higher\n\nFear dissipates.",
+      "tags": ["personal-development", "decision-making", "productivity", "mental-clarity"],
+      "author": 3,
+      "created_at": "2024-01-16T05:00:00Z",
+      "updated_at": "2024-01-16T05:00:00Z",
+      "banner_image": ""
+    }
+  }
+]
