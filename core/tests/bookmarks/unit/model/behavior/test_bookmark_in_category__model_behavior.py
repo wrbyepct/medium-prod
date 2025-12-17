@@ -24,7 +24,7 @@ def test_bookmark_in_category__model_create_successful(bookmark_in_category_fact
 
 # category delete cascade correct
 def test_bookmark_in_category__associated_article_delete_cascade(
-    bookmark_in_category_factory, mock_article_index_delete
+    bookmark_in_category_factory,
 ):
     bookmark = bookmark_in_category_factory.create()
     article = bookmark.bookmark
