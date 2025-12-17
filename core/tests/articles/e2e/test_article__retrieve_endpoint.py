@@ -17,16 +17,6 @@ def get_endpont(article_id):
     return reverse("article_retrieve_update_destroy", args=[article_id])
 
 
-@pytest.fixture
-def mock_article_es_delete(mocker):
-    mocker.patch("core.apps.articles.signals.registry.delete")
-
-
-@pytest.fixture
-def mock_article_es_update(mocker):
-    mocker.patch("core.apps.articles.signals.registry.update")
-
-
 class TestArticleRetreiveEndpoint:
     def test_article_retrieve_endpoint__unauthed_should_get_401(self, client):
         endpoint = get_endpont(uuid4())
@@ -58,7 +48,7 @@ class TestArticleRetreiveEndpoint:
 
 class TestTestArticleDesctroyEndpoint:
     def test_article_destroy_endpoint__delete_own_article_successful(
-        self, authenticated_client, article_factory, normal_user, mock_article_es_delete
+        self, authenticated_client, article_factory, normal_user
     ):
         article = article_factory(author=normal_user)
 
@@ -86,7 +76,6 @@ class TestArticleUpdateEndpoint:
         article_factory,
         mock_image_upload,
         mock_media_dir,
-        mock_article_es_update,
     ):
         article = article_factory.create(author=normal_user)
 
@@ -128,7 +117,6 @@ class TestArticleUpdateEndpoint:
         authenticated_client,
         normal_user,
         article_factory,
-        mock_article_es_update,
     ):
         article = article_factory.create(author=normal_user)
         old_article = Article.statistic_objects.get(id=article.id)

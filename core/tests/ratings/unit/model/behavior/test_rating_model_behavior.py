@@ -55,7 +55,7 @@ def test_rating_model_behavior__create_with_invalid_rating_raise_errors(
 # test remote model behave correct
 @pytest.mark.parametrize("remote_model", ["user", "article"])
 def test_rating_model_behavior__remote_instance_delete_cascade(
-    rating_factory, remote_model, mock_article_index_delete
+    rating_factory, remote_model
 ):
     rating = rating_factory.create()
     rating_id = rating.id

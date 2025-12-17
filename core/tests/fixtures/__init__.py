@@ -8,8 +8,6 @@ from faker import Faker
 from core.tests.utils.misc import create_upload_image_file
 
 from .constants import (
-    ARTICLE_DOCUMENT_DELETE,
-    ARTICLE_DOCUMENT_UPDATE,
     CREATE_USER_SIDE_EFFECT,
     PROFILE_CREATE,
     READING_CATEGORY_CREATE,
@@ -50,18 +48,6 @@ def api_request_with_user(mocker):
         return request
 
     return _make_request
-
-
-@pytest.fixture
-def mock_article_index_update():
-    with patch(ARTICLE_DOCUMENT_UPDATE):
-        yield
-
-
-@pytest.fixture
-def mock_article_index_delete():
-    with patch(ARTICLE_DOCUMENT_DELETE):
-        yield
 
 
 @pytest.fixture

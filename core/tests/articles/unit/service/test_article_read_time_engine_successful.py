@@ -49,7 +49,6 @@ def test_article_read_time_engine__word_count_correct(text, expected_count):
 
 
 def test_artciel_read_time_engine__get_read_time_with_tags_no_image(
-    mock_article_index_update,
     article_factory,
 ):
     """

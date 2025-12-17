@@ -136,9 +136,7 @@ def test_article_serializer__deserialize_read_only_fields_no_effect():
 
 
 # Test serializer.create()
-def test_article_serializer__create_return_article_correct(
-    normal_user, mock_article_index_update
-):
+def test_article_serializer__create_return_article_correct(normal_user):
     valid_info = {
         "title": "Test Title",
         "description": "Test body",
@@ -163,7 +161,7 @@ def test_article_serializer__create_return_article_correct(
 
 # Test erializer.update()
 def test_article_serializer__update_article_correct(
-    article, mock_image_upload, mock_media_dir, mock_article_index_update
+    article, mock_image_upload, mock_media_dir
 ):
     # Arrane
     update_info = {

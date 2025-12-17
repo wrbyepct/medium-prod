@@ -5,7 +5,6 @@ pytestmark = pytest.mark.django_db
 
 
 def test_article_model_behavior__create_article_successful(
-    mock_article_index_update,
     mock_media_dir,
     normal_user,
     article_factory,
