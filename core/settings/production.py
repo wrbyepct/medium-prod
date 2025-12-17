@@ -62,6 +62,9 @@ OPENSEARCH_DSL = {
     }
 }
 
+# Enable Async Index for OpenSearch
+OPENSEARCH_DSL_SIGNAL_PROCESSOR = "django_opensearch_dsl.signals.CelerySignalProcessor"
+
 # Admin URL
 ADMIN_URL = env("DJANGO_ADMIN_URL")
 
