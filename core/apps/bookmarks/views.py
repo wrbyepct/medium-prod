@@ -38,12 +38,14 @@ class BookmarkCategoryListView(generics.ListAPIView):
 class BookmarkCategoryCreateView(generics.CreateAPIView):
     """
 
-    Create a ReadingCategory.
-
-    If article id is provided, add the article the reading category.
+    The View can
+    1. Add a new bookmark category.
+    2. Add an article to the new bookmark category if article id is provided.
+    3. Add an article to the selected bookmark category if article id is provided.
 
     To provide aritcle id, append "?article_id=<article-id>"
-    """
+
+    """  # noqa: D205
 
     serializer_class = ReadingCategorySerializer
 
@@ -90,10 +92,10 @@ class BookmarkListView(generics.ListAPIView):
 
 
 class BookmarkCreateDestoryView(APIView):
-    """View to remove a bookmark from a category."""
+    """View to add/remove a bookmark from a category."""
 
     def post(self, request, slug, article_id, format=None):
-        """Try to add a bookmark from a bookmark category by providng bookmark category slug and article id."""
+        """Try to add a bookmark to an existing bookmark category by providng bookmark category slug and article id."""
         article = get_object_or_404(Article, id=article_id)
         category = get_object_or_404(ReadingCategory, user=request.user, slug=slug)
 

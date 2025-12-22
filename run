@@ -64,6 +64,13 @@ prod-down() {
     docker-compose -f prod.yml down
 }
 
+# Load fixtures
+load-fixtures() {
+
+    python -m core.manage loaddata ./core/tests/fixtures/users_verified.json
+    python -m core.manage loaddata ./core/tests/fixtures/articles_fixtures.json
+}
+
 # Tests
 test() {
     docker-compose -f local.yml exec -e IN_TEST=1 api pytest $@ 
