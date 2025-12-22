@@ -1,0 +1,86 @@
+[
+    {
+        "model": "user.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$1000000$z81pNPCt10UdifVzQgmfD5$sRyFX+C+okVbVhZcQuMLESqZLGaQADINPv8wTc+gl8w=",
+            "last_login": null,
+            "is_superuser": false,
+            "id": "1c1beb01-9b5b-449f-bea8-b7e50d885e1b",
+            "first_name": "Clarus",
+            "last_name": "Huang",
+            "email": "kerokerokerolovecat@gmail.com",
+            "date_joined": "2025-12-18T02:54:01.727Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$1000000$DWpln1jeZfUz8cL3pUnGJI$kfzwfNrBjwI5t46l2zvi06c9CW1laRrGAPAw8zf5mRA=",
+            "last_login": null,
+            "is_superuser": false,
+            "id": "d93b4f3a-e266-4ae8-8855-5e55ef636d43",
+            "first_name": "Nick",
+            "last_name": "Roy",
+            "email": "seaweednick3738@gmail.com",
+            "date_joined": "2025-12-18T02:54:10.038Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$1000000$yUT757AylPEudEC53UBYwE$hcAgKpBMAq1zeEBEj46CGErf2Q3Q9f6RkooO+jqHNh4=",
+            "last_login": null,
+            "is_superuser": false,
+            "id": "f006211b-0609-46ca-8222-4bb2a3a16b29",
+            "first_name": "Carson",
+            "last_name": "Wang",
+            "email": "23sambacamel23@gmail.com",
+            "date_joined": "2025-12-18T02:54:10.539Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "email": "kerokerokerolovecat@gmail.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 2,
+        "fields": {
+            "user": 3,
+            "email": "seaweednick3738@gmail.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 3,
+        "fields": {
+            "user": 4,
+            "email": "23sambacamel23@gmail.com",
+            "verified": true,
+            "primary": true
+        }
+    }
+]

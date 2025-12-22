@@ -126,7 +126,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     views = serializers.IntegerField(read_only=True)
     avg_rating = serializers.DecimalField(
-        max_digits=3, decimal_places=2, read_only=True
+        max_digits=3, decimal_places=2, coerce_to_string=False, read_only=True
     )
     author_info = ProfileSerializer(source="author.profile", read_only=True)
     created_at = serializers.DateTimeField(format="%m/%d/%Y, %H:%M:%S", read_only=True)

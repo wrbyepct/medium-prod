@@ -1,6 +1,8 @@
 """Article model Manager."""
 
 from django.db import models
+from django.db.models import OuterRef, Subquery
+from django.db.models.functions import Coalesce
 
 
 class ArticleQuerySet(models.QuerySet):
@@ -12,16 +14,67 @@ class ArticleQuerySet(models.QuerySet):
 
     def with_response_and_claps_count(self):
         """Return with claps_count & responses_count fields."""
+        from core.apps.responses.models import Response
+
+        from .models import Clap
+
+        # Use subquery to calculate in a nested query to avoid table joining
+        claps_count_subquery = (
+            Clap.objects.filter(article=OuterRef("pk"))
+            .order_by()
+            .values("article")
+            .annotate(claps_count=models.Count("id"))
+            .values("claps_count")
+        )
+
+        responses_count_subquery = (
+            Response.objects.filter(article=OuterRef("pk"))
+            .order_by()
+            .values("article")
+            .annotate(responses_count=models.Count("id"))
+            .values("responses_count")
+        )
         return self.annotate(
-            claps_count=models.Count("claps", distinct=True),
-            responses_count=models.Count("responses", distinct=True),
+            claps_count=Coalesce(
+                Subquery(claps_count_subquery),
+                0,
+            ),
+            responses_count=Coalesce(
+                Subquery(responses_count_subquery),
+                0,
+            ),
         )
 
     def with_view_count_and_avg_rating(self):
         """Return with and average rating & views count fields."""
+        from core.apps.articles.models import ArticleView
+        from core.apps.ratings.models import Rating
+
+        # Use subquery to calculate in a nested query to avoid table joining
+        avg_rating_subquery = (
+            Rating.objects.filter(article=OuterRef("pk"))
+            .order_by()
+            .values("article")
+            .annotate(avg_rating=models.Avg("rating"))
+            .values("avg_rating")
+        )
+
+        views_count_subquery = (
+            ArticleView.objects.filter(article=OuterRef("pk"))
+            .order_by()
+            .values("article")
+            .annotate(views_count=models.Count("id"))
+            .values("views_count")
+        )
         return self.annotate(
-            avg_rating=models.Avg("ratings"),
-            views=models.Count("article_views", distinct=True),
+            avg_rating=Coalesce(
+                Subquery(avg_rating_subquery),
+                0.0,
+            ),
+            views=Coalesce(
+                Subquery(views_count_subquery),
+                0,
+            ),
         )
 
     def fetch_related(self):
@@ -30,6 +83,7 @@ class ArticleQuerySet(models.QuerySet):
 
         fetch tags claps in resulting article ids.
         """
+        # TODO consider dedicate tags and claps user info to claps retrieval
         return self.select_related("author__profile").prefetch_related(
             "tags", "claps__user"
         )

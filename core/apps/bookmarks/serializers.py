@@ -57,7 +57,7 @@ class ReadingCategorySerializer(serializers.ModelSerializer):
         """
         Create a bookmark category or use an existing one.
 
-        Add a bookmark if specified.
+        Add a bookmark as well if specified.
         """
         category = validated_data.pop("category", None)
         if not category:

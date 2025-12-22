@@ -1,6 +1,8 @@
 """Response Model Manager."""
 
 from django.db import models
+from django.db.models import OuterRef, Subquery
+from django.db.models.functions import Coalesce
 
 
 class ResponseQuerySet(models.QuerySet):
@@ -20,9 +22,32 @@ class ResponseQuerySet(models.QuerySet):
 
     def with_count_data(self):
         """Annoate claps_count and replies_count columns."""
+        from .models import Response, ResponseClap
+
+        # Use subquery to calculate in a nested query to avoid table joining
+        claps_count_subquery = (
+            ResponseClap.objects.filter(response=OuterRef("pk"))
+            .order_by()
+            .values("response")
+            .annotate(claps_count=models.Count("id"))
+            .values("claps_count")
+        )
+        replies_count_subquery = (
+            Response.objects.filter(parent=OuterRef("pk"))
+            .order_by()
+            .values("parent")
+            .annotate(replies_count=models.Count("id"))
+            .values("replies_count")
+        )
         return self.annotate(
-            claps_count=models.Count("claps", distinct=True),
-            replies_count=models.Count("children", distinct=True),
+            claps_count=Coalesce(
+                Subquery(claps_count_subquery),
+                0,
+            ),
+            replies_count=Coalesce(
+                Subquery(replies_count_subquery),
+                0,
+            ),
         )
 
     def with_necessary_colums_only(self):

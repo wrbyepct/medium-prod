@@ -40,6 +40,7 @@ def test_article_serializer__serialize_successful(article):
 def test_article_serializer__serialize_simple_fields_data_correct(article, field):
     article = Article.statistic_objects.get(pk=article.pk)
     serializer = ArticleSerializer(article)
+
     assert getattr(article, field) == serializer.data[field]
 
 
