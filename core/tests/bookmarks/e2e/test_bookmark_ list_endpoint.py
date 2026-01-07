@@ -46,7 +46,11 @@ class TestBookmarkListEndpoint:
         # Assert response correct
         assert resp.status_code == status.HTTP_200_OK
 
-        bookmarks = cate.bookmarks.all().order_by("-created_at")
+        bookmarks = (
+            Article.statistic_objects.preview_data()
+            .filter(category=cate)
+            .order_by("-created_at")
+        )
         serializer = BookmarkSerializer(bookmarks, many=True)
 
         # Assert data correct
@@ -55,7 +59,7 @@ class TestBookmarkListEndpoint:
         assert resp.data["results"] == serializer.data
 
     # get not own and data return correctly
-    def test_get_not_own_category_bookmarks_200_and_data_correct(
+    def test_get_not_own_public_category_bookmarks_200_and_data_correct(
         self,
         reading_category_factory,
         authenticated_client,
@@ -75,7 +79,7 @@ class TestBookmarkListEndpoint:
         # Assert response correct
         assert resp.status_code == status.HTTP_200_OK
 
-        bookmarks = cate.bookmarks.all()
+        bookmarks = Article.statistic_objects.preview_data().filter(category=cate)
         serializer = BookmarkSerializer(bookmarks, many=True)
 
         # Assert data correct

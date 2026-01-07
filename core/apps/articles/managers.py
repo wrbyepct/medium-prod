@@ -97,7 +97,7 @@ class ArticleManager(models.Manager):
         return ArticleQuerySet(model=self.model, using=self._db)
 
     def get_queryset(self):
-        """Return optimized article queryset with pre-calculated fields."""
+        """Return optimized article queryset with pre-calculated and prefecthed fields."""
         return (
             self.base_set()
             .with_response_and_claps_count()
@@ -130,10 +130,8 @@ class ArticleManager(models.Manager):
                 "body",
                 "author__first_name",
                 "author__last_name",
+                "claps_count",
+                "responses_count",
             )
             .order_by("-created_at")
         )
-
-    def with_view_count_and_avg_rating(self):
-        """Adding in avg: ratingg & count: view in fields."""
-        return self.base_set().with_view_count_and_avg_rating()

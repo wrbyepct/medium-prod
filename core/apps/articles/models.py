@@ -76,8 +76,9 @@ class Article(TimestampedModel):
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
     tags = TaggableManager()
-    statistic_objects = ArticleManager()
+
     objects = models.Manager()
+    statistic_objects = ArticleManager()
 
     @property
     def user(self):

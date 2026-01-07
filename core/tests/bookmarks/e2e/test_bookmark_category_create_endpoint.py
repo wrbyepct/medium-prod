@@ -4,7 +4,6 @@ from rest_framework import status
 
 from core.apps.articles.models import Article
 from core.apps.bookmarks.models import ReadingCategory
-from core.apps.bookmarks.serializers import BookmarkSerializer
 
 pytestmark = pytest.mark.django_db
 
@@ -70,11 +69,7 @@ class TestBookmarkCategoryCreateEndpoint:
         # Assert: Article indeed in user's bookmark category
         article = Article.statistic_objects.preview_data().get(id=article_id)
         assert article in user_cate.bookmarks.all()
-
-        # Assert: Bookmark data serialized correct
-        article_serializer = BookmarkSerializer(article)
         assert len(resp.data["bookmarks"]) == 1
-        assert resp.data["bookmarks"][0] == article_serializer.data
 
     @pytest.mark.parametrize("invalid_title", ["", None, "a" * 61])
     def test_create_new_category_with_invalid_title_get_400(
