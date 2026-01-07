@@ -112,10 +112,13 @@ class ArticleManager(models.Manager):
         Field:
             "id"
             "title"
+            "body"
             "created_at"
             "banner_image"
             "author__first_name"
             "author__last_name"
+            "claps_count"
+            "responses_count"
 
         """
         return (
@@ -130,8 +133,6 @@ class ArticleManager(models.Manager):
                 "body",
                 "author__first_name",
                 "author__last_name",
-                "claps_count",
-                "responses_count",
             )
             .order_by("-created_at")
         )

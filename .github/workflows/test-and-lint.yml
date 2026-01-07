@@ -104,7 +104,15 @@ jobs:
         env:
           discovery.type: single-node
           xpack.security.enabled: false      
-
+      
+      redis:
+        image: redis:7.4-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
