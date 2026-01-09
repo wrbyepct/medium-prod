@@ -84,14 +84,3 @@ variable "django_allowed_hosts" {
   description = "Allowed Hosts for Django API"
 }
 
-variable "smtp_username" {
-  description = "SMTP username for SES"
-}
-
-variable "smtp_password" {
-  description = "SMTP password for SES"
-}
-
-variable "email_host" {
-  description = "SMTP host for SES"
-}

@@ -42,6 +42,7 @@ django-opensearch-dsl = "^0.7.0"
 dj-rest-auth = "v7.0.0"
 opensearch-dsl = "^2.1.0"
 django-ses = "^4.4.0"
+django-redis = "^6.0.0"
 
 
 [tool.poetry.group.dev]

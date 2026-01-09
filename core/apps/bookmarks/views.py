@@ -88,7 +88,8 @@ class BookmarkListView(generics.ListAPIView):
     def get_queryset(self):
         """Get previewed version of articles that belong to the category."""
         category = self._get_category()
-        return category.bookmarks.all()
+
+        return Article.statistic_objects.preview_data().filter(category=category)
 
 
 class BookmarkCreateDestoryView(APIView):

@@ -74,3 +74,14 @@ SPECTACULAR_SETTINGS = {
         "url": "https://testapi.com/contact",
     },
 }
+
+# Cache backend
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": env("CELERY_BROKER"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}

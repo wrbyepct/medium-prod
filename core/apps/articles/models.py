@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -76,8 +77,9 @@ class Article(TimestampedModel):
 
     author = models.ForeignKey(User, related_name="articles", on_delete=models.CASCADE)
     tags = TaggableManager()
-    statistic_objects = ArticleManager()
+
     objects = models.Manager()
+    statistic_objects = ArticleManager()
 
     @property
     def user(self):
@@ -169,8 +171,13 @@ class ArticleView(TimestampedModel):
             viewer_ip (str): Viwer IP string.
 
         """
-        cls.objects.get_or_create(
-            article=article,
-            user=user,
-            viewer_ip=viewer_ip,
-        )
+        key = f"view:{article.id}:{user.id if user else 'anon'}:{viewer_ip}"
+        # Because every time user check the article, this check runs
+        # To reduce db hits we use cache for check
+        if not cache.get(key):
+            cls.objects.get_or_create(
+                article=article,
+                user=user,
+                viewer_ip=viewer_ip,
+            )
+            cache.set(key, 1, timeout=86400)  # 24 hrs
