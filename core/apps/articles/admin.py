@@ -47,6 +47,8 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ["created_at", "updated_at"]
     search_fields = ["body", "title", "tags"]
     ordering = ["-created_at"]
+    readonly_fields = ("created_at", "updated_at")
+
     inlines = [RatingsInline, ViewInline, ClapInline]
 
 

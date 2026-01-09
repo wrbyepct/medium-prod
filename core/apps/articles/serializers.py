@@ -148,16 +148,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def update(self, instance: Article, validated_data):
         """User can only update 'title', 'body', 'description', 'banner_image', 'updated_time'."""
-        instance.title = validated_data.get("title", instance.title)
-        instance.body = validated_data.get("body", instance.body)
-        instance.banner_image = validated_data.get(
-            "banner_image",
-            instance.banner_image,
-        )
-        instance.description = validated_data.get("description", instance.description)
-        instance.updated_at = validated_data.get("updated_at", instance.updated_at)
-
         tags = validated_data.pop("tags", None)
+
+        for field, val in validated_data.items():
+            setattr(instance, field, val)
+
         if tags is not None:
             instance.tags.set(tags)
 

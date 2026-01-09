@@ -14,10 +14,13 @@ class ArticleFilter(filters.FilterSet):
     - udpated_at: article updated time
     """
 
-    tags = filters.CharFilter(field_name="tags__name", lookup_expr="iexact")
-    created_at = filters.DateFromToRangeFilter(field_name="created_at")
-    updated_at = filters.DateFromToRangeFilter(field_name="updated_at")
+    tags = filters.CharFilter(field_name="tags__name", lookup_expr="icontains")
+    created_range = filters.DateFromToRangeFilter(field_name="created_at")
+    updated_range = filters.DateFromToRangeFilter(field_name="updated_at")
 
     class Meta:
         model = Article
-        fields = ["tags", "created_at", "updated_at"]
+        fields = {
+            "created_at": ["exact", "gte", "lte", "year", "month"],
+            "updated_at": ["exact", "gte", "lte", "year", "month"],
+        }

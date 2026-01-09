@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 from django_mock_queries.mocks import MockSet
 
+from core.apps.articles.models import Article
 from core.apps.articles.paginations import ArticlePagination
 
 pytestmark = pytest.mark.django_db
@@ -20,9 +21,12 @@ def test_article_list_view__pagination_correct(
     articles = article_factory.build_batch(size=TOTAL_ARTICLES)
 
     # Arrange: prepre mock queyrset
+    mock_queryset = MockSet(*articles)
+    mock_queryset.model = Article
+
     mocker.patch(
         "core.apps.articles.views.ArticleListCreateView.get_queryset",
-        return_value=MockSet(*articles),
+        return_value=mock_queryset,
     )
 
     default_page_size = ArticlePagination.page_size
