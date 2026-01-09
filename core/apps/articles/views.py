@@ -3,6 +3,7 @@
 # ruff: noqa: ANN001, ARG002, D301
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
@@ -33,12 +34,13 @@ class ArticleListCreateView(generics.ListCreateAPIView):
             - author.last_name
             - tags
 
-        2. Exact match:
+        2. Case-insensitive contains:
             - tags
 
         3. Time range:
-            - created_at_after (e.g.: 2025-01-01)
-            - created_at_before (e.g.: 2024-12-31)
+            - created_range_after (e.g.: 2025-01-01)
+            - created_range_before (e.g.: 2024-12-31)
+            - created_at: ['exact', 'gte', 'lte', 'year', 'month'] (e.g.: created_at__month=12)
 
         4. Ordering:
             - ordering: (specify "created_at" or "-created_at")
@@ -48,7 +50,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
     filterset_class = ArticleFilter
-    filter_backends = [OrderingFilter]
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["created_at", "title"]
     # We already set the default to DjangoFilterBackend at the settings.py
 
