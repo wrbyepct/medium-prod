@@ -23,14 +23,14 @@ def test_article_retrieve_view__retrieve_method_correct(article, mocker):
     view.format_kwarg = None  # mock for get_serializer
 
     # Mock Article.record_view
-    mock_record_view = mocker.patch("core.apps.articles.views.ArticleView.record_view")
+    mock_record_view = mocker.patch("core.apps.articles.views.record_view")
 
     # Act
     response = view.retrieve(request=mock_request)
 
     # Assert
-    mock_record_view.assert_called_once_with(
-        article=article, viewer_ip=mock_ip, user=mock_user
+    mock_record_view.delay.assert_called_once_with(
+        article.pkid, mock_user.pkid, mock_ip
     )
 
     # Test return Response of serializer.data

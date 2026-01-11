@@ -5,6 +5,7 @@ import logging
 from celery import shared_task
 from django.core.mail import send_mail
 
+from core.apps.articles.models import ArticleView
 from core.settings import DEFAULT_FROM_EMAIL
 
 logger = logging.getLogger(__name__)
@@ -36,5 +37,18 @@ def inform_followed(
     }
     try:
         send_mail(**mail_data)
+    except Exception:
+        logger.exception()
+
+
+@shared_task
+def record_view(article_id: int, user_id: int, viewer_ip: str):
+    """Record article views."""
+    try:
+        ArticleView.record_view(
+            article_id=article_id,
+            user=user_id,
+            viewer_ip=viewer_ip,
+        )
     except Exception:
         logger.exception()
