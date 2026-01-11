@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import TYPE_CHECKING
 
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
@@ -21,9 +20,6 @@ from core.tools.image import generate_file_path
 
 from .managers import ArticleManager
 from .services.read_time_engine import ArticleReadTimeEngine
-
-if TYPE_CHECKING:
-    from django.contrib.auth.models import AbstractBaseUser
 
 User = get_user_model()
 
@@ -158,26 +154,26 @@ class ArticleView(TimestampedModel):
     @classmethod
     def record_view(
         cls,
-        article: Article,
-        user: AbstractBaseUser | None,
+        article_id: int,
+        user_id: int | None,
         viewer_ip: str,
     ) -> None:
         """
         ArticleView class method to create view instance.
 
         Args:
-            article (Article): Aritcle model instance.
-            user (AbstractBaseUser | None): Custom user model instance.
+            article_id (int): Aritcle model instance.
+            user_id (int | None): Custom user model instance.
             viewer_ip (str): Viwer IP string.
 
         """
-        key = f"view:{article.id}:{user.id if user else 'anon'}:{viewer_ip}"
+        key = f"view:{article_id}:{user_id if user_id else 'anon'}:{viewer_ip}"
         # Because every time user check the article, this check runs
         # To reduce db hits we use cache for check
         if not cache.get(key):
             cls.objects.get_or_create(
-                article=article,
-                user=user,
+                article_id=article_id,
+                user_id=user_id,
                 viewer_ip=viewer_ip,
             )
             cache.set(key, 1, timeout=86400)  # 24 hrs

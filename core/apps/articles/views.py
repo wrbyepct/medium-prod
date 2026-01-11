@@ -11,9 +11,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.apps.general.permissions import IsOwnerOrReadOnly
+from core.celery.task import record_view
 
 from .filters import ArticleFilter
-from .models import Article, ArticleView, Clap
+from .models import Article, Clap
 from .paginations import ArticlePagination
 from .serializers import ArticlePreviewSerializer, ArticleSerializer
 from .services.es import full_text_search
@@ -102,17 +103,18 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             Response: Return Http404 if article not found, else return article data.
 
         """
+        # Slightly older views count doesn't hurt much
         article = self.get_object()
-        # record view count
         viewer_ip = request.META.get("REMOTE_ADDR", "")
-        user = (
-            request.user
+        user_id = (
+            request.user.pkid
             if request.user.is_authenticated
             else None  # None for anonymous user
         )
 
-        ArticleView.record_view(article=article, viewer_ip=viewer_ip, user=user)
-        article = self.get_object()  # get newest view counts
+        # offload record view task to celery
+        article_id = article.pkid
+        record_view.delay(article_id, user_id, viewer_ip)
 
         serializer = self.get_serializer(article)
         return Response(serializer.data)
